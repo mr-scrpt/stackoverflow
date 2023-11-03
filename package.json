@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^4.26.2",
     "next": "14.0.1",
     "react": "^18",
     "react-dom": "^18"
@@ -25,6 +26,7 @@
     "eslint-plugin-tailwindcss": "^3.13.0",
     "postcss": "^8",
     "prettier": "^3.0.3",
+    "prettier-plugin-prisma": "^5.0.0",
     "prettier-plugin-tailwindcss": "^0.5.6",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
