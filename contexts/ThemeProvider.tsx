@@ -31,9 +31,9 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
     }
   }, [mode])
 
-  useEffect(() => {
-    handleThemeChange()
-  }, [mode, handleThemeChange])
+  // useEffect(() => {
+  //   handleThemeChange()
+  // }, [handleThemeChange])
 
   return (
     <ThemeContext.Provider value={{ mode, setMode }}>
