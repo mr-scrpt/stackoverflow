@@ -1,5 +1,6 @@
 'use client'
 
+import { THEME_DARK, THEME_LIGHT, THEME_SYSTEM } from '@/constants'
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
 interface ThemeContextType {
@@ -13,17 +14,25 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState('')
 
   const handleThemeChange = () => {
-    // check the localStorage and user's operating system prefer mode
-    if (
-      localStorage.theme === 'dark' ||
-      (!('theme' in localStorage) &&
-        window.matchMedia('(prefer-color-theme: dark)').matches) // if theme doesn't exist in localStorage and the window prefers dark mode
-    ) {
-      setMode('dark')
-      document.documentElement.classList.add('dark')
+    const themeLocal = localStorage.getItem('theme')
+    const themeDefaultIsDark = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    ).matches
+
+    const setTheme = (theme: string) => {
+      setMode(theme)
+      document.documentElement.classList.remove(THEME_LIGHT, THEME_DARK)
+      document.documentElement.classList.add(theme)
+    }
+
+    if (!themeLocal) {
+      const theme = themeDefaultIsDark ? THEME_DARK : THEME_LIGHT
+      setTheme(theme)
+      localStorage.setItem('theme', theme)
+    } else if (themeLocal !== THEME_SYSTEM) {
+      setTheme(themeLocal)
     } else {
-      setMode('light')
-      document.documentElement.classList.remove('dark')
+      setTheme(themeDefaultIsDark ? THEME_DARK : THEME_LIGHT)
     }
   }
 

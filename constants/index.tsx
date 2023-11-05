@@ -1,16 +1,25 @@
 import { SidebarLink } from '@/types'
 
-const THEME_LIGHT = 'light'
-const THEME_DARK = 'dark'
-const THEME_SYSTEM = 'system'
+export const THEME_LIGHT = 'light'
+export const THEME_DARK = 'dark'
+export const THEME_SYSTEM = 'system'
 
 export const THEME_LIST = [
-  { value: THEME_LIGHT, name: 'Light', icon: '/assets/icons/sun.svg' },
-  { value: THEME_DARK, name: 'Dark', icon: '/assets/icons/moon.svg' },
-  { value: THEME_SYSTEM, name: 'System', icon: '/assets/icons/computer.svg' },
+  {
+    value: THEME_LIGHT,
+    name: 'Light',
+    icon: `/assets/icons/${THEME_LIGHT}.svg`,
+  },
+  { value: THEME_DARK, name: 'Dark', icon: `/assets/icons/${THEME_DARK}.svg` },
+
+  {
+    value: THEME_SYSTEM,
+    name: 'System',
+    icon: `/assets/icons/${THEME_SYSTEM}.svg`,
+  },
 ]
 
-export const sidebarLinks: SidebarLink[] = [
+export const SIDEBAR_LINKS: SidebarLink[] = [
   {
     imgURL: '/assets/icons/home.svg',
     route: '/',
