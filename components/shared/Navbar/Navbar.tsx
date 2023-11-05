@@ -2,6 +2,7 @@ import { SignedIn, UserButton } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
+import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher'
 
 interface NavbarProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -21,7 +22,9 @@ export const Navbar: FC<NavbarProps> = (props) => {
         </span>
       </Link>
       GlobalSearch
-      <div className="flex-between gap-5">Theme</div>
+      <div className="flex-between gap-5">
+        <ThemeSwitcher />
+      </div>
       <SignedIn>
         <UserButton
           afterSignOutUrl="/"

@@ -29,11 +29,11 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
       setMode('dark')
       document.documentElement.classList.add('dark')
     }
-  }, [mode])
+  }, [])
 
-  // useEffect(() => {
-  //   handleThemeChange()
-  // }, [handleThemeChange])
+  useEffect(() => {
+    handleThemeChange()
+  }, [handleThemeChange])
 
   return (
     <ThemeContext.Provider value={{ mode, setMode }}>
@@ -47,4 +47,5 @@ export const useTheme = () => {
 
   if (context === undefined)
     throw new Error('useTheme must be used within a ThemeProvider')
+  return context
 }
