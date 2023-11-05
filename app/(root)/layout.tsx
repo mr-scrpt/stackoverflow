@@ -6,7 +6,7 @@ interface LayoutProps extends HTMLAttributes<HTMLDivElement> {}
 const Layout: FC<LayoutProps> = (props) => {
   const { children } = props
   return (
-    <main className="bg-light850_dark100 relative">
+    <main className="background-light850_dark100 relative">
       <Navbar />
       <div className="flex">
         <div>LeftSide</div>

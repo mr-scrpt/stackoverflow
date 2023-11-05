@@ -3,43 +3,39 @@
 @tailwind utilities;
 
 @layer utilities {
-  .bg-light850_dark100 {
+  .background-light850_dark100 {
     @apply bg-light-850 dark:bg-dark-100;
   }
 
-  .bg-light900_dark200 {
+  .background-light900_dark200 {
     @apply bg-light-900 dark:bg-dark-200;
   }
 
-  .bg-light900_dark300 {
+  .background-light900_dark300 {
     @apply bg-light-900 dark:bg-dark-300;
   }
 
-  .bg-light900_dark300 {
-    @apply bg-light-900 dark:bg-dark-300;
-  }
-
-  .bg-light800_darkgradient {
+  .background-light800_darkgradient {
     @apply bg-light-800 dark:dark-gradient;
   }
 
-  .bg-light800_dark400 {
+  .background-light800_dark400 {
     @apply bg-light-800 dark:bg-dark-400 !important;
   }
 
-  .bg-light700_dark400 {
+  .background-light700_dark400 {
     @apply bg-light-700 dark:bg-dark-400;
   }
 
-  .bg-light700_dark300 {
+  .background-light700_dark300 {
     @apply bg-light-700 dark:bg-dark-300;
   }
 
-  .bg-light800_dark400 {
+  .background-light800_dark400 {
     @apply bg-light-800 dark:bg-dark-400;
   }
 
-  .bg-light800_dark300 {
+  .background-light800_dark300 {
     @apply bg-light-800 dark:bg-dark-300 !important;
   }
 
