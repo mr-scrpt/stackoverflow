@@ -1,9 +1,13 @@
 import { SidebarLink } from '@/types'
 
-export const themes = [
-  { value: 'light', label: 'Light', icon: '/assets/icons/sun.svg' },
-  { value: 'dark', label: 'Dark', icon: '/assets/icons/moon.svg' },
-  { value: 'system', label: 'System', icon: '/assets/icons/computer.svg' },
+const THEME_LIGHT = 'light'
+const THEME_DARK = 'dark'
+const THEME_SYSTEM = 'system'
+
+export const THEME_LIST = [
+  { value: THEME_LIGHT, name: 'Light', icon: '/assets/icons/sun.svg' },
+  { value: THEME_DARK, name: 'Dark', icon: '/assets/icons/moon.svg' },
+  { value: THEME_SYSTEM, name: 'System', icon: '/assets/icons/computer.svg' },
 ]
 
 export const sidebarLinks: SidebarLink[] = [

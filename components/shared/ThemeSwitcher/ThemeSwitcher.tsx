@@ -1,19 +1,17 @@
 'use client'
-import { FC, HTMLAttributes } from 'react'
 import Image from 'next/image'
+import { FC, HTMLAttributes } from 'react'
 
-import useTheme from '@/contexts/ThemeProvider'
 import {
   Menubar,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
   MenubarTrigger,
 } from '@/components/ui/menubar'
+import useTheme from '@/contexts/ThemeProvider'
 
-import { themes } from '@/constants'
+import { THEME_LIST } from '@/constants'
 
 interface ThemeSwitcherProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -42,7 +40,7 @@ export const ThemeSwitcher: FC<ThemeSwitcherProps> = (props) => {
           )}
         </MenubarTrigger>
         <MenubarContent className="absolute right-[-3rem] mt-3 min-w-[120px] rounded border py-2 dark:border-dark-400 dark:bg-dark-300">
-          {themes.map((item) => {
+          {THEME_LIST.map((item) => {
             return (
               <MenubarItem
                 key={item.value}
@@ -71,7 +69,7 @@ export const ThemeSwitcher: FC<ThemeSwitcherProps> = (props) => {
                       : 'text-dark100_light900'
                   }`}
                 >
-                  {item.label}
+                  {item.name}
                 </p>
               </MenubarItem>
             )
