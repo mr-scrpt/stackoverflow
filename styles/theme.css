@@ -23,6 +23,10 @@
     @apply bg-light-800 dark:dark-gradient;
   }
 
+  .bg-light700_darkgradient {
+    @apply bg-light-700 dark:bg-dark-500;
+  }
+
   .bg-light800_dark400 {
     @apply bg-light-800 dark:bg-dark-400 !important;
   }

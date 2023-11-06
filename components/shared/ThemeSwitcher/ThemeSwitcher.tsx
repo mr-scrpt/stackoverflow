@@ -11,21 +11,27 @@ import {
 } from '@/components/ui/menubar'
 import useTheme from '@/contexts/ThemeProvider'
 
-import { THEME_LIST } from '@/constants'
+import { THEME_LIST, THEME_SYSTEM } from '@/constants'
 
 interface ThemeSwitcherProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const ThemeSwitcher: FC<ThemeSwitcherProps> = (props) => {
   const { mode, setMode } = useTheme()
 
-  const themeActimeSrc = `/assets/icons/${localStorage.getItem('theme')}.svg`
+  let activeTheme = THEME_SYSTEM
+  if (typeof window !== 'undefined') {
+    activeTheme = localStorage.getItem('theme') || THEME_SYSTEM
+  }
+  console.log(activeTheme ?? 'system')
+
+  const themeActiveSrc = `/assets/icons/${activeTheme}.svg`
 
   return (
     <Menubar className="relative border-none bg-transparent shadow-none">
       <MenubarMenu>
         <MenubarTrigger className="focus:bg-light-900 data-[state=open]:bg-light-900 dark:focus:bg-dark-200 dark:data-[state=open]:bg-dark-200">
           <Image
-            src={themeActimeSrc}
+            src={themeActiveSrc}
             alt="moon"
             width={20}
             height={20}
