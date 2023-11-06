@@ -28,7 +28,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (!themeLocal) {
       const theme = themeDefaultIsDark ? THEME_DARK : THEME_LIGHT
       setTheme(theme)
-      localStorage.setItem('theme', theme)
     } else if (themeLocal !== THEME_SYSTEM) {
       setTheme(themeLocal)
     } else {

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/menubar'
 import useTheme from '@/contexts/ThemeProvider'
 
-import { THEME_DARK, THEME_LIGHT, THEME_LIST, THEME_SYSTEM } from '@/constants'
+import { THEME_LIST } from '@/constants'
 
 interface ThemeSwitcherProps extends HTMLAttributes<HTMLDivElement> {}
 
