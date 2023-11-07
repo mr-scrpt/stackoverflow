@@ -84,3 +84,72 @@ export const BADGE_CRITERIA = {
     GOLD: 100000,
   },
 }
+
+export const HOT_NETWORKS = [
+  {
+    _id: 1,
+    title:
+      'Would it be appropriate to point out an error in another paper during a referee report?',
+  },
+  {
+    _id: 2,
+    title: 'How can an airconditioning machine exist?',
+  },
+  {
+    _id: 3,
+    title: 'Interrogated every time crossing UK Border as citizen',
+  },
+  {
+    _id: 4,
+    title: 'WLow digit addition generator',
+  },
+  {
+    _id: 5,
+    title:
+      'What is an example of 3 totalQuestionss that do not make up a vector?',
+  },
+]
+
+export const POPULAR_TAG = [
+  {
+    _id: 1,
+    name: 'JAVASCRIPT',
+    totalQuestions: 20152,
+  },
+  {
+    _id: 2,
+    name: 'PYTHON',
+    totalQuestions: 18493,
+  },
+  {
+    _id: 3,
+    name: 'JAVA',
+    totalQuestions: 18269,
+  },
+  {
+    _id: 4,
+    name: 'KUBERNATES',
+    totalQuestions: 15121,
+  },
+
+  {
+    _id: 5,
+    name: 'APOLLO',
+    totalQuestions: 14431,
+  },
+  {
+    _id: 6,
+    name: 'DOCKER',
+    totalQuestions: 9429,
+  },
+  {
+    _id: 7,
+    name: 'WEBSOCKET',
+    totalQuestions: 9429,
+  },
+  {
+    _id: 8,
+    name: 'MACHINE LEARNING',
+    totalQuestions: 9429,
+  },
+]
