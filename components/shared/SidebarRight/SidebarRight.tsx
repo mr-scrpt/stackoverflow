@@ -20,9 +20,9 @@ export const SidebarRight: FC<SidebarRightProps> = (props) => {
                 key={question._id}
                 className="flex cursor-pointer items-center justify-between gap-7"
               >
-                <p className="body-medium text-dark500_light700">
+                <span className="body-medium text-dark500_light700">
                   {question.title}
-                </p>
+                </span>
                 <Image
                   src="/assets/icons/chevron-right.svg"
                   alt="chevron right"
