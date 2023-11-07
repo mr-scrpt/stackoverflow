@@ -17,26 +17,28 @@ interface ThemeSwitcherProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const ThemeSwitcher: FC<ThemeSwitcherProps> = (props) => {
   const { mode, setMode } = useTheme()
-
-  let activeTheme = THEME_SYSTEM
-  if (typeof window !== 'undefined') {
-    activeTheme = localStorage.getItem('theme') || THEME_SYSTEM
-  }
-  console.log(activeTheme ?? 'system')
-
-  const themeActiveSrc = `/assets/icons/${activeTheme}.svg`
+  // console.log('mode', mode)
+  //
+  // let activeTheme = THEME_SYSTEM
+  // if (typeof window !== 'undefined') {
+  //   activeTheme = localStorage.getItem('theme')
+  // }
+  //
+  // const themeActiveSrc = `/assets/icons/${activeTheme}.svg`
 
   return (
     <Menubar className="relative border-none bg-transparent shadow-none">
       <MenubarMenu>
         <MenubarTrigger className="focus:bg-light-900 data-[state=open]:bg-light-900 dark:focus:bg-dark-200 dark:data-[state=open]:bg-dark-200">
-          <Image
-            src={themeActiveSrc}
-            alt="moon"
-            width={20}
-            height={20}
-            className="active-theme"
-          />
+          {mode && (
+            <Image
+              src={`/assets/icons/${mode}.svg`}
+              alt="moon"
+              width={20}
+              height={20}
+              className="active-theme"
+            />
+          )}
         </MenubarTrigger>
         <MenubarContent className="absolute right-[-3rem] mt-3 min-w-[120px] rounded border py-2 dark:border-dark-400 dark:bg-dark-300">
           {THEME_LIST.map((item) => {
