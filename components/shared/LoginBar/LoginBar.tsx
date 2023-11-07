@@ -15,7 +15,7 @@ export const LoginBar: FC<LoginBarProps> = (props) => {
   const clsTextSignUp = cn(classLinkText, '')
 
   const clsIcon = cn(classIcon, 'invert-colors lg:hidden')
-  console.log('class for icon', classIcon)
+  // console.log('class for icon', clsIcon)
   return (
     <div>
       <div className="flex flex-col gap-3 my-auto">
@@ -26,7 +26,7 @@ export const LoginBar: FC<LoginBarProps> = (props) => {
               alt="login"
               width={20}
               height={20}
-              className={classIcon}
+              className={clsIcon}
             />
             <span className={clsTextLogin}>Log In</span>
           </Button>

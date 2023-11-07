@@ -17,7 +17,7 @@ export const SidebarLeft: FC<SidebarLeftProps> = (props) => {
         pathname={pathname}
         classLinkText="max-lg:hidden"
       />
-      <LoginBar classLinkText="max-lg:hidden" classIcon="hidden" />
+      <LoginBar classLinkText="max-lg:hidden" classIcon="lg:hidden" />
     </div>
   )
 }

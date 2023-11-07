@@ -57,7 +57,7 @@ export const MenuMobile: FC<MenuMobileProps> = (props) => {
             <SignedOut>
               <div className="flex flex-col gap-3 my-auto">
                 <SheetClose asChild>
-                  <LoginBar />
+                  <LoginBar classIcon="hidden" />
                 </SheetClose>
               </div>
             </SignedOut>
