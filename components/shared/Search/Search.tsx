@@ -9,14 +9,25 @@ interface SearchProps extends InputHTMLAttributes<HTMLInputElement> {
   onSearch: (str: string) => void
   icon?: string
   iconPosition: 'left' | 'right'
+  classBg?: string
 }
 
 export const Search: FC<SearchProps> = (props) => {
-  const { placeholder, route, icon, className, value, onSearch, iconPosition } =
-    props
+  const {
+    placeholder,
+    route,
+    icon,
+    className,
+    value,
+    onSearch,
+    iconPosition,
+    classBg,
+  } = props
   return (
     <div className={className}>
-      <div className="w-full bg-light700_darkgradient relative flex min-h-[56px] grow items-center gap-1 rounded-xl px-4">
+      <div
+        className={`${classBg} w-full relative flex min-h-[56px] grow items-center gap-1 rounded-xl px-4 `}
+      >
         {icon && iconPosition === 'left' && (
           <Image
             src={icon}
@@ -30,9 +41,9 @@ export const Search: FC<SearchProps> = (props) => {
           type="text"
           placeholder={placeholder}
           onChange={(e) => onSearch(e.target?.value)}
-          value={value}
+          // value={value}
           // value=""
-          className="paragraph-regular no-focus placeholder bg-light700_darkgradient border-none shadow-none outline-none"
+          className={`${classBg} paragraph-regular no-focus placeholder border-none shadow-none outline-none`}
         />
         {icon && iconPosition === 'right' && (
           <Image

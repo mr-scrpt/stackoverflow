@@ -11,6 +11,7 @@ export const SearchLocal: FC<SearchLocalProps> = (props) => {
       iconPosition="left"
       placeholder="Local search"
       route="/"
+      classBg="bg-light700_dark400"
       className="flex-1"
       value=""
     />

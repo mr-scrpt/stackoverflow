@@ -1,5 +1,10 @@
 import { BADGE_CRITERIA } from '@/constants'
 
+export interface IFilter {
+  name: string
+  value: string
+}
+
 export interface SidebarLink {
   imgURL: string
   route: string

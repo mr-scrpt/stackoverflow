@@ -9,8 +9,10 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
       onSearch={console.log}
       icon="/assets/icons/search.svg"
       placeholder="Globally search"
+      classBg="bg-light700_dark400"
       route="/"
-      className="relative w-full max-w-[600px] max-lg:hidden"
+      iconPosition="left"
+      className="max-w-[600px] w-full max-lg:hidden"
     />
   )
 }
