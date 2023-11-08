@@ -14,6 +14,7 @@ export default function Home() {
           <Button className="primary-gradient min-h-[40px] px-4 py-3 text-light-900">
             Ask question
           </Button>
+          ololo
         </Link>
       </div>
 
