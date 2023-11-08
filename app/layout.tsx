@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="en">
       <body className={`${inter.variable} ${spaceGrotesk.variable}`}>
@@ -44,3 +44,4 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     </html>
   )
 }
+export default RootLayout
