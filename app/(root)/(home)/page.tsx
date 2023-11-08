@@ -15,7 +15,6 @@ export default function Home() {
             Ask question
           </Button>
         </Link>
-        text
       </div>
 
       <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
