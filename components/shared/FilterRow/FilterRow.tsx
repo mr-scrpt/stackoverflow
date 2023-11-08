@@ -12,7 +12,7 @@ export const FilterRow: FC<FilterRowProps> = (props) => {
   const active = 'newest'
 
   return (
-    <div className="mt-10 flex-wrap gap-3 max-lg:hidden md:flex ">
+    <div className="flex-wrap gap-3 max-lg:hidden md:flex ">
       {list.map((item) => (
         <Button
           key={item.value}

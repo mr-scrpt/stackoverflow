@@ -5,6 +5,29 @@ export interface IFilter {
   value: string
 }
 
+export interface ITag {
+  _id: string
+  name: string
+}
+
+export interface IAuthor {
+  _id: string
+  name: string
+  img: string
+}
+
+export interface IQuestion {
+  _id: string
+  title: string
+  tags: ITag[]
+
+  author: IAuthor
+  upVotes: number
+  views: number
+  answers: []
+  createdAt: Date
+}
+
 export interface SidebarLink {
   imgURL: string
   route: string
