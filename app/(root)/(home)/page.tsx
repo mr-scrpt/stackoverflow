@@ -1,5 +1,6 @@
 'use client'
 import { Filter } from '@/components/shared/Filter/Filter'
+import { FilterRow } from '@/components/shared/FilterRow/FilterRow'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { Button } from '@/components/ui/button'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
@@ -26,6 +27,7 @@ export default function Home() {
           classList=""
         />
       </div>
+      <FilterRow list={HOME_PAGE_FILTER} />
     </section>
   )
 }
