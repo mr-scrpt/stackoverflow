@@ -1,3 +1,5 @@
+'use client'
+import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
@@ -15,7 +17,8 @@ export default function Home() {
       </div>
 
       <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
-        LocalSearch
+        <SearchLocal />
+        <div>Filter</div>
       </div>
     </section>
   )

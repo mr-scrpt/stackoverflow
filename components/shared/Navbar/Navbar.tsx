@@ -1,9 +1,11 @@
+'use client'
 import { SignedIn, UserButton } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher'
 import { MenuMobile } from '../MenuMobile/MenuMobile'
+import { Search } from '../Search/Search'
 import { SearchGlobal } from '../SearchGlobal/SearchGlobal'
 
 interface NavbarProps extends HTMLAttributes<HTMLDivElement> {}
@@ -23,9 +25,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
           <span className="text-primary-500">Overflow</span>
         </span>
       </Link>
-      {/* <div className="flex grow text-light-500"> */}
       <SearchGlobal />
-      {/* </div> */}
       <div className="flex-between gap-5">
         <ThemeSwitcher />
       </div>
