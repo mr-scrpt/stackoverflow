@@ -13,7 +13,7 @@ export default function Home() {
         <h1 className="h1-bold text-dark100_light900">All Questions</h1>
         <Link href="/ask-question" className="flex justify-end max-sm:w-full">
           <Button className="primary-gradient min-h-[40px] px-4 py-3 text-light-900">
-            Ask question
+            Ask question 1
           </Button>
         </Link>
       </div>

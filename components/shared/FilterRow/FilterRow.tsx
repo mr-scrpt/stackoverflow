@@ -10,6 +10,7 @@ interface FilterRowProps extends HTMLAttributes<HTMLDivElement> {
 export const FilterRow: FC<FilterRowProps> = (props) => {
   const { list } = props
   const active = 'newest'
+
   return (
     <div className="mt-10 flex-wrap gap-3 max-lg:hidden md:flex ">
       {list.map((item) => (
