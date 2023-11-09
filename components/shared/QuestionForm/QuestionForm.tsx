@@ -1,7 +1,6 @@
 'use client'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Editor } from '@tinymce/tinymce-react'
-import Image from 'next/image'
 import {
   Form,
   FormControl,
@@ -13,12 +12,13 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FC, HTMLAttributes, useRef, KeyboardEvent, useState } from 'react'
-import { ControllerRenderProps, useForm } from 'react-hook-form'
+import { Editor } from '@tinymce/tinymce-react'
+import Image from 'next/image'
+import router from 'next/router'
+import { FC, HTMLAttributes, KeyboardEvent, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { QuestionFormSchema } from './validation.schema'
-import { Badge } from '@/components/ui/badge'
-import router from 'next/router'
 
 interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -111,7 +111,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
               </FormLabel>
               <FormControl>
                 <Input
-                  placeholder="shadcn"
+                  placeholder=""
                   {...field}
                   className="mt-0 no-focus paragraph-regular bg-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
                 />
