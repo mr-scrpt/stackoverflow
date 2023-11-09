@@ -15,10 +15,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Editor } from '@tinymce/tinymce-react'
 import Image from 'next/image'
 import router from 'next/router'
-import { FC, HTMLAttributes, KeyboardEvent, useRef, useState } from 'react'
+import {
+  FC,
+  HTMLAttributes,
+  KeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { QuestionFormSchema } from './validation.schema'
+import { createQuestion } from '@/lib/actions/question.action'
 
 interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -26,6 +34,10 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
   const editorRef = useRef(null)
 
   const type: string = 'create'
+
+  useEffect(() => {
+    createQuestion()
+  }, [])
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const form = useForm<z.infer<typeof QuestionFormSchema>>({
@@ -69,9 +81,10 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
     }
   }
 
-  const onSubmit = (values: z.infer<typeof QuestionFormSchema>) => {
+  const onSubmit = async (values: z.infer<typeof QuestionFormSchema>) => {
     setIsSubmitting(true)
     try {
+      await createQuestion()
       // await createQuestion({
       //   title: values.title,
       //   content: values.explanation,
@@ -141,6 +154,8 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                     //@ts-ignore
                     (editorRef.current = editor)
                   }
+                  onBlur={field.onBlur} // save value once exit
+                  onEditorChange={(content) => field.onChange(content)}
                   initialValue=""
                   init={{
                     height: 350,
