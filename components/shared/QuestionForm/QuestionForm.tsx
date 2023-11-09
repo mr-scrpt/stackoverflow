@@ -1,5 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
+import { Editor } from '@tinymce/tinymce-react'
 import {
   Form,
   FormControl,
@@ -11,7 +12,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { QuestionFormSchema } from './validation.schema'
@@ -19,6 +20,7 @@ import { QuestionFormSchema } from './validation.schema'
 interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const QuestionForm: FC<QuestionFormProps> = (props) => {
+  const editorRef = useRef(null)
   const form = useForm<z.infer<typeof QuestionFormSchema>>({
     resolver: zodResolver(QuestionFormSchema),
     defaultValues: {
@@ -70,7 +72,42 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                 Detail explanation of your question?
                 <span className="text-primary-500">*</span>
               </FormLabel>
-              <FormControl>Editor</FormControl>
+              <FormControl>
+                <Editor
+                  apiKey={process.env.NEXT_PUBLIC_TINY_API_KEY}
+                  onInit={(evt, editor) =>
+                    //@ts-ignore
+                    (editorRef.current = editor)
+                  }
+                  initialValue=""
+                  init={{
+                    height: 350,
+                    menubar: false,
+                    plugins: [
+                      'advlist',
+                      'autolink',
+                      'lists',
+                      'link',
+                      'image',
+                      'charmap',
+                      'preview',
+                      'anchor',
+                      'searchreplace',
+                      'visualblocks',
+                      'codesample',
+                      'fullscreen',
+                      'insertdatetime',
+                      'media',
+                      'table',
+                    ],
+                    toolbar:
+                      'undo redo | ' +
+                      'codesample | bold italic forecolor | alignleft aligncenter ' +
+                      'alignright alignjustify | bullist numlist',
+                    content_style: 'body { font-family:Inter; font-size:16px }',
+                  }}
+                />
+              </FormControl>
 
               <FormMessage className="text-[0.8rem] text-red-500" />
               <FormDescription>
