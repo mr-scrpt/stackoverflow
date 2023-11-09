@@ -13,16 +13,21 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FC, HTMLAttributes, useRef, KeyboardEvent } from 'react'
+import { FC, HTMLAttributes, useRef, KeyboardEvent, useState } from 'react'
 import { ControllerRenderProps, useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { QuestionFormSchema } from './validation.schema'
 import { Badge } from '@/components/ui/badge'
+import router from 'next/router'
 
 interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const QuestionForm: FC<QuestionFormProps> = (props) => {
   const editorRef = useRef(null)
+
+  const type: string = 'create'
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const form = useForm<z.infer<typeof QuestionFormSchema>>({
     resolver: zodResolver(QuestionFormSchema),
     defaultValues: {
@@ -65,7 +70,23 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
   }
 
   const onSubmit = (values: z.infer<typeof QuestionFormSchema>) => {
-    console.log(values)
+    setIsSubmitting(true)
+    try {
+      // await createQuestion({
+      //   title: values.title,
+      //   content: values.explanation,
+      //   tags: values.tags,
+      //   author: JSON.parse(mongoUserId),
+      //   path: pathname // for revalidation
+      // })
+
+      // navigate to home page
+      router.push('/')
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleTagRemove = (tag: string, field: any) => {
@@ -203,7 +224,17 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button
+          type="submit"
+          className="primary-gradient w-fit !text-light-900"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <>{type === 'edit' ? 'Editing...' : ' Posting...'}</>
+          ) : (
+            <>{type === 'edit' ? 'Edit Question' : 'Ask a Question'}</>
+          )}
+        </Button>
       </form>
     </Form>
   )
