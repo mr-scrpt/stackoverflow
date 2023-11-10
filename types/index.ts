@@ -5,11 +5,6 @@ export interface IFilter {
   value: string
 }
 
-export interface ITag {
-  _id: string
-  name: string
-}
-
 export interface IPost {}
 
 export interface IBaseUser {
@@ -31,6 +26,18 @@ export interface IAuthor extends Pick<IBaseUser, 'username' | 'picture'> {
   _id: string
   // name: string
   // img: string
+}
+
+export interface IBaseTag {
+  name: string
+  description: string
+  questions?: IPost[]
+  followers?: IAuthor[]
+  createdOn: Date
+}
+
+export interface ITag extends IBaseTag {
+  _id: string
 }
 
 export interface IBaseQuestion {
