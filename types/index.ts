@@ -16,16 +16,20 @@ export interface IAuthor {
   img: string
 }
 
-export interface IQuestion {
-  _id: string
+export interface IBaseQuestion {
   title: string
+  content: string
   tags: ITag[]
-
   author: IAuthor
   upVotes: number
+  downVotes: number
   views: number
   answers: []
   createdAt: Date
+}
+
+export interface IQuestion extends IBaseQuestion {
+  _id: string
 }
 
 export interface SidebarLink {
