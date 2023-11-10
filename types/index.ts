@@ -10,10 +10,27 @@ export interface ITag {
   name: string
 }
 
-export interface IAuthor {
-  _id: string
+export interface IPost {}
+
+export interface IBaseUser {
+  clerkId: string
   name: string
-  img: string
+  username: string
+  picture: string /* not required if login through third party */
+  email: string
+  password?: string
+  bio?: string
+  location?: string
+  portfolioWebsite?: string
+  reputation?: number
+  joinedAt: Date
+  postSaved?: IPost[]
+}
+
+export interface IAuthor extends Pick<IBaseUser, 'username' | 'picture'> {
+  _id: string
+  // name: string
+  // img: string
 }
 
 export interface IBaseQuestion {
