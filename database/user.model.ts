@@ -5,7 +5,7 @@ interface IUser extends Document, IBaseUser {
   // clerkId: string
   // name: string
   // username: string
-  // picture: string /* not required if login through third party */
+  // picture: string
   // email: string
   // password?: string
   // bio?: string

@@ -17,4 +17,4 @@ const TagSchema = new Schema<IDBTag>({
   createdOn: { type: Date, default: Date.now() },
 })
 
-export const Tag = models.Tag || model<IDBTag>('Tag', TagSchema)
+export const TagModel = models.Tag || model<IDBTag>('Tag', TagSchema)

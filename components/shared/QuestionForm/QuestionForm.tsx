@@ -27,17 +27,24 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { QuestionFormSchema } from './validation.schema'
 import { createQuestion } from '@/lib/actions/question.action'
+import { getUserById } from '@/lib/actions/user.action'
+import { usePathname, useRouter } from 'next/navigation'
 
-interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {}
+interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {
+  userId: string
+}
 
 export const QuestionForm: FC<QuestionFormProps> = (props) => {
   const editorRef = useRef(null)
+  const { userId } = props
+  const router = useRouter()
+  const pathname = usePathname()
 
   const type: string = 'create'
 
-  useEffect(() => {
-    createQuestion()
-  }, [])
+  // useEffect(() => {
+  //   createQuestion()
+  // }, [])
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const form = useForm<z.infer<typeof QuestionFormSchema>>({
@@ -84,7 +91,15 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
   const onSubmit = async (values: z.infer<typeof QuestionFormSchema>) => {
     setIsSubmitting(true)
     try {
-      await createQuestion()
+      console.log('user id from db', userId)
+      // await JSON.parse(JSON.stringify(await getUserById({ userId: '123456' })))
+      // console.log('user =>>>>>>>>>', user)
+      await createQuestion({
+        title: values.title,
+        content: values.explanation,
+        tags: values.tags,
+        author: userId,
+      })
       // await createQuestion({
       //   title: values.title,
       //   content: values.explanation,
