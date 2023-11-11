@@ -26,7 +26,8 @@ export const QuestionSchema = new Schema<IDBQuestion>({
   createdAt: { type: Date, default: Date.now },
 })
 
-export const QuestionModel =
-  models.Question || model<IDBQuestion>('Question', QuestionSchema)
+// export const QuestionModel =
+//   models.Question || model<IDBQuestion>('Question', QuestionSchema)
 
+export const QuestionModel = model<IDBQuestion>('Question', QuestionSchema)
 // export default QuestionModel
