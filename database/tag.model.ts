@@ -1,5 +1,5 @@
 import { IBaseTag } from '@/types'
-import { Schema, models, model, Document } from 'mongoose'
+import { Schema, models, model, Document, Model } from 'mongoose'
 
 export interface IDBTag extends Document, IBaseTag {
   // name: string,
@@ -17,4 +17,5 @@ const TagSchema = new Schema<IDBTag>({
   createdOn: { type: Date, default: Date.now() },
 })
 
-export const TagModel = models.Tag || model<IDBTag>('Tag', TagSchema)
+export const TagModel =
+  (models.Tag as Model<IDBTag>) || model<IDBTag>('Tag', TagSchema)

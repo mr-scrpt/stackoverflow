@@ -1,5 +1,5 @@
 import { IBaseQuestion } from '@/types'
-import { Document, Schema, model } from 'mongoose'
+import { Document, Model, Schema, model, models } from 'mongoose'
 
 // Document possess the types of database properties, such as "_id"
 export interface IDBQuestion extends Document, IBaseQuestion {
@@ -26,8 +26,9 @@ export const QuestionSchema = new Schema<IDBQuestion>({
   createdAt: { type: Date, default: Date.now },
 })
 
-// export const QuestionModel =
-//   models.Question || model<IDBQuestion>('Question', QuestionSchema)
+export const QuestionModel =
+  (models.Question as Model<IDBQuestion>) ||
+  model<IDBQuestion>('Question', QuestionSchema)
 
-export const QuestionModel = model<IDBQuestion>('Question', QuestionSchema)
+// export const QuestionModel = model<IDBQuestion>('Question', QuestionSchema)
 // export default QuestionModel
