@@ -67,12 +67,12 @@ export const deleteUser = async (params: IDeleteUserParams) => {
     // return an array with questionIds with distinct value
     // const userQuestionIds = await Question.find({ author: user._id }).distinct("_id")
 
+    const deleteUser = await UserModel.findByIdAndDelete(user._id)
     // delete user questions Ids
     await QuestionModel.deleteMany({ author: user._id })
 
     // TODO: delete user answers, comments...
 
-    const deleteUser = await UserModel.findByIdAndDelete(user._id)
     return deleteUser
   } catch (error) {
     console.log(error)
