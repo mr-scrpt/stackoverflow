@@ -1,4 +1,6 @@
+// 'use client'
 import { FC, HTMLAttributes } from 'react'
+
 import { Search } from '../Search/Search'
 
 interface SearchGlobalProps extends HTMLAttributes<HTMLDivElement> {}

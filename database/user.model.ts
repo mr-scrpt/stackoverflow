@@ -1,7 +1,7 @@
 import { IBaseUser } from '@/types'
 import { Schema, models, model, Document } from 'mongoose'
 
-interface IUser extends Document, IBaseUser {
+interface IDBUser extends Document, IBaseUser {
   // clerkId: string
   // name: string
   // username: string
@@ -16,7 +16,7 @@ interface IUser extends Document, IBaseUser {
   // postSaved?: Schema.Types.ObjectId[]
 }
 
-export const UserSchema = new Schema<IUser>({
+export const UserSchema = new Schema<IDBUser>({
   clerkId: { type: String, required: true } /* clerk ID */,
   name: { type: String, required: true },
   username: { type: String, required: true, unique: true },
@@ -30,4 +30,4 @@ export const UserSchema = new Schema<IUser>({
   postSaved: [{ type: Schema.Types.ObjectId, ref: 'Question' }],
 })
 
-export const UserModel = models.User || model<IUser>('User', UserSchema)
+export const UserModel = models.User || model<IDBUser>('User', UserSchema)

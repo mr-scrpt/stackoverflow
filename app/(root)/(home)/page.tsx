@@ -1,4 +1,3 @@
-'use client'
 import { Filter } from '@/components/shared/Filter/Filter'
 import { FilterRow } from '@/components/shared/FilterRow/FilterRow'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
@@ -6,10 +5,11 @@ import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { Button } from '@/components/ui/button'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
-import { QUESTIONS } from '@/constants/question'
+import { getQuestions } from '@/lib/actions/question.action'
 import Link from 'next/link'
 
-export default function Home() {
+export default async function Home() {
+  const { questions } = await getQuestions({})
   return (
     <section className="flex flex-col gap-8">
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -27,14 +27,13 @@ export default function Home() {
           list={HOME_PAGE_FILTER}
           classTrigger="min-h-[56px] sm:min-w-[170px] bg-light-700 dark:bg-dark-400"
           className="hidden max-md:flex"
-          classList=""
         />
       </div>
       <FilterRow list={HOME_PAGE_FILTER} />
 
       <div className="custom-scrollbar flex w-full flex-col gap-6 overflow-y-auto">
-        {QUESTIONS.length ? (
-          QUESTIONS.map((item) => <QuestionCard key={item._id} item={item} />)
+        {questions.length ? (
+          questions.map((item) => <QuestionCard key={item._id} item={item} />)
         ) : (
           <NoResult
             title="There's no question to show"

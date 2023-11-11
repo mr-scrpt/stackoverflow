@@ -4,8 +4,25 @@ import { QuestionModel } from '@/database/question.model'
 import { connectToDatabase } from '../mongoose'
 import { TagModel } from '@/database/tag.model'
 import { revalidatePath } from 'next/cache'
+import { UserModel } from '@/database/user.model'
+import { ICreateQuestionParams, IGetQuestionsParams } from '@/types/shared'
 
-export const createQuestion = async (params: any) => {
+export const getQuestions = async (params: IGetQuestionsParams) => {
+  try {
+    await connectToDatabase()
+    const questions = await QuestionModel.find({})
+      .populate({ path: 'tags', model: TagModel }) // Specifies paths which should be populated with other documents
+      .populate({ path: 'author', model: UserModel })
+      .sort({ createdAt: -1 })
+
+    return { questions }
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const createQuestion = async (params: ICreateQuestionParams) => {
   try {
     connectToDatabase()
     const { title, content, tags, author, path } = params
@@ -15,6 +32,9 @@ export const createQuestion = async (params: any) => {
       content,
       author,
     })
+
+    console.log('question created', question)
+    console.log('', Date.now())
 
     const tagDocuments = []
 

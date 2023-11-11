@@ -91,22 +91,13 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
   const onSubmit = async (values: z.infer<typeof QuestionFormSchema>) => {
     setIsSubmitting(true)
     try {
-      console.log('user id from db', userId)
-      // await JSON.parse(JSON.stringify(await getUserById({ userId: '123456' })))
-      // console.log('user =>>>>>>>>>', user)
       await createQuestion({
         title: values.title,
         content: values.explanation,
         tags: values.tags,
         author: userId,
+        path: pathname,
       })
-      // await createQuestion({
-      //   title: values.title,
-      //   content: values.explanation,
-      //   tags: values.tags,
-      //   author: JSON.parse(mongoUserId),
-      //   path: pathname // for revalidation
-      // })
 
       // navigate to home page
       router.push('/')
