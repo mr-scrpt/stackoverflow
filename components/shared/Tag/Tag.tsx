@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
 
 interface TagProps extends HTMLAttributes<HTMLDivElement> {
-  _id: string
+  _id: string | number
   name: string
   totalQuestions?: number
   showCount?: boolean

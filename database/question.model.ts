@@ -1,5 +1,5 @@
 import { IBaseQuestion } from '@/types'
-import { Schema, model, models, Document } from 'mongoose'
+import { Document, Schema, model } from 'mongoose'
 
 // Document possess the types of database properties, such as "_id"
 export interface IDBQuestion extends Document, IBaseQuestion {
