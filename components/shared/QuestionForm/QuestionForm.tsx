@@ -11,24 +11,15 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { createQuestion } from '@/lib/actions/question.action'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Editor } from '@tinymce/tinymce-react'
 import Image from 'next/image'
-import router from 'next/router'
-import {
-  FC,
-  HTMLAttributes,
-  KeyboardEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { FC, HTMLAttributes, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { QuestionFormSchema } from './validation.schema'
-import { createQuestion } from '@/lib/actions/question.action'
-import { getUserById } from '@/lib/actions/user.action'
-import { usePathname, useRouter } from 'next/navigation'
 
 interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {
   userId: string
@@ -136,7 +127,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                 />
               </FormControl>
               <FormDescription className="mt-0 text-[0.8rem] dark:text-slate-400 body-regular text-light-500">
-                Be specific and imagine you're asking a question to another
+                Be specific and imagine youre asking a question to another
                 person.
               </FormDescription>
               <FormMessage className="text-[0.8rem] text-red-500" />
@@ -157,7 +148,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                 <Editor
                   apiKey={process.env.NEXT_PUBLIC_TINY_API_KEY}
                   onInit={(evt, editor) =>
-                    //@ts-ignore
+                    // @ts-ignore
                     (editorRef.current = editor)
                   }
                   onBlur={field.onBlur} // save value once exit

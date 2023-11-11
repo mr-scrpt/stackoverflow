@@ -13,16 +13,8 @@ interface SearchProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Search: FC<SearchProps> = (props) => {
-  const {
-    placeholder,
-    route,
-    icon,
-    className,
-    value,
-    onSearch,
-    iconPosition,
-    classBg,
-  } = props
+  const { placeholder, icon, className, onSearch, iconPosition, classBg } =
+    props
   return (
     <div className={className}>
       <div

@@ -1,7 +1,6 @@
 import { QuestionForm } from '@/components/shared/QuestionForm/QuestionForm'
 import { getUserById } from '@/lib/actions/user.action'
 import { redirect } from 'next/navigation'
-import { FC, HTMLAttributes } from 'react'
 
 // interface PageProps extends HTMLAttributes<HTMLDivElement> {}
 
