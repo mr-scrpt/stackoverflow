@@ -2,21 +2,23 @@
 // import { Schema } from 'mongoose'
 // import { IDBUser } from '@/mongodb'
 
-export interface CreateAnswerParams {
+import { IDBUser } from '@/database/user.model'
+
+export interface ICreateAnswerParams {
   content: string
   author: string // User ID
   question: string // Question ID
   path: string
 }
 
-export interface GetAnswersParams {
+export interface IGetAnswersParams {
   questionId: string
   sortBy?: string
   page?: number
   pageSize?: number
 }
 
-export interface AnswerVoteParams {
+export interface IAnswerVoteParams {
   answerId: string
   userId: string
   hasupVoted: boolean
@@ -24,29 +26,29 @@ export interface AnswerVoteParams {
   path: string
 }
 
-export interface DeleteAnswerParams {
+export interface IDeleteAnswerParams {
   answerId: string
   path: string
 }
 
-export interface SearchParams {
+export interface ISearchParams {
   query?: string | null
   type?: string | null
 }
 
-export interface RecommendedParams {
+export interface IRecommendedParams {
   userId: string
   page?: number
   pageSize?: number
   searchQuery?: string
 }
 
-export interface ViewQuestionParams {
+export interface IViewQuestionParams {
   questionId: string
   userId: string | undefined
 }
 
-export interface JobFilterParams {
+export interface IJobFilterParams {
   query: string
   page: string
 }
@@ -66,11 +68,11 @@ export interface ICreateQuestionParams {
   path: string
 }
 
-export interface GetQuestionByIdParams {
+export interface IGetQuestionByIdParams {
   questionId: string
 }
 
-export interface QuestionVoteParams {
+export interface IQuestionVoteParams {
   questionId: string
   userId: string
   hasupVoted: boolean
@@ -78,38 +80,38 @@ export interface QuestionVoteParams {
   path: string
 }
 
-export interface DeleteQuestionParams {
+export interface IDeleteQuestionParams {
   questionId: string
   path: string
 }
 
-export interface EditQuestionParams {
+export interface IEditQuestionParams {
   questionId: string
   title: string
   content: string
   path: string
 }
 
-export interface GetAllTagsParams {
+export interface IGetAllTagsParams {
   page?: number
   pageSize?: number
   filter?: string
   searchQuery?: string
 }
 
-export interface GetQuestionsByTagIdParams {
+export interface IGetQuestionsByTagIdParams {
   tagId: string
   page?: number
   pageSize?: number
   searchQuery?: string
 }
 
-export interface GetTopInteractedTagsParams {
+export interface IGetTopInteractedTagsParams {
   userId: string
   limit?: number
 }
 
-export interface CreateUserParams {
+export interface ICreateUserParams {
   clerkId: string
   name: string
   username: string
@@ -117,30 +119,30 @@ export interface CreateUserParams {
   picture: string
 }
 
-export interface GetUserByIdParams {
+export interface IGetUserByIdParams {
   userId: string
 }
 
-export interface GetAllUsersParams {
+export interface IGetAllUsersParams {
   page?: number
   pageSize?: number
   filter?: string
   searchQuery?: string // Add searchQuery parameter
 }
 
-// export interface UpdateUserParams {
-//   clerkId: string
-//   updateData: Partial<IUser>
-//   path: string
-// }
+export interface IUpdateUserParams {
+  clerkId: string
+  updateData: Partial<IDBUser>
+  path: string
+}
 
-export interface ToggleSaveQuestionParams {
+export interface IToggleSaveQuestionParams {
   userId: string
   questionId: string
   path: string
 }
 
-export interface GetSavedQuestionsParams {
+export interface IGetSavedQuestionsParams {
   clerkId: string
   page?: number
   pageSize?: number
@@ -148,12 +150,12 @@ export interface GetSavedQuestionsParams {
   searchQuery?: string
 }
 
-export interface GetUserStatsParams {
+export interface IGetUserStatsParams {
   userId: string
   page?: number
   pageSize?: number
 }
 
-export interface DeleteUserParams {
+export interface IDeleteUserParams {
   clerkId: string
 }
