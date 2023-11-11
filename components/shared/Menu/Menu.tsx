@@ -1,9 +1,8 @@
+import { cn } from '@/lib/utils'
 import { SidebarLink } from '@/types'
+import Image from 'next/image'
 import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
-import Image from 'next/image'
-import clsx from 'clsx'
-import { cn } from '@/lib/utils'
 
 interface MenuProps extends HTMLAttributes<HTMLDivElement> {
   menuList: SidebarLink[]

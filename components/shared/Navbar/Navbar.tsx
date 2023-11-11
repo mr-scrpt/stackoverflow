@@ -3,10 +3,9 @@ import { SignedIn, UserButton } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
-import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher'
 import { MenuMobile } from '../MenuMobile/MenuMobile'
-import { Search } from '../Search/Search'
 import { SearchGlobal } from '../SearchGlobal/SearchGlobal'
+import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher'
 
 interface NavbarProps extends HTMLAttributes<HTMLDivElement> {}
 

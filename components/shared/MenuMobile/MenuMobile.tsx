@@ -1,5 +1,4 @@
 'use client'
-import { Button } from '@/components/ui/button'
 import {
   Sheet,
   SheetClose,
@@ -12,8 +11,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FC, HTMLAttributes } from 'react'
-import { Menu } from '../Menu/Menu'
 import { LoginBar } from '../LoginBar/LoginBar'
+import { Menu } from '../Menu/Menu'
 
 interface MenuMobileProps extends HTMLAttributes<HTMLDivElement> {}
 

@@ -11,24 +11,15 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { createQuestion } from '@/lib/actions/question.action'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Editor } from '@tinymce/tinymce-react'
 import Image from 'next/image'
-import router from 'next/router'
-import {
-  FC,
-  HTMLAttributes,
-  KeyboardEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { FC, HTMLAttributes, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { QuestionFormSchema } from './validation.schema'
-import { createQuestion } from '@/lib/actions/question.action'
-import { getUserById } from '@/lib/actions/user.action'
-import { usePathname, useRouter } from 'next/navigation'
 
 interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {
   userId: string

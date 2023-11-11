@@ -38,7 +38,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
         {/* question author */}
         <Metric
           imgUrl="/assets/icons/avatar.svg"
-          value={author.name}
+          value={author.username}
           alt="user"
           title={` - asked ${getTimestamp(createdAt)}`}
           href={`/profile/${author._id}`}
