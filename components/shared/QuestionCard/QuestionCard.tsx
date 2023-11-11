@@ -37,7 +37,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
         {/* question author */}
         <Metric
-          imgUrl="/assets/icons/avatar.svg"
+          imgUrl={author.picture}
           value={author.username}
           alt="user"
           title={` - asked ${getTimestamp(createdAt)}`}
