@@ -127,7 +127,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                 />
               </FormControl>
               <FormDescription className="mt-0 text-[0.8rem] dark:text-slate-400 body-regular text-light-500">
-                Be specific and imagine you're asking a question to another
+                Be specific and imagine youre asking a question to another
                 person.
               </FormDescription>
               <FormMessage className="text-[0.8rem] text-red-500" />
@@ -148,7 +148,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                 <Editor
                   apiKey={process.env.NEXT_PUBLIC_TINY_API_KEY}
                   onInit={(evt, editor) =>
-                    //@ts-ignore
+                    // @ts-ignore
                     (editorRef.current = editor)
                   }
                   onBlur={field.onBlur} // save value once exit
