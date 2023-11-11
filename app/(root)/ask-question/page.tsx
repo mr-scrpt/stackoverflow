@@ -1,12 +1,11 @@
 import { QuestionForm } from '@/components/shared/QuestionForm/QuestionForm'
 import { getUserById } from '@/lib/actions/user.action'
-import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import { FC, HTMLAttributes } from 'react'
 
-interface PageProps extends HTMLAttributes<HTMLDivElement> {}
+// interface PageProps extends HTMLAttributes<HTMLDivElement> {}
 
-const Page: FC<PageProps> = async (props) => {
+const QuestionPage = async () => {
   // const { userId } = auth()
   const userId = '123456'
   const user = await getUserById({ userId })
@@ -23,4 +22,4 @@ const Page: FC<PageProps> = async (props) => {
   )
 }
 
-export default Page
+export default QuestionPage
