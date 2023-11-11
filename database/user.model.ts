@@ -1,7 +1,7 @@
 import { IBaseUser } from '@/types'
 import { Schema, models, model, Document } from 'mongoose'
 
-interface IDBUser extends Document, IBaseUser {
+export interface IDBUser extends Document, IBaseUser {
   // clerkId: string
   // name: string
   // username: string
