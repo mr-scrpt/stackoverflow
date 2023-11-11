@@ -1,14 +1,18 @@
 import { QuestionForm } from '@/components/shared/QuestionForm/QuestionForm'
 import { getUserById } from '@/lib/actions/user.action'
+import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
 // interface PageProps extends HTMLAttributes<HTMLDivElement> {}
 
 const QuestionPage = async () => {
-  // const { userId } = auth()
-  const userId = '123456'
-  const user = await getUserById({ userId })
+  const { userId } = auth()
+  console.log('user id ====>>>>>', userId)
   if (!userId) redirect('/sign-in')
+  const user = await getUserById({ userId })
+  if (!user) {
+    return null
+  }
 
   return (
     <section className="flex flex-col gap-8">
