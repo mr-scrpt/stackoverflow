@@ -23,7 +23,7 @@ const CommunityPage = async () => {
         />
       </div>
       <FilterRow list={USER_PAGE_FILTER} />
-      <div className="custom-scrollbar flex w-full flex-col gap-6 overflow-y-auto">
+      <div className="custom-scrollbar flex flex-col items-center flex-wrap md:flex-row md:justify-start  w-full gap-6 overflow-y-auto">
         {users.length > 0 ? (
           users.map((user) => {
             return <UserCard user={user} key={user._id} />
@@ -36,18 +36,6 @@ const CommunityPage = async () => {
             </Link>
           </div>
         )}
-        {/* {questions.length ? ( */}
-        {/*   questions.map((item) => <QuestionCard key={item._id} item={item} />) */}
-        {/* ) : ( */}
-        {/*   <NoResult */}
-        {/*     title="There's no question to show" */}
-        {/*     description="Be the first to break the silence! 🚀 Ask a Question and kickstart the */}
-        {/* discussion. our query could be the next big thing others learn from. Get */}
-        {/* involved! 💡" */}
-        {/*     link="/ask-question" */}
-        {/*     linkTitle="Ask a Question" */}
-        {/*   /> */}
-        {/* )} */}
       </div>
     </section>
   )
