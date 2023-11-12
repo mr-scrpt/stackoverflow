@@ -19,7 +19,7 @@ export const QuestionFilters = [
   { name: 'Most Answered', value: 'most_answered' },
 ]
 
-export const TagFilters = [
+export const TAG_PAGE_FILTE = [
   { name: 'Popular', value: 'popular' },
   { name: 'Recent', value: 'recent' },
   { name: 'Name', value: 'name' },

@@ -3,6 +3,7 @@
 import { UserModel } from '@/database/user.model'
 import { connectToDatabase } from '../mongoose'
 import { IGetTopInteractedTagsParams } from '@/types/shared'
+import { TagModel } from '@/database/tag.model'
 
 export const fetchTagsByUserId = async (
   params: IGetTopInteractedTagsParams
@@ -29,5 +30,19 @@ export const fetchTagsByUserId = async (
   } catch (error) {
     console.log(error)
     throw error
+  }
+}
+
+export const fetchTagList = async () => {
+  try {
+    connectToDatabase()
+    const tagList = await TagModel.find({})
+
+    if (!tagList) throw new Error('tag list not be fetched')
+
+    return { tagList }
+  } catch (e) {
+    console.log(e)
+    throw e
   }
 }
