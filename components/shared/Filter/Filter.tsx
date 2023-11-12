@@ -19,7 +19,6 @@ interface FilterProps extends HTMLAttributes<HTMLDivElement> {
 
 export const Filter: FC<FilterProps> = (props) => {
   const { list, className, classTrigger, classList } = props
-  console.log('list', list)
   return (
     <div className={`relative ${className}`}>
       <Select>

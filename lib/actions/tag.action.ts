@@ -4,13 +4,15 @@ import { UserModel } from '@/database/user.model'
 import { connectToDatabase } from '../mongoose'
 import { IGetTopInteractedTagsParams } from '@/types/shared'
 
-export async function getTopInteractiveTags(
+export const fetchTagsByUserId = async (
   params: IGetTopInteractedTagsParams
-) {
+) => {
   try {
     connectToDatabase()
 
     const { userId, limit = 3 } = params
+
+    console.log('', limit)
 
     const user = await UserModel.findById(userId)
 

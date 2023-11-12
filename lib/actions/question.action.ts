@@ -33,9 +33,6 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
       author,
     })
 
-    console.log('question created', question)
-    console.log('', Date.now())
-
     const tagDocuments = []
 
     for (const tag of tags) {

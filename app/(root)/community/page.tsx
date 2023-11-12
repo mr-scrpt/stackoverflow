@@ -10,7 +10,6 @@ import Link from 'next/link'
 
 const CommunityPage = async () => {
   const { users } = await getAllUsers({})
-  console.log('user =>>', users)
   return (
     <section className="flex flex-col gap-8">
       <h1 className="h1-bold text-dark100_light900">Community Page</h1>
