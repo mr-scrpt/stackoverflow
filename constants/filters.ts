@@ -5,7 +5,7 @@ export const AnswerFilters = [
   { name: 'Oldest', value: 'old' },
 ]
 
-export const UserFilters = [
+export const USER_PAGE_FILTER = [
   { name: 'New Users', value: 'new_users' },
   { name: 'Old Users', value: 'old_users' },
   { name: 'Top Contributors', value: 'top_contributors' },
