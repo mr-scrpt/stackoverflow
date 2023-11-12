@@ -14,7 +14,7 @@ const Layout: FC<LayoutProps> = (props) => {
 
   const clsLeftSide = cn(
     clsSidebarCommon,
-    'left-0 lg:w-[266px] justify-between border-r max-sm:hidden'
+    'left-0 lg:w-[266px] min-w-[52px] justify-between border-r max-sm:hidden'
   )
 
   const clsRightSide = cn(

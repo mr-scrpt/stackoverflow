@@ -23,7 +23,7 @@ const CommunityPage = async () => {
         />
       </div>
       <FilterRow list={USER_PAGE_FILTER} />
-      <div className="custom-scrollbar flex w-full flex-col gap-6 overflow-y-auto">
+      <div className="custom-scrollbar flex flex-col items-center flex-wrap sm:flex-row sm:justify-start  w-full gap-6 overflow-y-auto">
         {users.length > 0 ? (
           users.map((user) => {
             return <UserCard user={user} key={user._id} />

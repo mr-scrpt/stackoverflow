@@ -10,9 +10,9 @@ export const fetchTagsByUserId = async (
   try {
     connectToDatabase()
 
-    const { userId, limit = 3 } = params
+    const { userId } = params
 
-    console.log('', limit)
+    // console.log('', limit)
 
     const user = await UserModel.findById(userId)
 
