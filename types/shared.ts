@@ -15,7 +15,7 @@ export interface IGetAnswersParams {
   questionId: string
   sortBy?: string
   page?: number
-  pageSize?: number
+  limit?: number
 }
 
 export interface IAnswerVoteParams {
@@ -39,7 +39,7 @@ export interface ISearchParams {
 export interface IRecommendedParams {
   userId: string
   page?: number
-  pageSize?: number
+  limit?: number
   searchQuery?: string
 }
 
@@ -55,7 +55,7 @@ export interface IJobFilterParams {
 
 export interface IGetQuestionsParams {
   page?: number
-  pageSize?: number
+  limit?: number
   searchQuery?: string
   filter?: string
 }
@@ -94,7 +94,7 @@ export interface IEditQuestionParams {
 
 export interface IGetAllTagsParams {
   page?: number
-  pageSize?: number
+  limit?: number
   filter?: string
   searchQuery?: string
 }
@@ -102,7 +102,7 @@ export interface IGetAllTagsParams {
 export interface IGetQuestionsByTagIdParams {
   tagId: string
   page?: number
-  pageSize?: number
+  limit?: number
   searchQuery?: string
 }
 
@@ -125,7 +125,7 @@ export interface IGetUserByIdParams {
 
 export interface IGetAllUsersParams {
   page?: number
-  pageSize?: number
+  limit?: number
   filter?: string
   searchQuery?: string // Add searchQuery parameter
 }
@@ -145,7 +145,7 @@ export interface IToggleSaveQuestionParams {
 export interface IGetSavedQuestionsParams {
   clerkId: string
   page?: number
-  pageSize?: number
+  limit?: number
   filter?: string
   searchQuery?: string
 }
@@ -153,7 +153,7 @@ export interface IGetSavedQuestionsParams {
 export interface IGetUserStatsParams {
   userId: string
   page?: number
-  pageSize?: number
+  limit?: number
 }
 
 export interface IDeleteUserParams {

@@ -22,7 +22,8 @@ export interface IBaseUser {
   postSaved?: IPost[]
 }
 
-export interface IAuthor extends Pick<IBaseUser, 'username' | 'picture'> {
+export interface IUser
+  extends Pick<IBaseUser, 'clerkId' | 'username' | 'name' | 'picture'> {
   _id: string
   // name: string
   // img: string
@@ -32,7 +33,7 @@ export interface IBaseTag {
   name: string
   description: string
   questions?: IPost[]
-  followers?: IAuthor[]
+  followers?: IUser[]
   createdOn: Date
 }
 
@@ -44,7 +45,7 @@ export interface IBaseQuestion {
   title: string
   content: string
   tags: ITag[]
-  author: IAuthor
+  author: IUser
   upVotes: number
   downVotes: number
   views: number
