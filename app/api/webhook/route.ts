@@ -56,10 +56,8 @@ export async function POST(req: Request) {
   const eventType = evt.type
 
   if (eventType === 'user.created') {
-    console.log('in created event =>>')
     const { id, email_addresses, image_url, username, first_name, last_name } =
       evt.data
-    console.log('in created event before created =>>')
 
     // Create a user in your database
     const userCreated = await createUser({
@@ -69,7 +67,6 @@ export async function POST(req: Request) {
       email: email_addresses[0].email_address,
       picture: image_url,
     })
-    console.log('in created event after created =>>')
 
     return NextResponse.json({ message: 'OK', user: userCreated })
   }

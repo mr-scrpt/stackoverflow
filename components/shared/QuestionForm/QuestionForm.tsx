@@ -16,7 +16,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Editor } from '@tinymce/tinymce-react'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { FC, HTMLAttributes, KeyboardEvent, useRef, useState } from 'react'
+import {
+  FC,
+  HTMLAttributes,
+  KeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { QuestionFormSchema } from './validation.schema'
@@ -46,6 +53,14 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
       tags: [],
     },
   })
+
+  const [mounte, setMounte] = useState(false)
+
+  useEffect(() => setMounte(true), [])
+
+  if (!mounte) {
+    return null
+  }
 
   const handleInputKeyDown = (
     e: KeyboardEvent<HTMLInputElement>,
@@ -105,6 +120,10 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
     form.setValue('tags', newTags)
   }
 
+  // TODO - сделать переключенлие темы реактивной,
+  // что бы редактор переключался динамически
+  const theme = localStorage.getItem('theme')
+
   return (
     <Form {...form}>
       <form
@@ -157,6 +176,8 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                   init={{
                     height: 350,
                     menubar: false,
+                    skin: theme === 'dark' ? 'oxide-dark' : 'oxide',
+                    content_css: theme === 'dark' ? 'dark' : 'default',
                     plugins: [
                       'advlist',
                       'autolink',

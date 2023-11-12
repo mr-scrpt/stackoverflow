@@ -1,3 +1,4 @@
+'use client'
 import { IFilter } from '@/types'
 import { FC, HTMLAttributes } from 'react'
 

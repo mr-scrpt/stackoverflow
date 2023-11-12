@@ -5,6 +5,7 @@ import { connectToDatabase } from '../mongoose'
 import {
   ICreateUserParams,
   IDeleteUserParams,
+  IGetAllUsersParams,
   IUpdateUserParams,
 } from '@/types/shared'
 import { revalidatePath } from 'next/cache'
@@ -18,6 +19,20 @@ export const getUserById = async (params: any) => {
     const user = await UserModel.findOne({ clerkId: userId })
 
     return JSON.parse(JSON.stringify(user))
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const getAllUsers = async (params: IGetAllUsersParams) => {
+  try {
+    await connectToDatabase()
+
+    // const { page = 1, limit = 20, filter, searchQuery } = params
+
+    const users = await UserModel.find({}).sort({ createdAt: -1 })
+    return { users }
   } catch (error) {
     console.log(error)
     throw error
