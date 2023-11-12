@@ -15,7 +15,7 @@ const QuestionPage = async () => {
 
   return (
     <section className="flex flex-col gap-8">
-      <h1 className="h1-bold text-dark100-light900">Ask a Question</h1>
+      <h1 className="h1-bold text-dark100_light900">Ask a Question</h1>
 
       <div className="flex flex-col">
         <QuestionForm userId={user._id} />

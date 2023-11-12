@@ -105,6 +105,10 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
     form.setValue('tags', newTags)
   }
 
+  // TODO - сделать переключенлие темы реактивной,
+  // что бы редактор переключался динамически
+  const theme = localStorage.getItem('theme')
+
   return (
     <Form {...form}>
       <form
@@ -157,6 +161,8 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                   init={{
                     height: 350,
                     menubar: false,
+                    skin: theme === 'dark' ? 'oxide-dark' : 'oxide',
+                    content_css: theme === 'dark' ? 'dark' : 'default',
                     plugins: [
                       'advlist',
                       'autolink',
