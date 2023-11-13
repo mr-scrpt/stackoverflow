@@ -41,7 +41,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
           value={author.username}
           alt="user"
           title={` - asked ${getTimestamp(createdAt)}`}
-          href={`/profile/${author._id}`}
+          href={`/profile/${author.username}`}
           textStyles="body-medium text-dark400_light700"
         />
         {/* likes, answer, views */}
