@@ -5,9 +5,19 @@ import { Metric } from '@/components/shared/Metric/Metric'
 import { formatNumber, getTimestamp } from '@/lib/utils'
 import { Tag } from '@/components/shared/Tag/Tag'
 import { ParseHTML } from '@/components/shared/ParseHTML/ParseHTML'
+import { AnswerForm } from '@/components/shared/AnswerForm/AnswerForm'
+import { auth } from '@clerk/nextjs'
+import { getUserById } from '@/lib/actions/user.action'
 
 const QuestionDetailsPage = async ({ params }) => {
   const { slug } = params
+  const { userId } = auth()
+  console.log('userId', userId)
+
+  const user = await getUserById({ userId })
+
+  console.log('user', user)
+
   const question = await fetchQuestionBySlug(slug)
   if (!question) return null
   return (
@@ -77,11 +87,6 @@ const QuestionDetailsPage = async ({ params }) => {
       {/*   userId={JSON.stringify(mongoUser._id)} */}
       {/*   totalAnswers={result.answers.length} */}
       {/* /> */}
-      {/* <Answer */}
-      {/*   question={result.content} */}
-      {/*   questionId={JSON.stringify(result._id)} */}
-      {/*   authorId={JSON.stringify(mongoUser._id)} */}
-      {/* /> */}
 
       <ParseHTML data={question.content} />
       <div className="flex flex-wrap gap-2">
@@ -89,6 +94,13 @@ const QuestionDetailsPage = async ({ params }) => {
           <Tag key={tag._id} _id={tag._id} name={tag.name} showCount={false} />
         ))}
       </div>
+      {user && (
+        <AnswerForm
+          question={question.content}
+          questionId={JSON.stringify(question._id)}
+          authorId={JSON.stringify(user._id)}
+        />
+      )}
     </section>
   )
 }

@@ -54,6 +54,15 @@ export interface IBaseQuestion {
   createdAt: Date
 }
 
+export interface IBaseAnswer {
+  author: IUser
+  question: IBaseQuestion
+  content: string
+  upVotes: IUser[]
+  downVotes: IUser[]
+  createdAt: Date
+}
+
 export interface IQuestion extends IBaseQuestion {
   _id: string
 }

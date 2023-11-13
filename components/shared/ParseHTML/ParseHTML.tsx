@@ -1,5 +1,5 @@
 'use client'
-import { FC, HTMLAttributes, useEffect } from 'react'
+import { FC, HTMLAttributes, useEffect, useState } from 'react'
 import Prism from 'prismjs'
 import parse from 'html-react-parser'
 
@@ -32,9 +32,18 @@ interface ParseHTMLProps extends HTMLAttributes<HTMLDivElement> {
 
 export const ParseHTML: FC<ParseHTMLProps> = (props) => {
   const { data } = props
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   useEffect(() => {
     Prism.highlightAll()
   }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   return <div className={`markdown w-full min-f-full`}>{parse(data)}</div>
 }
