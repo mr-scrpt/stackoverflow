@@ -6,6 +6,7 @@ import { TagModel } from '@/database/tag.model'
 import { revalidatePath } from 'next/cache'
 import { UserModel } from '@/database/user.model'
 import { ICreateQuestionParams, IGetQuestionsParams } from '@/types/shared'
+import { slugGenerator } from '../utils'
 
 export const getQuestions = async (params: IGetQuestionsParams) => {
   try {
@@ -27,8 +28,11 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
     connectToDatabase()
     const { title, content, tags, author, path } = params
 
+    const slug = slugGenerator(title)
+
     const question = await QuestionModel.create({
       title,
+      slug,
       content,
       author,
     })

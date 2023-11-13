@@ -10,7 +10,7 @@ interface QuestionCardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const QuestionCard: FC<QuestionCardProps> = (props) => {
-  const { _id, title, tags, author, upVotes, views, answers, createdAt } =
+  const { title, slug, tags, author, upVotes, views, answers, createdAt } =
     props.item
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
@@ -19,7 +19,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
           {/* for mobile size */}
           {getTimestamp(createdAt)}
         </span>{' '}
-        <Link href={`/question/${_id}`}>
+        <Link href={`/question/${slug}`}>
           <h3 className="sm:h3-semibold base-semibold text-dark200_light900 flex-1">
             {title}
           </h3>

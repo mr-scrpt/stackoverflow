@@ -43,6 +43,7 @@ export interface ITag extends IBaseTag {
 
 export interface IBaseQuestion {
   title: string
+  slug: string
   content: string
   tags: ITag[]
   author: IUser
