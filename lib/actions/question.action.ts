@@ -23,11 +23,32 @@ export const getQuestions = async (params: IGetQuestionsParams) => {
   }
 }
 
+export const fetchQuestionBySlug = async (slug: string) => {
+  try {
+    await connectToDatabase()
+    const question = await QuestionModel.findOne({ slug })
+      .populate({ path: 'tags', model: TagModel, select: '_id name' })
+      .populate({
+        path: 'author',
+        model: UserModel,
+        select: '_id name clerkId picture',
+      })
+
+    // console.log('===>>>', question)
+
+    return question
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
 export const createQuestion = async (params: ICreateQuestionParams) => {
   try {
     connectToDatabase()
     const { title, content, tags, author, path } = params
 
+    console.log('tags =>>>', tags)
     const slug = slugGenerator(title)
 
     const question = await QuestionModel.create({
@@ -42,10 +63,11 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
     for (const tag of tags) {
       const existingTag = await TagModel.findOneAndUpdate(
         {
-          name: { $regex: new RegExp(`^${tag}$,"i"`) },
+          name: { $regex: new RegExp(`^${tag}$`, 'i') },
         },
         {
-          $setOnInsert: { name: tag, $push: { question: question._id } }, // do update if target found
+          $setOnInsert: { name: tag }, // do update if target found
+          $push: { questions: question._id },
         },
         {
           upsert: true, // upsert if target not found
@@ -54,6 +76,7 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
       )
       tagDocuments.push(existingTag._id)
     }
+
     await QuestionModel.findByIdAndUpdate(question._id, {
       $push: { tags: { $each: tagDocuments } },
     })
