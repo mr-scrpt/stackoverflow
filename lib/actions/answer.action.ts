@@ -30,7 +30,7 @@ export const createAnswer = async (params: ICreateAnswerParams) => {
   }
 }
 
-export async function getAnswers(params: IGetAnswersParams) {
+export const getAnswerList = async (params: IGetAnswersParams) => {
   try {
     connectToDatabase()
     const { questionId } = params
@@ -43,7 +43,7 @@ export async function getAnswers(params: IGetAnswersParams) {
       })
       .sort({ createdAt: -1 })
 
-    return { answers }
+    return answers
   } catch (error) {
     console.log(error)
     throw error

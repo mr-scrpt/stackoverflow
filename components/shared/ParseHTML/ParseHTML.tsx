@@ -32,18 +32,21 @@ interface ParseHTMLProps extends HTMLAttributes<HTMLDivElement> {
 
 export const ParseHTML: FC<ParseHTMLProps> = (props) => {
   const { data } = props
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+
+  // const [mounted, setMounted] = useState(false)
+
+  const codeHTML = parse(data)
+  // useEffect(() => {
+  //   setMounted(true)
+  // }, [])
 
   useEffect(() => {
     Prism.highlightAll()
   }, [])
 
-  if (!mounted) {
-    return null
-  }
+  // if (!mounted) {
+  //   return null
+  // }
 
-  return <div className={`markdown w-full min-f-full`}>{parse(data)}</div>
+  return <div className="markdown w-full min-f-full">{codeHTML}</div>
 }

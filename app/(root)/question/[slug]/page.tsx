@@ -8,6 +8,7 @@ import { ParseHTML } from '@/components/shared/ParseHTML/ParseHTML'
 import { AnswerForm } from '@/components/shared/AnswerForm/AnswerForm'
 import { auth } from '@clerk/nextjs'
 import { getUserById } from '@/lib/actions/user.action'
+import { AnswerList } from '@/components/shared/AnswerList/AnswerList'
 
 const QuestionDetailsPage = async ({ params }) => {
   const { slug } = params
@@ -82,18 +83,17 @@ const QuestionDetailsPage = async ({ params }) => {
         </div>
       </div>
 
-      {/* <AllAnswers */}
-      {/*   questionId={result._id} */}
-      {/*   userId={JSON.stringify(mongoUser._id)} */}
-      {/*   totalAnswers={result.answers.length} */}
-      {/* /> */}
-
       <ParseHTML data={question.content} />
       <div className="flex flex-wrap gap-2">
         {question.tags.map((tag: any) => (
           <Tag key={tag._id} _id={tag._id} name={tag.name} showCount={false} />
         ))}
       </div>
+      <AnswerList
+        questionId={question._id}
+        userId={JSON.stringify(user._id)}
+        // totalAnswers={question.answers.length}
+      />
       {user && (
         <AnswerForm
           question={question.content}
