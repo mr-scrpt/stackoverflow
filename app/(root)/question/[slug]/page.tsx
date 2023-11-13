@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { Metric } from '@/components/shared/Metric/Metric'
 import { formatNumber, getTimestamp } from '@/lib/utils'
 import { Tag } from '@/components/shared/Tag/Tag'
+import { ParseHTML } from '@/components/shared/ParseHTML/ParseHTML'
 
 const QuestionDetailsPage = async ({ params }) => {
   const { slug } = params
@@ -69,17 +70,6 @@ const QuestionDetailsPage = async ({ params }) => {
             textStyles="small-medium text-dark400_light800"
           />
         </div>
-
-        <div className="flex flex-wrap gap-2">
-          {question.tags.map((tag: any) => (
-            <Tag
-              key={tag._id}
-              _id={tag._id}
-              name={tag.name}
-              showCount={false}
-            />
-          ))}
-        </div>
       </div>
 
       {/* <AllAnswers */}
@@ -93,7 +83,12 @@ const QuestionDetailsPage = async ({ params }) => {
       {/*   authorId={JSON.stringify(mongoUser._id)} */}
       {/* /> */}
 
-      {/* <ParseHTML data={result.content} /> */}
+      <ParseHTML data={question.content} />
+      <div className="flex flex-wrap gap-2">
+        {question.tags.map((tag: any) => (
+          <Tag key={tag._id} _id={tag._id} name={tag.name} showCount={false} />
+        ))}
+      </div>
     </section>
   )
 }
