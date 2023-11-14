@@ -1,9 +1,20 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import slugify from 'slugify'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+const slugifyConfig = {
+  remove: undefined,
+  lower: true,
+  strict: false,
+  locale: 'vi',
+  trim: true,
+}
+
+export const slugGenerator = (str: string) => slugify(str, slugifyConfig)
 
 export const getTimestamp = (createdAt: Date): string => {
   const now = new Date()

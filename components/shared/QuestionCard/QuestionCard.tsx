@@ -10,7 +10,7 @@ interface QuestionCardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const QuestionCard: FC<QuestionCardProps> = (props) => {
-  const { _id, title, tags, author, upVotes, views, answers, createdAt } =
+  const { title, slug, tags, author, upVotes, views, answers, createdAt } =
     props.item
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
@@ -18,8 +18,8 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
         <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
           {/* for mobile size */}
           {getTimestamp(createdAt)}
-        </span>{' '}
-        <Link href={`/question/${_id}`}>
+        </span>
+        <Link href={`/question/${slug}`}>
           <h3 className="sm:h3-semibold base-semibold text-dark200_light900 flex-1">
             {title}
           </h3>
@@ -41,14 +41,14 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
           value={author.username}
           alt="user"
           title={` - asked ${getTimestamp(createdAt)}`}
-          href={`/profile/${author._id}`}
+          href={`/profile/${author.username}`}
           textStyles="body-medium text-dark400_light700"
         />
         {/* likes, answer, views */}
         <div className="flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start">
           <Metric
             imgUrl="/assets/icons/like.svg"
-            value={formatNumber(upVotes)}
+            value={formatNumber(upVotes.length)}
             alt="UpVotes"
             title="Votes"
             textStyles="small-medium text-dark400_light800"

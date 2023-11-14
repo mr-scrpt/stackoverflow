@@ -159,3 +159,12 @@ export interface IGetUserStatsParams {
 export interface IDeleteUserParams {
   clerkId: string
 }
+
+export enum VoteDirectionEnum {
+  UP = 'up',
+  DOWN = 'down',
+}
+export enum VoteTypeEnum {
+  ANSWER = 'answer',
+  QUESTION = 'question',
+}

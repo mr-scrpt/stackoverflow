@@ -16,6 +16,7 @@ export interface IDBQuestion extends Document, IBaseQuestion {
 
 export const QuestionSchema = new Schema<IDBQuestion>({
   title: { type: String, required: true },
+  slug: { type: String, required: true },
   content: { type: String, required: true },
   tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
   answers: [{ type: Schema.Types.ObjectId, ref: 'Answer' }],

@@ -27,6 +27,7 @@ import {
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { QuestionFormSchema } from './validation.schema'
+import useTheme from '@/contexts/ThemeProvider'
 
 interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {
   userId: string
@@ -34,6 +35,7 @@ interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {
 
 export const QuestionForm: FC<QuestionFormProps> = (props) => {
   const editorRef = useRef(null)
+  const { mode } = useTheme()
   const { userId } = props
   const router = useRouter()
   const pathname = usePathname()
@@ -122,7 +124,6 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
 
   // TODO - сделать переключенлие темы реактивной,
   // что бы редактор переключался динамически
-  const theme = localStorage.getItem('theme')
 
   return (
     <Form {...form}>
@@ -176,8 +177,9 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                   init={{
                     height: 350,
                     menubar: false,
-                    skin: theme === 'dark' ? 'oxide-dark' : 'oxide',
-                    content_css: theme === 'dark' ? 'dark' : 'default',
+                    skin: mode === 'dark' ? 'oxide-dark' : 'oxide',
+                    content_css: mode === 'dark' ? 'dark' : 'light',
+
                     plugins: [
                       'advlist',
                       'autolink',

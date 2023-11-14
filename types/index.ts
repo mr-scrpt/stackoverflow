@@ -7,21 +7,6 @@ export interface IFilter {
 
 export interface IPost {}
 
-export interface IBaseUser {
-  clerkId: string
-  name: string
-  username: string
-  picture: string /* not required if login through third party */
-  email: string
-  password?: string
-  bio?: string
-  location?: string
-  portfolioWebsite?: string
-  reputation?: number
-  joinedAt: Date
-  postSaved?: IPost[]
-}
-
 export interface IUser
   extends Pick<IBaseUser, 'clerkId' | 'username' | 'name' | 'picture'> {
   _id: string
@@ -43,13 +28,32 @@ export interface ITag extends IBaseTag {
 
 export interface IBaseQuestion {
   title: string
+  slug: string
   content: string
   tags: ITag[]
   author: IUser
-  upVotes: number
-  downVotes: number
+  upVotes: IUser[]
+  downVotes: IUser[]
   views: number
   answers: []
+  createdAt: Date
+}
+
+export interface IBaseAnswer {
+  author: IUser
+  question: IBaseQuestion
+  content: string
+  upVotes: IUser[]
+  downVotes: IUser[]
+  createdAt: Date
+}
+
+export interface IBaseInteraction {
+  user: IUser
+  action: string
+  question: IBaseQuestion
+  answer: IBaseAnswer
+  tags: IBaseTag
   createdAt: Date
 }
 
@@ -57,6 +61,20 @@ export interface IQuestion extends IBaseQuestion {
   _id: string
 }
 
+export interface IBaseUser {
+  clerkId: string
+  name: string
+  username: string
+  picture: string /* not required if login through third party */
+  email: string
+  password?: string
+  bio?: string
+  location?: string
+  portfolioWebsite?: string
+  reputation?: number
+  joinedAt: Date
+  postSaved?: IQuestion[]
+}
 export interface SidebarLink {
   imgURL: string
   route: string
