@@ -39,10 +39,8 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
   const pathname = usePathname()
   const router = useRouter()
 
-  console.log('hasUpVoted', hasUpVoted)
-  console.log('hasDownVoted', hasDownVoted)
-
   const handleSave = async () => {
+    console.log('click')
     await toggleSaveQuestion({
       userId,
       questionId: itemId,
@@ -103,6 +101,7 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
     })
   }, [itemId, userId, pathname, router])
 
+  console.log('hasSaved =', hasSaved)
   return (
     <div className="flex gap-5 ">
       <div className="flex-center gap-2.5">

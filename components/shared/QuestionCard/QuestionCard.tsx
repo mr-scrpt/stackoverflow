@@ -18,7 +18,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
         <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
           {/* for mobile size */}
           {getTimestamp(createdAt)}
-        </span>{' '}
+        </span>
         <Link href={`/question/${slug}`}>
           <h3 className="sm:h3-semibold base-semibold text-dark200_light900 flex-1">
             {title}
@@ -48,7 +48,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
         <div className="flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start">
           <Metric
             imgUrl="/assets/icons/like.svg"
-            value={formatNumber(upVotes)}
+            value={formatNumber(upVotes.length)}
             alt="UpVotes"
             title="Votes"
             textStyles="small-medium text-dark400_light800"

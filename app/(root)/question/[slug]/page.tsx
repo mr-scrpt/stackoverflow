@@ -1,19 +1,26 @@
-import { fetchQuestionBySlug } from '@/lib/actions/question.action'
-import Link from 'next/link'
-import Image from 'next/image'
-import { Metric } from '@/components/shared/Metric/Metric'
-import { formatNumber, getTimestamp } from '@/lib/utils'
-import { Tag } from '@/components/shared/Tag/Tag'
-import { ParseHTML } from '@/components/shared/ParseHTML/ParseHTML'
 import { AnswerForm } from '@/components/shared/AnswerForm/AnswerForm'
-import { auth } from '@clerk/nextjs'
-import { getUserById } from '@/lib/actions/user.action'
 import { AnswerList } from '@/components/shared/AnswerList/AnswerList'
+import { Metric } from '@/components/shared/Metric/Metric'
+import { ParseHTML } from '@/components/shared/ParseHTML/ParseHTML'
+import { Tag } from '@/components/shared/Tag/Tag'
+import { VoteBar } from '@/components/shared/VoteBar/VoteBar'
+import { fetchQuestionBySlug } from '@/lib/actions/question.action'
+import { getUserById } from '@/lib/actions/user.action'
+import { formatNumber, getTimestamp } from '@/lib/utils'
+import { VoteTypeEnum } from '@/types/shared'
+import { auth } from '@clerk/nextjs'
+import Image from 'next/image'
+import Link from 'next/link'
 
-const QuestionDetailsPage = async ({ params }) => {
+interface QuestionDetailsProps {
+  params: {
+    slug: string
+  }
+}
+
+const QuestionDetailsPage = async ({ params }: QuestionDetailsProps) => {
   const { slug } = params
   const { userId } = auth()
-  console.log('question page userId', userId)
 
   const user = await getUserById({ userId })
 
@@ -42,16 +49,25 @@ const QuestionDetailsPage = async ({ params }) => {
           </Link>
 
           <div className="flex justify-end">
-            {/* <Votes */}
-            {/*   type="question" */}
-            {/*   itemId={JSON.stringify(question._id)} */}
-            {/*   userId={JSON.stringify(mongoUser._id)} */}
-            {/*   upVotes={question.upVotes.length} */}
-            {/*   downVotes={question.downVotes.length} */}
-            {/*   hasUpVoted={question.upVotes.includes(mongoUser._id)} */}
-            {/*   hasDownVoted={question.downVotes.includes(mongoUser._id)} */}
-            {/*   hasSaved={mongoUser?.saved.includes(question._id)} */}
-            {/* /> */}
+            <VoteBar
+              type={VoteTypeEnum.QUESTION}
+              itemId={question._id.toString()}
+              userId={user?._id.toString()}
+              upVotes={question.upVotes.length}
+              downVotes={question.downVotes.length}
+              hasUpVoted={question.upVotes.includes(user?._id)}
+              hasDownVoted={question.downVotes.includes(user?._id)}
+              hasSaved={user?.postSaved?.includes(question._id)}
+              // hasUpVoted={question.upVotes.some((item) => {
+              //   return item._id.toString() === user?._id.toString()
+              // })}
+              // hasDownVoted={question.downVotes.some(
+              //   (item) => item._id.toString() === user?._id.toString()
+              // )}
+              // hasSaved={user?.postSaved?.some(
+              //   (item) => item._id.toString() === question._id.toString()
+              // )}
+            />
           </div>
         </div>
         <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -89,8 +105,8 @@ const QuestionDetailsPage = async ({ params }) => {
         ))}
       </div>
       <AnswerList
-        questionId={question._id}
-        userId={user._id}
+        questionId={question._id.toString()}
+        userId={user?._id.toString()}
         // totalAnswers={question.answers.length}
       />
       {user && (

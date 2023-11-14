@@ -185,10 +185,15 @@ export const toggleSaveQuestion = async (params: IToggleSaveQuestionParams) => {
       throw new Error('User not found!')
     }
 
-    const isQuestionSaved = user.postSaved?.includes(questionId)
+    const isQuestionSaved = user.postSaved?.some((item) => {
+      console.log('item._id', item._id)
+      console.log('questionId', questionId)
+      return item._id.toString() === questionId
+    })
 
     if (isQuestionSaved) {
       // remove question from saved
+      console.log('in save +')
       await UserModel.findByIdAndUpdate(
         userId,
         {
@@ -197,6 +202,7 @@ export const toggleSaveQuestion = async (params: IToggleSaveQuestionParams) => {
         { new: true }
       )
     } else {
+      console.log('not in save -')
       // add question to saved
       await UserModel.findByIdAndUpdate(
         userId,
@@ -218,7 +224,8 @@ export const getSavedQuestions = async (params: IGetSavedQuestionsParams) => {
   try {
     connectToDatabase()
 
-    const { clerkId, searchQuery, filter, page = 1, pageSize = 10 } = params
+    const { clerkId, searchQuery } = params
+    // const { clerkId, searchQuery, filter, page = 1, pageSize = 10 } = params
 
     const query: FilterQuery<typeof QuestionModel> = searchQuery
       ? { title: { $regex: new RegExp(searchQuery, 'i') } }

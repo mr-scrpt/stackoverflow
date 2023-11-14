@@ -18,7 +18,7 @@ const QuestionPage = async () => {
       <h1 className="h1-bold text-dark100_light900">Ask a Question</h1>
 
       <div className="flex flex-col">
-        <QuestionForm userId={user._id} />
+        <QuestionForm userId={user._id.toString()} />
       </div>
     </section>
   )

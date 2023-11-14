@@ -57,14 +57,11 @@ export const AnswerList: FC<AnswerListProps> = async (props) => {
               <div className="flex justify-end">
                 <VoteBar
                   type={VoteTypeEnum.ANSWER}
-                  itemId={answer._id}
-                  userId={userId}
+                  itemId={answer._id.toString()}
+                  userId={userId.toString()}
                   upVotes={answer.upVotes.length}
                   downVotes={answer.downVotes.length}
                   hasUpVoted={answer.upVotes.some((item) => {
-                    console.log('item', item._id.toString())
-                    console.log('userId', userId)
-                    console.log('boolean', item._id.toString() === userId)
                     return item._id.toString() === userId
                   })}
                   hasDownVoted={answer.downVotes.some(

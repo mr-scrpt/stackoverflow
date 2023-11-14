@@ -18,7 +18,8 @@ export const getUserById = async (params: any) => {
     const { userId } = params
     const user = await UserModel.findOne({ clerkId: userId })
 
-    return JSON.parse(JSON.stringify(user))
+    // return JSON.parse(JSON.stringify(user))
+    return user
   } catch (error) {
     console.log(error)
     throw error
