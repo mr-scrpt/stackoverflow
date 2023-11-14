@@ -33,23 +33,23 @@ export const AnswerList: FC<AnswerListProps> = async (props) => {
             <div className="mb-8 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
               <Link
                 href={`/profile/${answer.author.clerkId}`}
-                className="flex flex-1 items-start gap-1 sm:items-center"
+                className="flex flex-1 items-start gap-1.5 sm:items-center"
               >
                 <Image
                   src={answer.author.picture}
-                  width={18}
-                  height={18}
+                  width={22}
+                  height={22}
                   alt="profile"
-                  className="rounded-full object-cover max-sm:mt-0.5"
+                  className="rounded-full object-cover"
                 />
-                <div className="flex flex-col sm:flex-row sm:items-center">
-                  <p className="body-semibold text-dark300_light700">
+                <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center">
+                  <span className="body-semibold text-dark300_light700">
                     {answer.author.name}
-                  </p>
+                  </span>
 
-                  <p className="small-regular text-light400_light500 ml-1 mt-0.5 line-clamp-1">
+                  <span className="small-regular text-light400_light500 line-clamp-1">
                     answered - {getTimestamp(answer.createdAt)}
-                  </p>
+                  </span>
                 </div>
               </Link>
               <div className="flex justify-end">
