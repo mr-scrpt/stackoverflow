@@ -13,14 +13,13 @@ import { AnswerList } from '@/components/shared/AnswerList/AnswerList'
 const QuestionDetailsPage = async ({ params }) => {
   const { slug } = params
   const { userId } = auth()
-  console.log('userId', userId)
+  console.log('question page userId', userId)
 
   const user = await getUserById({ userId })
 
-  console.log('user', user)
-
   const question = await fetchQuestionBySlug(slug)
   if (!question) return null
+
   return (
     <section className="flex flex-col gap-8">
       <div className="flex flex-col gap-4">
@@ -91,7 +90,7 @@ const QuestionDetailsPage = async ({ params }) => {
       </div>
       <AnswerList
         questionId={question._id}
-        userId={JSON.stringify(user._id)}
+        userId={user._id}
         // totalAnswers={question.answers.length}
       />
       {user && (

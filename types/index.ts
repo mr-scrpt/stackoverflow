@@ -63,6 +63,15 @@ export interface IBaseAnswer {
   createdAt: Date
 }
 
+export interface IBaseInteraction {
+  user: IUser
+  action: string
+  question: IBaseQuestion
+  answer: IBaseAnswer
+  tags: IBaseTag
+  createdAt: Date
+}
+
 export interface IQuestion extends IBaseQuestion {
   _id: string
 }

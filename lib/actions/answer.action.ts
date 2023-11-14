@@ -3,7 +3,11 @@
 import { AnswerModel } from '@/database/answer.model'
 import { revalidatePath } from 'next/cache'
 import { connectToDatabase } from '../mongoose'
-import { ICreateAnswerParams, IGetAnswersParams } from '@/types/shared'
+import {
+  IAnswerVoteParams,
+  ICreateAnswerParams,
+  IGetAnswersParams,
+} from '@/types/shared'
 import { QuestionModel } from '@/database/question.model'
 import { UserModel } from '@/database/user.model'
 
@@ -44,6 +48,75 @@ export const getAnswerList = async (params: IGetAnswersParams) => {
       .sort({ createdAt: -1 })
 
     return answers
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const upVoteAnswer = async (params: IAnswerVoteParams) => {
+  try {
+    connectToDatabase()
+
+    const { answerId, userId, hasupVoted, hasdownVoted, path } = params
+
+    let updateQuery = {}
+
+    if (hasupVoted) {
+      updateQuery = { $pull: { upVotes: userId } }
+    } else if (hasdownVoted) {
+      updateQuery = {
+        $pull: { downVotes: userId },
+        $push: { upVotes: userId },
+      }
+    } else {
+      updateQuery = { $addToSet: { upVotes: userId } }
+    }
+    console.log('answerId in aciton', answerId)
+
+    const answer = await AnswerModel.findByIdAndUpdate(answerId, updateQuery, {
+      new: true,
+    })
+
+    if (!answer) throw new Error('Answer not found')
+
+    // TODO: interaction
+
+    revalidatePath(path)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const downVoteAnswer = async (params: IAnswerVoteParams) => {
+  try {
+    connectToDatabase()
+
+    const { answerId, userId, hasupVoted, hasdownVoted, path } = params
+
+    let updateQuery = {}
+
+    if (hasdownVoted) {
+      updateQuery = { $pull: { downVotes: userId } }
+    } else if (hasupVoted) {
+      updateQuery = {
+        $pull: { upVotes: userId },
+        $push: { downVotes: userId },
+      }
+    } else {
+      updateQuery = { $addToSet: { downVotes: userId } }
+    }
+
+    const answer = await AnswerModel.findByIdAndUpdate(answerId, updateQuery, {
+      new: true,
+    })
+
+    if (!answer) throw new Error('Answer not found')
+
+    // TODO: interaction
+
+    revalidatePath(path)
   } catch (error) {
     console.log(error)
     throw error
