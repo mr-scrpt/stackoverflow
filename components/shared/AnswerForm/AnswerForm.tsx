@@ -25,7 +25,7 @@ interface AnswerFormProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const AnswerForm: FC<AnswerFormProps> = (props) => {
-  const { question, questionId, authorId } = props
+  const { questionId, authorId } = props
   const editorRef = useRef(null)
   const { mode } = useTheme()
   const [isSubmitting, setIsSubmitting] = useState(false)
