@@ -5,17 +5,21 @@ import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestionByTagSlug } from '@/lib/actions/question.action'
+import { ISearchParam } from '@/types'
 import { HTMLAttributes } from 'react'
 
 interface PageTagProps extends HTMLAttributes<HTMLDivElement> {
   params: {
     slug: string
   }
+  searchParams?: ISearchParam
 }
 
-const PageTag = async ({ params }: PageTagProps) => {
+const PageTag = async ({ params, searchParams }: PageTagProps) => {
   const { slug } = params
+
   // const { userId } = auth()
+  console.log('searchParams', searchParams)
 
   const { tagTitle, questions } = await getQuestionByTagSlug({ slug })
   // const tag = await getTagBySlug(slug)
@@ -24,7 +28,9 @@ const PageTag = async ({ params }: PageTagProps) => {
     <section className="flex flex-col gap-8">
       <div className="flex flex-col gap-4">
         <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
-          <h1 className="h1-bold text-dark100_light900">{tagTitle}</h1>
+          <h1 className="h1-bold text-dark100_light900">
+            Current tag: [ {tagTitle} ]
+          </h1>
         </div>
       </div>
       <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">

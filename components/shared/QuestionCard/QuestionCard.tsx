@@ -30,7 +30,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
 
       <div className="mt-3.5 flex flex-wrap gap-2">
         {tags.map((tag) => (
-          <Tag key={tag._id} _id={tag._id} name={tag.name} />
+          <Tag key={tag._id} _id={tag._id} name={tag.name} slug={tag.slug} />
         ))}
       </div>
 

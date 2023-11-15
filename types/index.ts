@@ -103,14 +103,17 @@ export interface Country {
 export interface ParamsProps {
   params: { id: string }
 }
+export interface ISearchParam {
+  [key: string]: string | undefined
+}
 
 export interface SearchParamsProps {
-  searchParams: { [key: string]: string | undefined }
+  searchParams: ISearchParam
 }
 
 export interface URLProps {
   params: { id: string }
-  searchParams: { [key: string]: string | undefined }
+  searchParams: ISearchParam
 }
 
 export interface BadgeCounts {
