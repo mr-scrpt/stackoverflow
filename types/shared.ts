@@ -68,6 +68,11 @@ export interface ICreateQuestionParams {
   path: string
 }
 
+export interface ICreateTagParams {
+  name: string
+  questionId: string
+}
+
 export interface IGetQuestionByIdParams {
   questionId: string
 }

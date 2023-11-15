@@ -101,7 +101,6 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
     })
   }, [itemId, userId, pathname, router])
 
-  console.log('hasSaved =', hasSaved)
   return (
     <div className="flex gap-5 ">
       <div className="flex-center gap-2.5">

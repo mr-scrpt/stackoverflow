@@ -14,6 +14,7 @@ import {
 } from '@/types/shared'
 import { slugGenerator } from '../utils'
 import { FilterQuery } from 'mongoose'
+import { createTag } from './tag.action'
 
 export const getQuestions = async (params: IGetQuestionsParams) => {
   try {
@@ -55,7 +56,6 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
     connectToDatabase()
     const { title, content, tags, author, path } = params
 
-    console.log('tags =>>>', tags)
     const slug = slugGenerator(title)
 
     const question = await QuestionModel.create({
@@ -68,20 +68,11 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
     const tagDocuments = []
 
     for (const tag of tags) {
-      const existingTag = await TagModel.findOneAndUpdate(
-        {
-          name: { $regex: new RegExp(`^${tag}$`, 'i') },
-        },
-        {
-          $setOnInsert: { name: tag }, // do update if target found
-          $push: { questions: question._id },
-        },
-        {
-          upsert: true, // upsert if target not found
-          new: true, // return new doc instead original one
-        }
-      )
-      tagDocuments.push(existingTag._id)
+      const existingTag = await createTag({
+        name: tag,
+        questionId: question._id,
+      })
+      tagDocuments.push(existingTag.tag._id)
     }
 
     await QuestionModel.findByIdAndUpdate(question._id, {
@@ -96,7 +87,6 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
 }
 
 export const upVoteQuestion = async (params: IQuestionVoteParams) => {
-  console.log('upVoteQuestion')
   try {
     connectToDatabase()
 
@@ -186,14 +176,11 @@ export const toggleSaveQuestion = async (params: IToggleSaveQuestionParams) => {
     }
 
     const isQuestionSaved = user.postSaved?.some((item) => {
-      console.log('item._id', item._id)
-      console.log('questionId', questionId)
       return item._id.toString() === questionId
     })
 
     if (isQuestionSaved) {
       // remove question from saved
-      console.log('in save +')
       await UserModel.findByIdAndUpdate(
         userId,
         {
@@ -202,7 +189,6 @@ export const toggleSaveQuestion = async (params: IToggleSaveQuestionParams) => {
         { new: true }
       )
     } else {
-      console.log('not in save -')
       // add question to saved
       await UserModel.findByIdAndUpdate(
         userId,
