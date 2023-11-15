@@ -105,7 +105,8 @@ export interface IGetAllTagsParams {
 }
 
 export interface IGetQuestionsByTagIdParams {
-  tagId: string
+  slug: string
+  tagId?: string
   page?: number
   limit?: number
   searchQuery?: string

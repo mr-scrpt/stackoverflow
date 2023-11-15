@@ -13,7 +13,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
   const { title, slug, tags, author, upVotes, views, answers, createdAt } =
     props.item
   return (
-    <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
+    <div className="card-wrapper rounded-[10px] p-2 sm:p-4">
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
         <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
           {/* for mobile size */}

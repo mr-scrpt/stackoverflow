@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache'
 import { UserModel } from '@/database/user.model'
 import {
   ICreateQuestionParams,
+  IGetQuestionsByTagIdParams,
   IGetQuestionsParams,
   IGetSavedQuestionsParams,
   IQuestionVoteParams,
@@ -15,6 +16,7 @@ import {
 import { slugGenerator } from '../utils'
 import { FilterQuery } from 'mongoose'
 import { createTag } from './tag.action'
+import { ITag } from '@/types'
 
 export const getQuestions = async (params: IGetQuestionsParams) => {
   try {
@@ -45,6 +47,66 @@ export const fetchQuestionBySlug = async (slug: string) => {
     // console.log('===>>>', question)
 
     return question
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export async function getQuestionByTagSlug(params: IGetQuestionsByTagIdParams) {
+  try {
+    connectToDatabase()
+
+    // const { tagId, searchQuery, page = 1, pageSize = 10 } = params
+    const { searchQuery, slug } = params
+
+    // const tagIds = await TagModel.find({ slug }).distinct('_id')
+    // let query = { tags: { $in: tagIds } }
+    //
+    // // Добавляем условие поиска по регулярному выражению, если searchQuery передан
+    // if (searchQuery) {
+    //   query.title = { $regex: new RegExp(searchQuery, 'i') }
+    // }
+    //
+    // const questions = await QuestionModel.find(query)
+    //   .populate('tags') // Заполняем данные о тегах
+    //   .populate('author')
+    //   .exec()
+    //
+    // return questions
+
+    // const questions = await QuestionModel.find({ 'tags.slug': slug })
+    //   .populate({ path: 'tags', model: TagModel }) // Specifies paths which should be populated with other documents
+    //   .populate({ path: 'author', model: UserModel })
+    //   .sort({ createdAt: -1 })
+    // console.log('questions =====', questions)
+
+    const tagFilter: FilterQuery<ITag> = { slug }
+
+    const tag = await TagModel.findOne(tagFilter).populate({
+      path: 'questions',
+      model: QuestionModel,
+      match: searchQuery
+        ? { title: { $regex: new RegExp(searchQuery, 'i') } }
+        : {},
+      options: {
+        sort: { createdAt: -1 },
+      },
+      populate: [
+        {
+          path: 'author',
+          model: UserModel,
+          select: '_id name clerkId picture',
+        },
+        { path: 'tags', model: TagModel, select: '_id name' },
+      ],
+    })
+
+    if (!tag) throw new Error('No tag found')
+
+    const questions = tag.questions
+
+    return { tagTitle: tag.name, questions }
   } catch (error) {
     console.log(error)
     throw error

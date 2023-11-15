@@ -10,7 +10,7 @@ const Layout: FC<LayoutProps> = (props) => {
   const { children } = props
 
   const clsSidebarCommon =
-    'bg-light800_dark300 light-border custom-scrollbar sticky left-0 top-0 flex h-screen flex-col  overflow-y-auto p-6 pt-36 shadow-light-300 dark:shadow-none gap-2'
+    'bg-light800_dark300 light-border custom-scrollbar sticky left-0 top-0 flex h-screen flex-col  overflow-y-auto p-6 pt-32 shadow-light-300 dark:shadow-none gap-2'
 
   const clsLeftSide = cn(
     clsSidebarCommon,
@@ -23,7 +23,7 @@ const Layout: FC<LayoutProps> = (props) => {
   )
 
   const clsContent =
-    'flex flex-1 flex-col px-6 pb-6 pt-36 min-h-screen sm:px-14 max-md:pb-14'
+    'flex flex-1 flex-col px-4 pb-6 pt-32 min-h-screen sm:px-10 max-md:pb-14'
 
   return (
     <main className="bg-light850_dark100 relative">

@@ -4,6 +4,7 @@ import { UserModel } from '@/database/user.model'
 import { connectToDatabase } from '../mongoose'
 import { ICreateTagParams, IGetTopInteractedTagsParams } from '@/types/shared'
 import { TagModel } from '@/database/tag.model'
+import { slugGenerator } from '../utils'
 
 export const fetchTagsByUserId = async (
   params: IGetTopInteractedTagsParams
@@ -47,18 +48,30 @@ export const fetchTagList = async () => {
   }
 }
 
+export const getTagBySlug = async (slug: sting) => {
+  try {
+    const tag = await TagModel.findOne({ slug })
+    return tag
+  } catch (e) {
+    console.log(e)
+    throw e
+  }
+}
+
 export const createTag = async (params: ICreateTagParams) => {
   try {
     connectToDatabase()
 
     const { name, questionId } = params
 
+    const slug = slugGenerator(name)
+
     const tag = await TagModel.findOneAndUpdate(
       {
         name: { $regex: new RegExp(`^${name}$`, 'i') },
       },
       {
-        $setOnInsert: { name }, // do update if target found
+        $setOnInsert: { name, slug }, // do update if target found
         $push: { questions: questionId },
       },
       {

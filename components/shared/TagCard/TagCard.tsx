@@ -12,7 +12,7 @@ export const TagCard: FC<TagCardProps> = (props) => {
     <article className="bg-light900_dark200 rounded-2xl border light-border shadow-light100_darknone w-full max-xs:min-w-full xs:w-[260px] flex flex-col gap-8 py-8 px-4">
       <div className="w-full">
         <Link
-          href={`/tags/${tag.name}`}
+          href={`/tags/${tag.slug}`}
           className="bg-light800_dark400 w-fit rounded-sm px-5 py-1.5"
         >
           <span className="paragraph-semibold text-dark300_light900">

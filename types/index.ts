@@ -5,8 +5,6 @@ export interface IFilter {
   value: string
 }
 
-export interface IPost {}
-
 export interface IUser
   extends Pick<IBaseUser, 'clerkId' | 'username' | 'name' | 'picture'> {
   _id: string
@@ -16,8 +14,9 @@ export interface IUser
 
 export interface IBaseTag {
   name: string
+  slug: string
   description: string
-  questions?: IPost[]
+  questions?: IQuestion[]
   followers?: IUser[]
   createdOn: Date
 }

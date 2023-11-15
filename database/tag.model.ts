@@ -11,6 +11,7 @@ export interface IDBTag extends Document, IBaseTag {
 
 const TagSchema = new Schema<IDBTag>({
   name: { type: String, required: true, unique: true },
+  slug: { type: String, required: true },
   description: { type: String, required: true },
   questions: [{ type: Schema.Types.ObjectId, ref: 'Question' }],
   followers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
