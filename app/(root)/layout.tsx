@@ -1,13 +1,18 @@
 import { Navbar } from '@/components/shared/Navbar'
 import { SidebarLeft } from '@/components/shared/SidebarLeft/SidebarLeft'
 import { SidebarRight } from '@/components/shared/SidebarRight/SidebarRight'
+import { getUserById } from '@/lib/actions/user.action'
 import { cn } from '@/lib/utils'
+import { auth } from '@clerk/nextjs'
 import { FC, HTMLAttributes } from 'react'
 
 interface LayoutProps extends HTMLAttributes<HTMLDivElement> {}
 
-const Layout: FC<LayoutProps> = (props) => {
+const Layout: FC<LayoutProps> = async (props) => {
   const { children } = props
+  const { userId } = auth()
+
+  const user = userId ? await getUserById(userId) : undefined
 
   const clsSidebarCommon =
     'bg-light800_dark300 light-border custom-scrollbar sticky left-0 top-0 flex h-screen flex-col  overflow-y-auto p-6 pt-32 shadow-light-300 dark:shadow-none gap-2'
@@ -29,7 +34,7 @@ const Layout: FC<LayoutProps> = (props) => {
     <main className="bg-light850_dark100 relative">
       <Navbar />
       <div className="flex">
-        <SidebarLeft className={clsLeftSide} />
+        <SidebarLeft className={clsLeftSide} userSlug={user?.slug} />
         <section className={clsContent}>
           <div className="mx-auto w-full max-w-5xl">{children}</div>
         </section>

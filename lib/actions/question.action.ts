@@ -289,7 +289,7 @@ export const getSavedQuestions = async (params: IGetSavedQuestionsParams) => {
         {
           path: 'author',
           model: UserModel,
-          select: '_id name clerkId picture',
+          select: '_id name username clerkId picture',
         },
         { path: 'tags', model: TagModel, select: '_id name' },
       ],

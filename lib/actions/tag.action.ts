@@ -48,7 +48,7 @@ export const fetchTagList = async () => {
   }
 }
 
-export const getTagBySlug = async (slug: sting) => {
+export const getTagBySlug = async (slug: string) => {
   try {
     const tag = await TagModel.findOne({ slug })
     return tag

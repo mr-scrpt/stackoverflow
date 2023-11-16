@@ -2,19 +2,29 @@ import { IQuestion } from '@/types'
 import { FC, HTMLAttributes } from 'react'
 import { Tag } from '../Tag/Tag'
 import Link from 'next/link'
-import { formatNumber, getTimestamp } from '@/lib/utils'
+import { formatNumber, getTimestamp, parseHTMLToString } from '@/lib/utils'
 import { Metric } from '../Metric/Metric'
+import { ParseHTML } from '../ParseHTML/ParseHTML'
 
 interface QuestionCardProps extends HTMLAttributes<HTMLDivElement> {
   item: IQuestion
 }
 
 export const QuestionCard: FC<QuestionCardProps> = (props) => {
-  const { title, slug, tags, author, upVotes, views, answers, createdAt } =
-    props.item
+  const {
+    title,
+    slug,
+    tags,
+    author,
+    upVotes,
+    views,
+    answers,
+    createdAt,
+    content,
+  } = props.item
   return (
-    <div className="card-wrapper rounded-[10px] p-2 sm:p-4">
-      <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
+    <div className="flex flex-col gap-2 card-wrapper rounded-[10px] p-2 sm:p-4">
+      <div className="flex flex-col items-start justify-between gap-1">
         <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
           {/* for mobile size */}
           {getTimestamp(createdAt)}
@@ -24,6 +34,11 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
             {title}
           </h3>
         </Link>
+        <div className="text-dark400_light700 ">
+          <h3 className="text-[13px] leading-[15px]  opacity-50 break-all">
+            {parseHTMLToString(content.substring(0, 100))}...
+          </h3>
+        </div>
       </div>
 
       {/* if signed in add edit delete actions */}

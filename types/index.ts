@@ -46,6 +46,9 @@ export interface IBaseAnswer {
   downVotes: IUser[]
   createdAt: Date
 }
+export interface IAnswer extends IBaseAnswer {
+  _id: string
+}
 
 export interface IBaseInteraction {
   user: IUser
@@ -64,6 +67,7 @@ export interface IBaseUser {
   clerkId: string
   name: string
   username: string
+  slug: string
   picture: string /* not required if login through third party */
   email: string
   password?: string

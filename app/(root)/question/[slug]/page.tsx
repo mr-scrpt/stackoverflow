@@ -22,7 +22,10 @@ const QuestionDetailsPage = async ({ params }: QuestionDetailsProps) => {
   const { slug } = params
   const { userId } = auth()
 
-  const user = await getUserById({ userId })
+  let user
+  if (userId) {
+    user = await getUserById(userId)
+  }
 
   const question = await fetchQuestionBySlug(slug)
   if (!question) return null

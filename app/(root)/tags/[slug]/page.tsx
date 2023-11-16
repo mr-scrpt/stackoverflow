@@ -8,14 +8,14 @@ import { getQuestionByTagSlug } from '@/lib/actions/question.action'
 import { ISearchParam } from '@/types'
 import { HTMLAttributes } from 'react'
 
-interface PageTagProps extends HTMLAttributes<HTMLDivElement> {
+interface TagPageProps extends HTMLAttributes<HTMLDivElement> {
   params: {
     slug: string
   }
   searchParams?: ISearchParam
 }
 
-const PageTag = async ({ params, searchParams }: PageTagProps) => {
+const TagPage = async ({ params, searchParams }: TagPageProps) => {
   const { slug } = params
 
   // const { userId } = auth()
@@ -61,4 +61,4 @@ const PageTag = async ({ params, searchParams }: PageTagProps) => {
   )
 }
 
-export default PageTag
+export default TagPage

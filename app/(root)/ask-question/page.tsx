@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation'
 const QuestionPage = async () => {
   const { userId } = auth()
   if (!userId) redirect('/sign-in')
-  const user = await getUserById({ userId })
+  const user = await getUserById(userId)
   if (!user) {
     return <div>user not found</div>
   }

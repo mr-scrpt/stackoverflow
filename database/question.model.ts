@@ -30,6 +30,3 @@ export const QuestionSchema = new Schema<IDBQuestion>({
 export const QuestionModel =
   (models.Question as Model<IDBQuestion>) ||
   model<IDBQuestion>('Question', QuestionSchema)
-
-// export const QuestionModel = model<IDBQuestion>('Question', QuestionSchema)
-// export default QuestionModel
