@@ -170,7 +170,13 @@ export enum VoteDirectionEnum {
   UP = 'up',
   DOWN = 'down',
 }
+
 export enum VoteTypeEnum {
+  ANSWER = 'answer',
+  QUESTION = 'question',
+}
+
+export enum ActionTypeEnum {
   ANSWER = 'answer',
   QUESTION = 'question',
 }

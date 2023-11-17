@@ -104,7 +104,13 @@ const QuestionDetailsPage = async ({ params }: QuestionDetailsProps) => {
       <ParseHTML data={question.content} />
       <div className="flex flex-wrap gap-2">
         {question.tags.map((tag: any) => (
-          <Tag key={tag._id} _id={tag._id} name={tag.name} showCount={false} />
+          <Tag
+            key={tag._id}
+            _id={tag._id}
+            name={tag.name}
+            showCount={false}
+            slug={tag.slug}
+          />
         ))}
       </div>
       <AnswerList

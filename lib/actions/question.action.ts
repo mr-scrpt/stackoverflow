@@ -7,6 +7,8 @@ import { revalidatePath } from 'next/cache'
 import { UserModel } from '@/database/user.model'
 import {
   ICreateQuestionParams,
+  IDeleteQuestionParams,
+  IEditQuestionParams,
   IGetQuestionsByTagIdParams,
   IGetQuestionsParams,
   IGetSavedQuestionsParams,
@@ -17,6 +19,8 @@ import { slugGenerator } from '../utils'
 import { FilterQuery } from 'mongoose'
 import { createTag } from './tag.action'
 import { ITag } from '@/types'
+import { AnswerModel } from '@/database/answer.model'
+import { InteractionModel } from '@/database/interaction.model'
 
 export const getQuestions = async (params: IGetQuestionsParams) => {
   try {
@@ -145,6 +149,51 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
     revalidatePath(path)
   } catch (e) {
     // throw error
+  }
+}
+
+export const deleteQuestion = async (params: IDeleteQuestionParams) => {
+  try {
+    connectToDatabase()
+
+    const { questionId, path } = params
+    // console.log('questionId =====6....>>>', questionId)
+
+    // delete question/answers/interactivity/tags associate with question
+    await QuestionModel.deleteOne({ _id: questionId })
+    await AnswerModel.deleteMany({ question: questionId })
+    await InteractionModel.deleteMany({ question: questionId })
+    await TagModel.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } }
+    )
+
+    revalidatePath(path)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const editQuestion = async (params: IEditQuestionParams) => {
+  try {
+    connectToDatabase()
+
+    const { questionId, title, content, path } = params
+
+    const question = await QuestionModel.findById(questionId).populate('tags')
+
+    if (!question) throw new Error('Question not found')
+
+    question.title = title
+    question.content = content
+
+    await question.save()
+
+    revalidatePath(path)
+  } catch (error) {
+    console.log(error)
+    throw error
   }
 }
 

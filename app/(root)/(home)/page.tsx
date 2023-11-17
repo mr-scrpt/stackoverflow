@@ -6,10 +6,20 @@ import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { Button } from '@/components/ui/button'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestions } from '@/lib/actions/question.action'
+import { getUserById } from '@/lib/actions/user.action'
+import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 
 const Home = async () => {
   const { questions } = await getQuestions({})
+
+  const { userId: clerkId } = auth()
+  let userActual
+  if (clerkId) {
+    userActual = await getUserById(clerkId)
+  }
+  console.log('actual user', userActual)
+
   return (
     <section className="flex flex-col gap-8">
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -33,7 +43,17 @@ const Home = async () => {
 
       <div className="custom-scrollbar flex w-full flex-col gap-6 overflow-y-auto">
         {questions.length ? (
-          questions.map((item) => <QuestionCard key={item._id} item={item} />)
+          questions.map((item) => (
+            <QuestionCard
+              key={item._id}
+              item={item}
+              isAuthor={
+                userActual &&
+                JSON.stringify(item.author._id) ===
+                  JSON.stringify(userActual?._id)
+              }
+            />
+          ))
         ) : (
           <NoResult
             title="There's no question to show"

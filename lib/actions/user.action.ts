@@ -39,7 +39,6 @@ export async function getUserProfileBySlug(slug: string) {
 }
 
 export const getUserById = async (userId: string) => {
-  console.log('user id ====', userId)
   try {
     await connectToDatabase()
 

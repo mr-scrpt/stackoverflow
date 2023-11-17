@@ -6,6 +6,7 @@ import { HTMLAttributes } from 'react'
 import { ISearchParam } from '@/types'
 import {
   getUserAnswers,
+  getUserById,
   getUserProfileBySlug,
   getUserQuestions,
 } from '@/lib/actions/user.action'
@@ -27,25 +28,34 @@ const ProfilePage = async (props: ProfilePageProps) => {
   const { params, searchParams } = props
   console.log('searchParams', searchParams)
 
-  const { user, totalAnswers, totalQuestions } = await getUserProfileBySlug(
-    params.slug
-  )
+  // const userClerk = auth()
+  const { userId: clerkId } = auth()
+  let userActual
+  if (clerkId) {
+    userActual = await getUserById(clerkId)
+  }
+
+  const {
+    user: userProfile,
+    totalAnswers,
+    totalQuestions,
+  } = await getUserProfileBySlug(params.slug)
 
   const { questions } = await getUserQuestions({
-    userId: user._id,
+    userId: userProfile._id,
     page: 1,
   })
+  // console.log('questions', questions)
 
-  const { answers } = await getUserAnswers({ userId: user._id, page: 1 })
+  const { answers } = await getUserAnswers({ userId: userProfile._id, page: 1 })
   // console.log('answers', answers)
-  const { userId: clerkId } = auth()
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row">
         <div className="flex flex-col items-start gap-4 lg:flex-row">
           <Image
-            src={user.picture}
+            src={userProfile.picture}
             alt="profile picture"
             width={140}
             height={140}
@@ -54,37 +64,39 @@ const ProfilePage = async (props: ProfilePageProps) => {
 
           <div className="flex flex-col gap-4">
             <div className="flex flex-col">
-              <h2 className="h2-bold text-dark100_light900">{user.name}</h2>
+              <h2 className="h2-bold text-dark100_light900">
+                {userProfile.name}
+              </h2>
               <p className="paragraph-regular text-dark200_light800">
-                @{user.username}
+                @{userProfile.username}
               </p>
             </div>
 
             <div className="flex flex-wrap items-center justify-start gap-4">
-              {user.portfolioWebsite && (
+              {userProfile.portfolioWebsite && (
                 <ProfileLink
                   imgUrl="/assets/icons/link.svg"
-                  href={user.portfolioWebsite}
+                  href={userProfile.portfolioWebsite}
                   title="Website"
                 />
               )}
 
-              {user.location && (
+              {userProfile.location && (
                 <ProfileLink
                   imgUrl="/assets/icons/location.svg"
-                  title={user.location}
+                  title={userProfile.location}
                 />
               )}
 
               <ProfileLink
                 imgUrl="/assets/icons/calendar.svg"
-                title={getJoinedDate(user.joinedAt)}
+                title={getJoinedDate(userProfile.joinedAt)}
               />
             </div>
 
-            {user.bio && (
+            {userProfile.bio && (
               <p className="paragraph-regular text-dark400_light800 mt-8">
-                {user.bio}
+                {userProfile.bio}
               </p>
             )}
           </div>
@@ -92,7 +104,7 @@ const ProfilePage = async (props: ProfilePageProps) => {
 
         <div className="flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3">
           <SignedIn>
-            {clerkId === user.clerkId && (
+            {clerkId === userProfile.clerkId && (
               <Link href="/profile/edit">
                 <Button className="paragraph-medium btn-secondary text-dark300_light900 min-h-[46px] min-w-[175px] px-4 py-3">
                   Edit Profile
@@ -123,6 +135,7 @@ const ProfilePage = async (props: ProfilePageProps) => {
             {questions ? (
               <QuestionTab
                 list={questions}
+                userId={userActual?._id}
                 // searchParams={searchParams}
                 // clerkId={clerkId}
                 // userId={userInfo.user._id}
@@ -135,6 +148,7 @@ const ProfilePage = async (props: ProfilePageProps) => {
             {answers ? (
               <AnswerTab
                 list={answers}
+                userId={userActual?._id}
                 // searchParams={searchParams}
                 // clerkId={clerkId}
                 // userId={userInfo.user._id}

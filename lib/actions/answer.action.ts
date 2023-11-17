@@ -6,10 +6,12 @@ import { connectToDatabase } from '../mongoose'
 import {
   IAnswerVoteParams,
   ICreateAnswerParams,
+  IDeleteAnswerParams,
   IGetAnswersParams,
 } from '@/types/shared'
 import { QuestionModel } from '@/database/question.model'
 import { UserModel } from '@/database/user.model'
+import { InteractionModel } from '@/database/interaction.model'
 
 export const createAnswer = async (params: ICreateAnswerParams) => {
   try {
@@ -28,6 +30,31 @@ export const createAnswer = async (params: ICreateAnswerParams) => {
     revalidatePath(path)
 
     return newAnswer
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const deleteAnswer = async (params: IDeleteAnswerParams) => {
+  try {
+    connectToDatabase()
+
+    const { answerId, path } = params
+
+    const answer = await AnswerModel.findById(answerId)
+
+    if (!answer) throw new Error('Answer not found')
+
+    // delete answer within quesiton and interaction
+    await AnswerModel.deleteOne({ _id: answerId })
+    await QuestionModel.updateMany(
+      { answer: answerId },
+      { $pull: { answers: answerId } }
+    )
+    await InteractionModel.deleteMany({ answer: answerId })
+
+    revalidatePath(path)
   } catch (error) {
     console.log(error)
     throw error
@@ -72,7 +99,6 @@ export const upVoteAnswer = async (params: IAnswerVoteParams) => {
     } else {
       updateQuery = { $addToSet: { upVotes: userId } }
     }
-    console.log('answerId in aciton', answerId)
 
     const answer = await AnswerModel.findByIdAndUpdate(answerId, updateQuery, {
       new: true,

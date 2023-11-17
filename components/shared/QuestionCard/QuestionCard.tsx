@@ -1,17 +1,22 @@
-import { IQuestion } from '@/types'
-import { FC, HTMLAttributes } from 'react'
-import { Tag } from '../Tag/Tag'
-import Link from 'next/link'
 import { formatNumber, getTimestamp, parseHTMLToString } from '@/lib/utils'
+import { IQuestion } from '@/types'
+import { ActionTypeEnum } from '@/types/shared'
+import { SignedIn } from '@clerk/nextjs'
+import Link from 'next/link'
+import { FC, HTMLAttributes } from 'react'
+import { CardActionBar } from '../CardActionBar/CardActionBar'
 import { Metric } from '../Metric/Metric'
-import { ParseHTML } from '../ParseHTML/ParseHTML'
+import { Tag } from '../Tag/Tag'
 
 interface QuestionCardProps extends HTMLAttributes<HTMLDivElement> {
   item: IQuestion
+  isAuthor: boolean
 }
 
 export const QuestionCard: FC<QuestionCardProps> = (props) => {
+  const { isAuthor, item } = props
   const {
+    _id,
     title,
     slug,
     tags,
@@ -21,7 +26,8 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
     answers,
     createdAt,
     content,
-  } = props.item
+  } = item
+
   return (
     <div className="flex flex-col gap-2 card-wrapper rounded-[10px] p-2 sm:p-4">
       <div className="flex flex-col items-start justify-between gap-1">
@@ -42,6 +48,15 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
       </div>
 
       {/* if signed in add edit delete actions */}
+      <SignedIn>
+        {isAuthor && (
+          <CardActionBar
+            itemId={JSON.stringify(_id)}
+            type={ActionTypeEnum.QUESTION}
+            slug={slug}
+          />
+        )}
+      </SignedIn>
 
       <div className="mt-3.5 flex flex-wrap gap-2">
         {tags.map((tag) => (

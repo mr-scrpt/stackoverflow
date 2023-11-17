@@ -3,15 +3,19 @@ import { IAnswer } from '@/types'
 import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
 import { Metric } from '../Metric/Metric'
+import { ActionTypeEnum } from '@/types/shared'
+import { CardActionBar } from '../CardActionBar/CardActionBar'
+import { SignedIn } from '@clerk/nextjs'
 
 interface AnswerCardProps extends HTMLAttributes<HTMLDivElement> {
   item: IAnswer
+  isAuthor: boolean
 }
 
 export const AnswerCard: FC<AnswerCardProps> = (props) => {
-  const { item } = props
+  const { item, isAuthor } = props
   const { question, author } = item
-  console.log('question $$$$', question)
+  // console.log('question $$$$', question)
   return (
     <div
       // href={`/question/${question.slug}/#${item._id}`}
@@ -30,11 +34,19 @@ export const AnswerCard: FC<AnswerCardProps> = (props) => {
           </h3>
         </div>
 
-        {/* <SignedIn>
-          {showActionButtons && (
-            <EditDeleteAction type="Answer" itemId={JSON.stringify(_id)} />
+        {/* {<SignedIn> */}
+        {/*   {showActionButtons && ( */}
+        {/*     <EditDeleteAction type="Answer" itemId={JSON.stringify(_id)} /> */}
+        {/*   )} */}
+        {/* </SignedIn>} */}
+        <SignedIn>
+          {isAuthor && (
+            <CardActionBar
+              itemId={JSON.stringify(item._id)}
+              type={ActionTypeEnum.ANSWER}
+            />
           )}
-        </SignedIn> */}
+        </SignedIn>
       </div>
 
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
