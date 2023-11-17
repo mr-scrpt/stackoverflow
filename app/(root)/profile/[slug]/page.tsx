@@ -41,7 +41,7 @@ const ProfilePage = async (props: ProfilePageProps) => {
   const { userId: clerkId } = auth()
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row">
         <div className="flex flex-col items-start gap-4 lg:flex-row">
           <Image
@@ -52,18 +52,20 @@ const ProfilePage = async (props: ProfilePageProps) => {
             className="rounded-full object-cover"
           />
 
-          <div className="mt-3">
-            <h2 className="h2-bold text-dark100_light900">{user.name}</h2>
-            <p className="paragraph-regular text-dark200_light800">
-              @{user.username}
-            </p>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col">
+              <h2 className="h2-bold text-dark100_light900">{user.name}</h2>
+              <p className="paragraph-regular text-dark200_light800">
+                @{user.username}
+              </p>
+            </div>
 
-            <div className="mt-5 flex flex-wrap items-center justify-start gap-5">
+            <div className="flex flex-wrap items-center justify-start gap-4">
               {user.portfolioWebsite && (
                 <ProfileLink
                   imgUrl="/assets/icons/link.svg"
                   href={user.portfolioWebsite}
-                  title="Portfolio"
+                  title="Website"
                 />
               )}
 
@@ -143,7 +145,7 @@ const ProfilePage = async (props: ProfilePageProps) => {
           </TabsContent>
         </Tabs>
       </div>
-    </>
+    </div>
   )
 }
 

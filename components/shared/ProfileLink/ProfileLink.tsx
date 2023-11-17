@@ -19,7 +19,9 @@ export const ProfileLink: FC<ProfileLinkProps> = (props) => {
           href={href}
           target="_blank"
           className="text-blue-500 paragraph-medium"
-        ></Link>
+        >
+          {title}
+        </Link>
       ) : (
         <p className="paragraph-medium text-dark400_light700">{title}</p>
       )}
