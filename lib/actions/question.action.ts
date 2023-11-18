@@ -124,6 +124,12 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
 
     const slug = slugGenerator(title)
 
+    const existQuestion = await QuestionModel.findOne({ slug })
+
+    if (existQuestion) {
+      throw new Error('question has existing')
+    }
+
     const question = await QuestionModel.create({
       title,
       slug,
@@ -148,7 +154,8 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
     // revalidation => purge data cache and update UI
     revalidatePath(path)
   } catch (e) {
-    // throw error
+    console.log(e)
+    throw e
   }
 }
 
@@ -177,6 +184,7 @@ export const deleteQuestion = async (params: IDeleteQuestionParams) => {
 
 export const editQuestion = async (params: IEditQuestionParams) => {
   try {
+    console.log('on edit question action')
     connectToDatabase()
 
     const { questionId, title, content, path } = params
@@ -188,7 +196,9 @@ export const editQuestion = async (params: IEditQuestionParams) => {
     question.title = title
     question.content = content
 
-    await question.save()
+    const newQuestion = await question.save()
+
+    console.log('newQuestion', newQuestion)
 
     revalidatePath(path)
   } catch (error) {
