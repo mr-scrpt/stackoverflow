@@ -13,6 +13,7 @@ import { revalidatePath } from 'next/cache'
 import { QuestionModel } from '@/database/question.model'
 import { AnswerModel } from '@/database/answer.model'
 import { TagModel } from '@/database/tag.model'
+import { toPlainObject } from '../utils'
 
 export async function getUserProfileBySlug(slug: string) {
   try {
@@ -45,7 +46,7 @@ export const getUserById = async (userId: string) => {
     const user = await UserModel.findOne({ clerkId: userId })
 
     // return JSON.parse(JSON.stringify(user))
-    return user
+    return toPlainObject(user)
   } catch (error) {
     console.log(error)
     throw error

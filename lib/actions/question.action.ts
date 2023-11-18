@@ -15,7 +15,7 @@ import {
   IQuestionVoteParams,
   IToggleSaveQuestionParams,
 } from '@/types/shared'
-import { slugGenerator } from '../utils'
+import { slugGenerator, toPlainObject } from '../utils'
 import { FilterQuery } from 'mongoose'
 import { createTag } from './tag.action'
 import { ITag } from '@/types'
@@ -50,7 +50,8 @@ export const fetchQuestionBySlug = async (slug: string) => {
 
     // console.log('===>>>', question)
 
-    return question
+    // return question
+    return toPlainObject(question)
   } catch (error) {
     console.log(error)
     throw error
@@ -147,15 +148,41 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
       tagDocuments.push(existingTag.tag._id)
     }
 
-    await QuestionModel.findByIdAndUpdate(question._id, {
+    const result = await QuestionModel.findByIdAndUpdate(question._id, {
       $push: { tags: { $each: tagDocuments } },
-    })
+    }).lean()
 
-    // revalidation => purge data cache and update UI
     revalidatePath(path)
+    return toPlainObject(result)
   } catch (e) {
     console.log(e)
     throw e
+  }
+}
+
+export const editQuestion = async (params: IEditQuestionParams) => {
+  try {
+    connectToDatabase()
+
+    const { slug, title, content, path } = params
+
+    const question = await QuestionModel.findOne({ slug }).populate('tags')
+
+    if (!question) throw new Error('Question not found')
+
+    question.title = title
+    // question.slug = slugGenerator(title)
+    question.content = content
+
+    const result = await question.save()
+
+    revalidatePath(`/question/${result.slug}`)
+    // revalidatePath(`/question/${result.slug}`)
+
+    return toPlainObject(result)
+  } catch (error) {
+    console.log(error)
+    throw error
   }
 }
 
@@ -174,31 +201,6 @@ export const deleteQuestion = async (params: IDeleteQuestionParams) => {
       { questions: questionId },
       { $pull: { questions: questionId } }
     )
-
-    revalidatePath(path)
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
-}
-
-export const editQuestion = async (params: IEditQuestionParams) => {
-  try {
-    console.log('on edit question action')
-    connectToDatabase()
-
-    const { questionId, title, content, path } = params
-
-    const question = await QuestionModel.findById(questionId).populate('tags')
-
-    if (!question) throw new Error('Question not found')
-
-    question.title = title
-    question.content = content
-
-    const newQuestion = await question.save()
-
-    console.log('newQuestion', newQuestion)
 
     revalidatePath(path)
   } catch (error) {

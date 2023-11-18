@@ -17,9 +17,16 @@ const slugifyConfig = {
 
 export const slugGenerator = (str: string) => slugify(str, slugifyConfig)
 
-export const getTimestamp = (createdAt: Date): string => {
+export const getTimestamp = (createdAt: Date | string): string => {
   const now = new Date()
-  const diffMilliseconds = now.getTime() - createdAt.getTime()
+  // const createdAtDate = new Date(createdAt).getTime()
+  // const diffMilliseconds = now.getTime() - createdAtDate
+  let diffMilliseconds
+  if (typeof createdAt === 'string') {
+    diffMilliseconds = now.getTime() - new Date(createdAt).getTime()
+  } else {
+    diffMilliseconds = now.getTime() - createdAt.getTime()
+  }
 
   const diffMinutes = Math.floor(diffMilliseconds / (1000 * 60))
   const diffHours = Math.floor(diffMinutes / 60)
@@ -76,3 +83,5 @@ export const parseHTMLToString = (html: string) => {
   // const parser = new DOMParser()
   // return parser.parseFromString(html, 'text/html').textContent
 }
+
+export const toPlainObject = (obj) => JSON.parse(JSON.stringify(obj))

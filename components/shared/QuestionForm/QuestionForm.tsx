@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { createQuestion } from '@/lib/actions/question.action'
+import { createQuestion, editQuestion } from '@/lib/actions/question.action'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Editor } from '@tinymce/tinymce-react'
 import Image from 'next/image'
@@ -28,31 +28,35 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { QuestionFormSchema } from './validation.schema'
 import useTheme from '@/contexts/ThemeProvider'
+import { IQuestion, ITag } from '@/types'
+import { QuestionFormTypeEnum } from '@/types/shared'
 
 interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {
   userId: string
+  questionDetails?: IQuestion
+  type?: QuestionFormTypeEnum
 }
 
 export const QuestionForm: FC<QuestionFormProps> = (props) => {
+  const { questionDetails, userId, type } = props
   const editorRef = useRef(null)
   const { mode } = useTheme()
-  const { userId } = props
   const router = useRouter()
   const pathname = usePathname()
+  // const type: string = 'create'
 
-  const type: string = 'create'
+  // const questionDetails =
+  //   questionDetails && JSON.parse(questionDetails || '')
 
-  // useEffect(() => {
-  //   createQuestion()
-  // }, [])
+  const groupTags = questionDetails?.tags?.map((tag: ITag) => tag.name)
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const form = useForm<z.infer<typeof QuestionFormSchema>>({
     resolver: zodResolver(QuestionFormSchema),
     defaultValues: {
-      title: '',
-      explanation: '',
-      tags: [],
+      title: questionDetails?.title || '',
+      explanation: questionDetails?.content || '',
+      tags: groupTags || [],
     },
   })
 
@@ -99,16 +103,32 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
   const onSubmit = async (values: z.infer<typeof QuestionFormSchema>) => {
     setIsSubmitting(true)
     try {
-      await createQuestion({
-        title: values.title,
-        content: values.explanation,
-        tags: values.tags,
-        author: userId,
-        path: pathname,
-      })
+      if (type === QuestionFormTypeEnum.EDIT) {
+        const result = await editQuestion({
+          // questionId: questionDetails._id,
+          slug: questionDetails.slug,
+          title: values.title,
+          content: values.explanation,
+          // tags: values.tags,
+          // author: userId,
+          path: pathname,
+        })
+        console.log('new')
 
-      // navigate to home page
-      router.push('/')
+        router.push(`/question/${result.slug}`)
+      }
+      if (type === QuestionFormTypeEnum.CREATE) {
+        await createQuestion({
+          title: values.title,
+          content: values.explanation,
+          tags: values.tags,
+          author: userId,
+          path: pathname,
+        })
+
+        // navigate to home page
+        router.push('/')
+      }
     } catch (error) {
       console.log(error)
     } finally {
@@ -122,6 +142,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
     form.setValue('tags', newTags)
   }
 
+  console.log('type', type)
   // TODO - сделать переключенлие темы реактивной,
   // что бы редактор переключался динамически
 
@@ -173,7 +194,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                   }
                   onBlur={field.onBlur} // save value once exit
                   onEditorChange={(content) => field.onChange(content)}
-                  initialValue=""
+                  initialValue={questionDetails?.content}
                   init={{
                     height: 350,
                     menubar: false,
@@ -226,6 +247,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
               <FormControl>
                 <Input
                   onKeyDown={(e) => handleInputKeyDown(e, field)}
+                  disabled={type === QuestionFormTypeEnum.EDIT}
                   className="mt-0 no-focus paragraph-regular bg-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
                   placeholder="Tags..."
                 />
@@ -236,16 +258,21 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                     <Badge
                       key={tag}
                       className="subtle-medium bg-light800_dark400 text-light400_light500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 capitalize"
-                      onClick={() => handleTagRemove(tag, field)}
+                      onClick={() =>
+                        type === QuestionFormTypeEnum.CREATE &&
+                        handleTagRemove(tag, field)
+                      }
                     >
                       {tag}
-                      <Image
-                        src="/assets/icons/close.svg"
-                        alt="Close icon"
-                        width={12}
-                        height={12}
-                        className="cursor-pointer object-contain invert-0 dark:invert"
-                      />
+                      {type === QuestionFormTypeEnum.CREATE && (
+                        <Image
+                          src="/assets/icons/close.svg"
+                          alt="Close icon"
+                          width={12}
+                          height={12}
+                          className="cursor-pointer object-contain invert-0 dark:invert"
+                        />
+                      )}
                     </Badge>
                   ))}
                 </div>

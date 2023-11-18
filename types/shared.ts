@@ -91,7 +91,8 @@ export interface IDeleteQuestionParams {
 }
 
 export interface IEditQuestionParams {
-  questionId: string
+  // questionId: string
+  slug: string
   title: string
   content: string
   path: string
@@ -179,4 +180,9 @@ export enum VoteTypeEnum {
 export enum ActionTypeEnum {
   ANSWER = 'answer',
   QUESTION = 'question',
+}
+
+export enum QuestionFormTypeEnum {
+  EDIT = 'edit',
+  CREATE = 'create',
 }
