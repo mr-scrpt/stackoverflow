@@ -4,7 +4,7 @@ import { IQuestion } from '@/types'
 
 interface QuestionTabProps extends HTMLAttributes<HTMLDivElement> {
   list: IQuestion[]
-  userId: string
+  userId: string | undefined
 }
 
 export const QuestionTab: FC<QuestionTabProps> = (props) => {
@@ -20,6 +20,7 @@ export const QuestionTab: FC<QuestionTabProps> = (props) => {
             key={question._id}
             item={question}
             isAuthor={
+              !!userId &&
               JSON.stringify(question.author._id) === JSON.stringify(userId)
             }
           />

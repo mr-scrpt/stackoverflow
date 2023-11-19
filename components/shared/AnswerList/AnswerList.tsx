@@ -9,7 +9,7 @@ import { VoteTypeEnum } from '@/types/shared'
 
 interface AnswerListProps extends HTMLAttributes<HTMLDivElement> {
   questionId: string
-  userId: string
+  userId: string | undefined
   page?: number
   filter?: number
 }
@@ -59,19 +59,21 @@ export const AnswerList: FC<AnswerListProps> = async (props) => {
                 </div>
               </Link>
               <div className="flex justify-end">
-                <VoteBar
-                  type={VoteTypeEnum.ANSWER}
-                  itemId={answer._id.toString()}
-                  userId={userId.toString()}
-                  upVotes={answer.upVotes.length}
-                  downVotes={answer.downVotes.length}
-                  hasUpVoted={answer.upVotes.some((item) => {
-                    return item._id.toString() === userId
-                  })}
-                  hasDownVoted={answer.downVotes.some(
-                    (item) => item._id.toString() === userId
-                  )}
-                />
+                {userId && (
+                  <VoteBar
+                    type={VoteTypeEnum.ANSWER}
+                    itemId={answer._id.toString()}
+                    userId={userId}
+                    upVotes={answer.upVotes.length}
+                    downVotes={answer.downVotes.length}
+                    hasUpVoted={answer.upVotes.some((item) => {
+                      return item._id.toString() === userId
+                    })}
+                    hasDownVoted={answer.downVotes.some(
+                      (item) => item._id.toString() === userId
+                    )}
+                  />
+                )}
               </div>
             </div>
             <ParseHTML data={answer.content} />

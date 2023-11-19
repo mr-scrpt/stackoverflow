@@ -26,14 +26,25 @@ interface ProfilePageProps extends HTMLAttributes<HTMLDivElement> {
 
 const ProfilePage = async (props: ProfilePageProps) => {
   const { params, searchParams } = props
-  console.log('searchParams', searchParams)
 
-  // const userClerk = auth()
-  const { userId: clerkId } = auth()
-  let userActual
-  if (clerkId) {
-    userActual = await getUserById(clerkId)
+  const { userId } = auth()
+
+  if (!userId) {
+    return (
+      <div className="paragraph-regular text-dark200_light800 mx-auto max-w-4xl text-center">
+        <p>You are not loggined</p>
+        <div className="flex items-center justify-center"></div>
+        <Link href="/sign-in" className="mt-1 font-bold text-accent-blue">
+          Sign in
+        </Link>
+        <Link href="/sign-up" className="mt-1 font-bold text-accent-blue">
+          Or sign up
+        </Link>
+      </div>
+    )
   }
+
+  const userActual = await getUserById(userId)
 
   const {
     user: userProfile,
@@ -104,7 +115,7 @@ const ProfilePage = async (props: ProfilePageProps) => {
 
         <div className="flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3">
           <SignedIn>
-            {clerkId === userProfile.clerkId && (
+            {userId === userProfile.clerkId && (
               <Link href="/profile/edit">
                 <Button className="paragraph-medium btn-secondary text-dark300_light900 min-h-[46px] min-w-[175px] px-4 py-3">
                   Edit Profile

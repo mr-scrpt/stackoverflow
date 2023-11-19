@@ -4,7 +4,7 @@ import { AnswerCard } from '../AnswerCard/AnswerCard'
 
 interface QuestionTabProps extends HTMLAttributes<HTMLDivElement> {
   list: IAnswer[]
-  userId: string
+  userId: string | undefined
 }
 
 export const AnswerTab: FC<QuestionTabProps> = (props) => {
@@ -17,7 +17,10 @@ export const AnswerTab: FC<QuestionTabProps> = (props) => {
         <AnswerCard
           key={item._id}
           item={item}
-          isAuthor={JSON.stringify(item.author._id) === JSON.stringify(userId)}
+          isAuthor={
+            !!userId &&
+            JSON.stringify(item.author._id) === JSON.stringify(userId)
+          }
         />
       ))}
     </>

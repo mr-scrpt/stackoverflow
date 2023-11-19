@@ -19,6 +19,8 @@ const EditQuestionPage = async ({ params }: EditQuestionDetailsProps) => {
   const user = await getUserById(userId)
   const question = await fetchQuestionBySlug(slug)
 
+  if (!user) return null
+
   return (
     <section className="flex flex-col gap-8">
       <h1 className="h1-bold text-dark100_light900">Edit question</h1>

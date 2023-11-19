@@ -6,7 +6,10 @@ export interface IFilter {
 }
 
 export interface IUser
-  extends Pick<IBaseUser, 'clerkId' | 'username' | 'name' | 'picture'> {
+  extends Pick<
+    IBaseUser,
+    'clerkId' | 'username' | 'name' | 'picture' | 'postSaved' | 'slug'
+  > {
   _id: string
   // name: string
   // img: string

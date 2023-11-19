@@ -1,5 +1,3 @@
-// interface pageProps extends HTMLAttributes<HTMLDivElement> {}
-
 import { Filter } from '@/components/shared/Filter/Filter'
 import { FilterRow } from '@/components/shared/FilterRow/FilterRow'
 import { NoResult } from '@/components/shared/NoResult/NoResult'

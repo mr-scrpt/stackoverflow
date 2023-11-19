@@ -15,10 +15,7 @@ const Home = async () => {
   const questions = await getQuestions({})
 
   const { userId: clerkId } = auth()
-  let userActual: IUser
-  if (clerkId) {
-    userActual = await getUserById(clerkId)
-  }
+  const userActual = await getUserById(clerkId)
 
   return (
     <section className="flex flex-col gap-8">

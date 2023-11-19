@@ -103,7 +103,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
   const onSubmit = async (values: z.infer<typeof QuestionFormSchema>) => {
     setIsSubmitting(true)
     try {
-      if (type === QuestionFormTypeEnum.EDIT) {
+      if (type === QuestionFormTypeEnum.EDIT && questionDetails) {
         const result = await editQuestion({
           // questionId: questionDetails._id,
           slug: questionDetails.slug,
