@@ -7,6 +7,7 @@ import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { USER_PAGE_FILTER } from '@/constants/filters'
 import { getSavedQuestions } from '@/lib/actions/question.action'
+import { getUserById } from '@/lib/actions/user.action'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 
@@ -28,6 +29,7 @@ const CollectionPage = async () => {
     )
   }
   const { questions } = await getSavedQuestions({ clerkId: userId })
+  const userActual = await getUserById(userId)
   return (
     <section className="flex flex-col gap-8">
       <h1 className="h1-bold text-dark100_light900">Saved Pages</h1>
@@ -44,7 +46,13 @@ const CollectionPage = async () => {
       <div className="custom-scrollbar flex flex-col items-center flex-wrap md:flex-row md:justify-start  w-full gap-6 overflow-y-auto">
         {questions && questions.length > 0 ? (
           questions.map((item) => {
-            return <QuestionCard key={item._id} item={item} />
+            return (
+              <QuestionCard
+                key={item._id}
+                item={item}
+                isAuthor={!!userActual && item.author._id === userActual?._id}
+              />
+            )
           })
         ) : (
           <NoResult

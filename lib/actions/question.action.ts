@@ -18,11 +18,13 @@ import {
 import { slugGenerator, toPlainObject } from '../utils'
 import { FilterQuery } from 'mongoose'
 import { createTag } from './tag.action'
-import { ITag } from '@/types'
+import { IQuestion, ITag } from '@/types'
 import { AnswerModel } from '@/database/answer.model'
 import { InteractionModel } from '@/database/interaction.model'
 
-export const getQuestions = async (params: IGetQuestionsParams) => {
+export const getQuestions = async (
+  params: IGetQuestionsParams
+): Promise<IQuestion[]> => {
   try {
     await connectToDatabase()
     const questions = await QuestionModel.find({})
@@ -30,7 +32,7 @@ export const getQuestions = async (params: IGetQuestionsParams) => {
       .populate({ path: 'author', model: UserModel })
       .sort({ createdAt: -1 })
 
-    return { questions }
+    return toPlainObject(questions)
   } catch (error) {
     console.log(error)
     throw error

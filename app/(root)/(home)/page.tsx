@@ -7,18 +7,18 @@ import { Button } from '@/components/ui/button'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestions } from '@/lib/actions/question.action'
 import { getUserById } from '@/lib/actions/user.action'
+import { IUser } from '@/types'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 
 const Home = async () => {
-  const { questions } = await getQuestions({})
+  const questions = await getQuestions({})
 
   const { userId: clerkId } = auth()
-  let userActual
+  let userActual: IUser
   if (clerkId) {
     userActual = await getUserById(clerkId)
   }
-  console.log('actual user', userActual)
 
   return (
     <section className="flex flex-col gap-8">
@@ -47,11 +47,7 @@ const Home = async () => {
             <QuestionCard
               key={item._id}
               item={item}
-              isAuthor={
-                userActual &&
-                JSON.stringify(item.author._id) ===
-                  JSON.stringify(userActual?._id)
-              }
+              isAuthor={!!userActual && item.author._id === userActual?._id}
             />
           ))
         ) : (

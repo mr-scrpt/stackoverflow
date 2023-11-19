@@ -14,6 +14,7 @@ import { QuestionModel } from '@/database/question.model'
 import { AnswerModel } from '@/database/answer.model'
 import { TagModel } from '@/database/tag.model'
 import { toPlainObject } from '../utils'
+import { IUser } from '@/types'
 
 export async function getUserProfileBySlug(slug: string) {
   try {
@@ -39,7 +40,7 @@ export async function getUserProfileBySlug(slug: string) {
   }
 }
 
-export const getUserById = async (userId: string) => {
+export const getUserById = async (userId: string): Promise<IUser> => {
   try {
     await connectToDatabase()
 
