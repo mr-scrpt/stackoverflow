@@ -8,7 +8,15 @@ export interface IFilter {
 export interface IUser
   extends Pick<
     IBaseUser,
-    'clerkId' | 'username' | 'name' | 'picture' | 'postSaved' | 'slug'
+    | 'clerkId'
+    | 'username'
+    | 'name'
+    | 'picture'
+    | 'postSaved'
+    | 'slug'
+    | 'portfolioWebsite'
+    | 'bio'
+    | 'location'
   > {
   _id: string
   // name: string

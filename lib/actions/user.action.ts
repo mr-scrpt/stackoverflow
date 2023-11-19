@@ -13,7 +13,7 @@ import { revalidatePath } from 'next/cache'
 import { QuestionModel } from '@/database/question.model'
 import { AnswerModel } from '@/database/answer.model'
 import { TagModel } from '@/database/tag.model'
-import { toPlainObject } from '../utils'
+import { slugGenerator, toPlainObject } from '../utils'
 import { IUser } from '@/types'
 
 export async function getUserProfileBySlug(slug: string) {
@@ -89,10 +89,22 @@ export const updateUser = async (params: IUpdateUserParams) => {
     await connectToDatabase()
 
     const { clerkId, updateData, path } = params
+    const { username } = updateData
 
-    await UserModel.findOneAndUpdate({ clerkId }, updateData, { new: true })
+    if (username) {
+      const slug = slugGenerator(username)
+      updateData.slug = slug
+    }
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { clerkId },
+      updateData,
+      { new: true }
+    )
 
     revalidatePath(path)
+
+    return toPlainObject(updatedUser)
   } catch (error) {
     console.log(error)
     throw error
