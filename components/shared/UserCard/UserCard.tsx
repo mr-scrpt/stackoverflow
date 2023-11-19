@@ -42,7 +42,12 @@ export const UserCard: FC<UserCardProps> = async (props) => {
         {tagList.length > 0 ? (
           <div className="flex items-center gap-2">
             {tagList.map((tag) => (
-              <Tag key={tag._id} _id={tag._id} name={tag.name} />
+              <Tag
+                key={tag._id}
+                _id={tag._id}
+                name={tag.name}
+                slug={tag.slug}
+              />
             ))}
           </div>
         ) : (

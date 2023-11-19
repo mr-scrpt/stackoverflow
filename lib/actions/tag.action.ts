@@ -25,9 +25,9 @@ export const fetchTagsByUserId = async (
     // interaction
 
     return [
-      { _id: '123', name: 'HTML' },
-      { _id: '123', name: 'HTML' },
-      { _id: '123', name: 'HTML' },
+      { _id: '123', name: 'HTML', slug: 'test' },
+      { _id: '123', name: 'HTML', slug: 'test' },
+      { _id: '123', name: 'HTML', slug: 'test' },
     ]
   } catch (error) {
     console.log(error)

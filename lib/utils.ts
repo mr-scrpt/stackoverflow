@@ -84,4 +84,4 @@ export const parseHTMLToString = (html: string) => {
   // return parser.parseFromString(html, 'text/html').textContent
 }
 
-export const toPlainObject = (obj) => JSON.parse(JSON.stringify(obj))
+export const toPlainObject = (obj: any) => JSON.parse(JSON.stringify(obj))

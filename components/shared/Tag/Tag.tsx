@@ -11,7 +11,7 @@ interface TagProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const Tag: FC<TagProps> = (props) => {
-  const { _id, name, slug, totalQuestions, showCount } = props
+  const { name, slug, totalQuestions, showCount } = props
   return (
     <Link href={`/tags/${slug}`} className="flex justify-between gap-2">
       <Badge className="subtle-medium bg-light800_dark300 text-light400_light500 rounded-md border-none px-4 py-2 uppercase">

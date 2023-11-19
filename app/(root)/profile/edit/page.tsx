@@ -1,10 +1,8 @@
 import { ProfileFrom } from '@/components/shared/ProfileForm/ProfileFrom'
 import { getUserById } from '@/lib/actions/user.action'
-import { ISearchParam } from '@/types'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { HTMLAttributes } from 'react'
 
 // interface ProfileEdtiPageProps extends HTMLAttributes<HTMLDivElement> {
 // params: {

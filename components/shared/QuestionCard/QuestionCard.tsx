@@ -10,7 +10,7 @@ import { Tag } from '../Tag/Tag'
 
 interface QuestionCardProps extends HTMLAttributes<HTMLDivElement> {
   item: IQuestion
-  isAuthor: boolean
+  isAuthor?: boolean
 }
 
 export const QuestionCard: FC<QuestionCardProps> = (props) => {

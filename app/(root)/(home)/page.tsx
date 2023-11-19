@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestions } from '@/lib/actions/question.action'
 import { getUserById } from '@/lib/actions/user.action'
-import { IUser } from '@/types'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 

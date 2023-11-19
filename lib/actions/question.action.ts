@@ -166,7 +166,7 @@ export const editQuestion = async (params: IEditQuestionParams) => {
   try {
     connectToDatabase()
 
-    const { slug, title, content, path } = params
+    const { slug, title, content } = params
 
     const question = await QuestionModel.findOne({ slug }).populate('tags')
 

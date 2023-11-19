@@ -6,9 +6,8 @@ import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestionByTagSlug } from '@/lib/actions/question.action'
 import { ISearchParam } from '@/types'
-import { HTMLAttributes } from 'react'
 
-interface TagPageProps extends HTMLAttributes<HTMLDivElement> {
+interface TagPageProps {
   params: {
     slug: string
   }
@@ -18,11 +17,7 @@ interface TagPageProps extends HTMLAttributes<HTMLDivElement> {
 const TagPage = async ({ params, searchParams }: TagPageProps) => {
   const { slug } = params
 
-  // const { userId } = auth()
-  console.log('searchParams', searchParams)
-
   const { tagTitle, questions } = await getQuestionByTagSlug({ slug })
-  // const tag = await getTagBySlug(slug)
 
   return (
     <section className="flex flex-col gap-8">
@@ -45,7 +40,16 @@ const TagPage = async ({ params, searchParams }: TagPageProps) => {
 
       <div className="custom-scrollbar flex w-full flex-col gap-6 overflow-y-auto">
         {questions && questions.length ? (
-          questions.map((item) => <QuestionCard key={item._id} item={item} />)
+          questions.map((item) => (
+            <QuestionCard
+              key={item._id}
+              item={item}
+              // isAuthor={
+              //   !!userActual &&
+              //   JSON.stringify(item.author._id) === JSON.stringify(userActual)
+              // }
+            />
+          ))
         ) : (
           <NoResult
             title="There's no tag question to show"

@@ -1,32 +1,28 @@
+import { AnswerTab } from '@/components/shared/AnswerTab/AnswerTab'
+import { ProfileLink } from '@/components/shared/ProfileLink/ProfileLink'
+import { QuestionTab } from '@/components/shared/QuestionTab/QuestionTab'
+import { Stats } from '@/components/shared/Stats/Stats'
 import { Button } from '@/components/ui/button'
-import { SignedIn, auth } from '@clerk/nextjs'
-import Link from 'next/link'
-import Image from 'next/image'
-import { HTMLAttributes } from 'react'
-import { ISearchParam } from '@/types'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   getUserAnswers,
   getUserById,
   getUserProfileBySlug,
   getUserQuestions,
 } from '@/lib/actions/user.action'
-import { ProfileLink } from '@/components/shared/ProfileLink/ProfileLink'
 import { getJoinedDate } from '@/lib/utils'
-import { Stats } from '@/components/shared/Stats/Stats'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { QuestionTab } from '@/components/shared/QuestionTab/QuestionTab'
-import { AnswerTab } from '@/components/shared/AnswerTab/AnswerTab'
+import { SignedIn, auth } from '@clerk/nextjs'
+import Image from 'next/image'
+import Link from 'next/link'
 
-interface ProfilePageProps extends HTMLAttributes<HTMLDivElement> {
+interface ProfilePageProps {
   params: {
     slug: string
   }
-  searchParams?: ISearchParam
+  // searchParams?: ISearchParam
 }
 
-const ProfilePage = async (props: ProfilePageProps) => {
-  const { params, searchParams } = props
-
+const ProfilePage = async ({ params }: ProfilePageProps) => {
   const { userId } = auth()
 
   if (!userId) {
