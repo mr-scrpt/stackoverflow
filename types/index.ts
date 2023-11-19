@@ -28,6 +28,7 @@ export interface IBaseTag {
   slug: string
   description: string
   questions?: IQuestion[]
+  totalQuestions?: number
   followers?: IUser[]
   createdOn: Date
 }

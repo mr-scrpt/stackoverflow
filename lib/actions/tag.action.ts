@@ -4,7 +4,8 @@ import { UserModel } from '@/database/user.model'
 import { connectToDatabase } from '../mongoose'
 import { ICreateTagParams, IGetTopInteractedTagsParams } from '@/types/shared'
 import { TagModel } from '@/database/tag.model'
-import { slugGenerator } from '../utils'
+import { slugGenerator, toPlainObject } from '../utils'
+import { ITag } from '@/types'
 
 export const fetchTagsByUserId = async (
   params: IGetTopInteractedTagsParams
@@ -84,5 +85,30 @@ export const createTag = async (params: ICreateTagParams) => {
   } catch (e) {
     console.log('CREATE_TAG: ', e)
     throw e
+  }
+}
+
+export const getPopularTags = async (): Promise<ITag[]> => {
+  try {
+    connectToDatabase()
+
+    const popularTags = await TagModel.aggregate([
+      {
+        $project: {
+          name: 1, // include field
+          slug: 1,
+
+          totalQuestions: { $size: '$questions' }, // new field with a size of property
+        },
+      },
+      { $sort: { totalQuestions: -1 } },
+      { $limit: 5 },
+    ])
+    console.log('', popularTags)
+
+    return toPlainObject(popularTags)
+  } catch (error) {
+    console.log(error)
+    throw error
   }
 }

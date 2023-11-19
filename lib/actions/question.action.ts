@@ -366,3 +366,18 @@ export const getSavedQuestions = async (params: IGetSavedQuestionsParams) => {
     throw error
   }
 }
+
+export const getHotQuestions = async (): Promise<IQuestion[]> => {
+  try {
+    connectToDatabase()
+
+    const hotQuestions = await QuestionModel.find({})
+      .sort({ views: -1, upVotes: -1 }) // descending order
+      .limit(5)
+
+    return toPlainObject(hotQuestions)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
