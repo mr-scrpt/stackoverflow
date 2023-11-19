@@ -6,20 +6,51 @@ import {
   ICreateUserParams,
   IDeleteUserParams,
   IGetAllUsersParams,
+  IGetUserStatsParams,
   IUpdateUserParams,
 } from '@/types/shared'
 import { revalidatePath } from 'next/cache'
 import { QuestionModel } from '@/database/question.model'
+import { AnswerModel } from '@/database/answer.model'
+import { TagModel } from '@/database/tag.model'
+import { slugGenerator, toPlainObject } from '../utils'
+import { IUser } from '@/types'
 
-export const getUserById = async (params: any) => {
+export async function getUserProfileBySlug(slug: string) {
   try {
+    connectToDatabase()
+
+    const user = await UserModel.findOne({ slug })
+
+    if (!user) throw new Error('User not found')
+
+    const totalQuestions = await QuestionModel.countDocuments({
+      author: user._id,
+    }) // count where author=userId
+    const totalAnswers = await AnswerModel.countDocuments({ author: user._id })
+
+    return {
+      user,
+      totalAnswers,
+      totalQuestions,
+    }
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const getUserById = async (
+  userId: string | null
+): Promise<IUser | null> => {
+  try {
+    if (!userId) return null
     await connectToDatabase()
 
-    const { userId } = params
     const user = await UserModel.findOne({ clerkId: userId })
 
     // return JSON.parse(JSON.stringify(user))
-    return user
+    return toPlainObject(user)
   } catch (error) {
     console.log(error)
     throw error
@@ -29,6 +60,7 @@ export const getUserById = async (params: any) => {
 export const getAllUsers = async (params: IGetAllUsersParams) => {
   try {
     await connectToDatabase()
+    console.log('getAllUsers', params)
 
     // const { page = 1, limit = 20, filter, searchQuery } = params
 
@@ -57,10 +89,22 @@ export const updateUser = async (params: IUpdateUserParams) => {
     await connectToDatabase()
 
     const { clerkId, updateData, path } = params
+    const { username } = updateData
 
-    await UserModel.findOneAndUpdate({ clerkId }, updateData, { new: true })
+    if (username) {
+      const slug = slugGenerator(username)
+      updateData.slug = slug
+    }
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { clerkId },
+      updateData,
+      { new: true }
+    )
 
     revalidatePath(path)
+
+    return toPlainObject(updatedUser)
   } catch (error) {
     console.log(error)
     throw error
@@ -90,6 +134,53 @@ export const deleteUser = async (params: IDeleteUserParams) => {
     // TODO: delete user answers, comments...
 
     return deleteUser
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export async function getUserQuestions(params: IGetUserStatsParams) {
+  try {
+    connectToDatabase()
+
+    const { userId, page = 1, limit = 10 } = params
+
+    const totalQuestions = await QuestionModel.countDocuments({
+      author: userId,
+    }) // count where author=userId
+    const totalAnswers = await AnswerModel.countDocuments({ author: userId })
+
+    const userQuestions = await QuestionModel.find({ author: userId })
+      .sort({ createdAt: -1, views: -1, upVotes: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .populate({ path: 'tags', model: TagModel })
+      .populate({ path: 'author', model: UserModel })
+
+    return { questions: userQuestions, totalAnswers, totalQuestions }
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export async function getUserAnswers(params: IGetUserStatsParams) {
+  try {
+    connectToDatabase()
+
+    // const { userId, page = 1, pageSize = 10 } = params
+    const { userId, page = 1, limit = 10 } = params
+
+    const totalAnswers = await AnswerModel.countDocuments({ author: userId })
+    const userAnswers = await AnswerModel.find({ author: userId })
+      .sort({ upVotes: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .populate('author', '_id name clerkId picture')
+      .populate('question', 'title _id createdAt author slug')
+
+    return { answers: userAnswers, totalAnswers }
   } catch (error) {
     console.log(error)
     throw error

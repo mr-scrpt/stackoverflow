@@ -101,7 +101,6 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
     })
   }, [itemId, userId, pathname, router])
 
-  console.log('hasSaved =', hasSaved)
   return (
     <div className="flex gap-5 ">
       <div className="flex-center gap-2.5">
@@ -114,7 +113,7 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
             className="cursor-pointer"
             onClick={() => handleVote(VoteDirectionEnum.UP)}
           />
-          <div className="flex-center  background-light700_dark400 p-1 rounded-sm min-w-[18px] ">
+          <div className="flex-center  bg-light700_dark400 p-1 rounded-sm min-w-[18px] ">
             <p className="text-dark400_light900 subtle-medium text-center uppercase">
               {formatNumber(upVotes)}
             </p>
@@ -130,7 +129,7 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
             className="cursor-pointer"
             onClick={() => handleVote(VoteDirectionEnum.DOWN)}
           />
-          <div className="flex-center  background-light700_dark400 p-1 rounded-sm min-w-[18px] ">
+          <div className="flex-center  bg-light700_dark400 p-1 rounded-sm min-w-[18px] ">
             <p className="text-dark400_light900 subtle-medium text-center uppercase">
               {formatNumber(downVotes)}
             </p>

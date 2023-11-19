@@ -22,7 +22,7 @@ const QuestionDetailsPage = async ({ params }: QuestionDetailsProps) => {
   const { slug } = params
   const { userId } = auth()
 
-  const user = await getUserById({ userId })
+  const user = await getUserById(userId)
 
   const question = await fetchQuestionBySlug(slug)
   if (!question) return null
@@ -49,25 +49,27 @@ const QuestionDetailsPage = async ({ params }: QuestionDetailsProps) => {
           </Link>
 
           <div className="flex justify-end">
-            <VoteBar
-              type={VoteTypeEnum.QUESTION}
-              itemId={question._id.toString()}
-              userId={user?._id.toString()}
-              upVotes={question.upVotes.length}
-              downVotes={question.downVotes.length}
-              hasUpVoted={question.upVotes.includes(user?._id)}
-              hasDownVoted={question.downVotes.includes(user?._id)}
-              hasSaved={user?.postSaved?.includes(question._id)}
-              // hasUpVoted={question.upVotes.some((item) => {
-              //   return item._id.toString() === user?._id.toString()
-              // })}
-              // hasDownVoted={question.downVotes.some(
-              //   (item) => item._id.toString() === user?._id.toString()
-              // )}
-              // hasSaved={user?.postSaved?.some(
-              //   (item) => item._id.toString() === question._id.toString()
-              // )}
-            />
+            {user && (
+              <VoteBar
+                type={VoteTypeEnum.QUESTION}
+                itemId={question._id.toString()}
+                userId={user?._id.toString()}
+                upVotes={question.upVotes.length}
+                downVotes={question.downVotes.length}
+                hasUpVoted={question.upVotes.includes(user?._id)}
+                hasDownVoted={question.downVotes.includes(user?._id)}
+                hasSaved={user?.postSaved?.includes(question._id)}
+                // hasUpVoted={question.upVotes.some((item) => {
+                //   return item._id.toString() === user?._id.toString()
+                // })}
+                // hasDownVoted={question.downVotes.some(
+                //   (item) => item._id.toString() === user?._id.toString()
+                // )}
+                // hasSaved={user?.postSaved?.some(
+                //   (item) => item._id.toString() === question._id.toString()
+                // )}
+              />
+            )}
           </div>
         </div>
         <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -101,19 +103,25 @@ const QuestionDetailsPage = async ({ params }: QuestionDetailsProps) => {
       <ParseHTML data={question.content} />
       <div className="flex flex-wrap gap-2">
         {question.tags.map((tag: any) => (
-          <Tag key={tag._id} _id={tag._id} name={tag.name} showCount={false} />
+          <Tag
+            key={tag._id}
+            _id={tag._id}
+            name={tag.name}
+            showCount={false}
+            slug={tag.slug}
+          />
         ))}
       </div>
       <AnswerList
-        questionId={question._id.toString()}
-        userId={user?._id.toString()}
+        questionId={question._id}
+        userId={user?._id}
         // totalAnswers={question.answers.length}
       />
       {user && (
         <AnswerForm
           question={question.content}
-          questionId={JSON.stringify(question._id)}
-          authorId={JSON.stringify(user._id)}
+          questionId={question._id}
+          authorId={user._id}
         />
       )}
     </section>

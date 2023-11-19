@@ -7,15 +7,24 @@ import { revalidatePath } from 'next/cache'
 import { UserModel } from '@/database/user.model'
 import {
   ICreateQuestionParams,
+  IDeleteQuestionParams,
+  IEditQuestionParams,
+  IGetQuestionsByTagIdParams,
   IGetQuestionsParams,
   IGetSavedQuestionsParams,
   IQuestionVoteParams,
   IToggleSaveQuestionParams,
 } from '@/types/shared'
-import { slugGenerator } from '../utils'
+import { slugGenerator, toPlainObject } from '../utils'
 import { FilterQuery } from 'mongoose'
+import { createTag } from './tag.action'
+import { IQuestion, ITag } from '@/types'
+import { AnswerModel } from '@/database/answer.model'
+import { InteractionModel } from '@/database/interaction.model'
 
-export const getQuestions = async (params: IGetQuestionsParams) => {
+export const getQuestions = async (
+  params: IGetQuestionsParams
+): Promise<IQuestion[]> => {
   try {
     await connectToDatabase()
     const questions = await QuestionModel.find({})
@@ -23,7 +32,7 @@ export const getQuestions = async (params: IGetQuestionsParams) => {
       .populate({ path: 'author', model: UserModel })
       .sort({ createdAt: -1 })
 
-    return { questions }
+    return toPlainObject(questions)
   } catch (error) {
     console.log(error)
     throw error
@@ -43,7 +52,68 @@ export const fetchQuestionBySlug = async (slug: string) => {
 
     // console.log('===>>>', question)
 
-    return question
+    // return question
+    return toPlainObject(question)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export async function getQuestionByTagSlug(params: IGetQuestionsByTagIdParams) {
+  try {
+    connectToDatabase()
+
+    // const { tagId, searchQuery, page = 1, pageSize = 10 } = params
+    const { searchQuery, slug } = params
+
+    // const tagIds = await TagModel.find({ slug }).distinct('_id')
+    // let query = { tags: { $in: tagIds } }
+    //
+    // // Добавляем условие поиска по регулярному выражению, если searchQuery передан
+    // if (searchQuery) {
+    //   query.title = { $regex: new RegExp(searchQuery, 'i') }
+    // }
+    //
+    // const questions = await QuestionModel.find(query)
+    //   .populate('tags') // Заполняем данные о тегах
+    //   .populate('author')
+    //   .exec()
+    //
+    // return questions
+
+    // const questions = await QuestionModel.find({ 'tags.slug': slug })
+    //   .populate({ path: 'tags', model: TagModel }) // Specifies paths which should be populated with other documents
+    //   .populate({ path: 'author', model: UserModel })
+    //   .sort({ createdAt: -1 })
+    // console.log('questions =====', questions)
+
+    const tagFilter: FilterQuery<ITag> = { slug }
+
+    const tag = await TagModel.findOne(tagFilter).populate({
+      path: 'questions',
+      model: QuestionModel,
+      match: searchQuery
+        ? { title: { $regex: new RegExp(searchQuery, 'i') } }
+        : {},
+      options: {
+        sort: { createdAt: -1 },
+      },
+      populate: [
+        {
+          path: 'author',
+          model: UserModel,
+          select: '_id name clerkId picture',
+        },
+        { path: 'tags', model: TagModel, select: '_id name' },
+      ],
+    })
+
+    if (!tag) throw new Error('No tag found')
+
+    const questions = tag.questions
+
+    return { tagTitle: tag.name, questions }
   } catch (error) {
     console.log(error)
     throw error
@@ -55,8 +125,13 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
     connectToDatabase()
     const { title, content, tags, author, path } = params
 
-    console.log('tags =>>>', tags)
     const slug = slugGenerator(title)
+
+    const existQuestion = await QuestionModel.findOne({ slug })
+
+    if (existQuestion) {
+      throw new Error('question has existing')
+    }
 
     const question = await QuestionModel.create({
       title,
@@ -68,35 +143,75 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
     const tagDocuments = []
 
     for (const tag of tags) {
-      const existingTag = await TagModel.findOneAndUpdate(
-        {
-          name: { $regex: new RegExp(`^${tag}$`, 'i') },
-        },
-        {
-          $setOnInsert: { name: tag }, // do update if target found
-          $push: { questions: question._id },
-        },
-        {
-          upsert: true, // upsert if target not found
-          new: true, // return new doc instead original one
-        }
-      )
-      tagDocuments.push(existingTag._id)
+      const existingTag = await createTag({
+        name: tag,
+        questionId: question._id,
+      })
+      tagDocuments.push(existingTag.tag._id)
     }
 
-    await QuestionModel.findByIdAndUpdate(question._id, {
+    const result = await QuestionModel.findByIdAndUpdate(question._id, {
       $push: { tags: { $each: tagDocuments } },
-    })
+    }).lean()
 
-    // revalidation => purge data cache and update UI
     revalidatePath(path)
+    return toPlainObject(result)
   } catch (e) {
-    // throw error
+    console.log(e)
+    throw e
+  }
+}
+
+export const editQuestion = async (params: IEditQuestionParams) => {
+  try {
+    connectToDatabase()
+
+    const { slug, title, content } = params
+
+    const question = await QuestionModel.findOne({ slug }).populate('tags')
+
+    if (!question) throw new Error('Question not found')
+
+    question.title = title
+    // question.slug = slugGenerator(title)
+    question.content = content
+
+    const result = await question.save()
+
+    revalidatePath(`/question/${result.slug}`)
+    // revalidatePath(`/question/${result.slug}`)
+
+    return toPlainObject(result)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const deleteQuestion = async (params: IDeleteQuestionParams) => {
+  try {
+    connectToDatabase()
+
+    const { questionId, path } = params
+    // console.log('questionId =====6....>>>', questionId)
+
+    // delete question/answers/interactivity/tags associate with question
+    await QuestionModel.deleteOne({ _id: questionId })
+    await AnswerModel.deleteMany({ question: questionId })
+    await InteractionModel.deleteMany({ question: questionId })
+    await TagModel.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } }
+    )
+
+    revalidatePath(path)
+  } catch (error) {
+    console.log(error)
+    throw error
   }
 }
 
 export const upVoteQuestion = async (params: IQuestionVoteParams) => {
-  console.log('upVoteQuestion')
   try {
     connectToDatabase()
 
@@ -186,14 +301,11 @@ export const toggleSaveQuestion = async (params: IToggleSaveQuestionParams) => {
     }
 
     const isQuestionSaved = user.postSaved?.some((item) => {
-      console.log('item._id', item._id)
-      console.log('questionId', questionId)
       return item._id.toString() === questionId
     })
 
     if (isQuestionSaved) {
       // remove question from saved
-      console.log('in save +')
       await UserModel.findByIdAndUpdate(
         userId,
         {
@@ -202,7 +314,6 @@ export const toggleSaveQuestion = async (params: IToggleSaveQuestionParams) => {
         { new: true }
       )
     } else {
-      console.log('not in save -')
       // add question to saved
       await UserModel.findByIdAndUpdate(
         userId,
@@ -241,7 +352,7 @@ export const getSavedQuestions = async (params: IGetSavedQuestionsParams) => {
         {
           path: 'author',
           model: UserModel,
-          select: '_id name clerkId picture',
+          select: '_id name username clerkId picture',
         },
         { path: 'tags', model: TagModel, select: '_id name' },
       ],
@@ -250,6 +361,21 @@ export const getSavedQuestions = async (params: IGetSavedQuestionsParams) => {
     if (!user) throw new Error('User not found')
 
     return { questions: user.postSaved }
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const getHotQuestions = async (): Promise<IQuestion[]> => {
+  try {
+    connectToDatabase()
+
+    const hotQuestions = await QuestionModel.find({})
+      .sort({ views: -1, upVotes: -1 }) // descending order
+      .limit(5)
+
+    return toPlainObject(hotQuestions)
   } catch (error) {
     console.log(error)
     throw error

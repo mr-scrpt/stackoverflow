@@ -68,6 +68,11 @@ export interface ICreateQuestionParams {
   path: string
 }
 
+export interface ICreateTagParams {
+  name: string
+  questionId: string
+}
+
 export interface IGetQuestionByIdParams {
   questionId: string
 }
@@ -86,7 +91,8 @@ export interface IDeleteQuestionParams {
 }
 
 export interface IEditQuestionParams {
-  questionId: string
+  // questionId: string
+  slug: string
   title: string
   content: string
   path: string
@@ -100,7 +106,8 @@ export interface IGetAllTagsParams {
 }
 
 export interface IGetQuestionsByTagIdParams {
-  tagId: string
+  slug: string
+  tagId?: string
   page?: number
   limit?: number
   searchQuery?: string
@@ -164,7 +171,18 @@ export enum VoteDirectionEnum {
   UP = 'up',
   DOWN = 'down',
 }
+
 export enum VoteTypeEnum {
   ANSWER = 'answer',
   QUESTION = 'question',
+}
+
+export enum ActionTypeEnum {
+  ANSWER = 'answer',
+  QUESTION = 'question',
+}
+
+export enum QuestionFormTypeEnum {
+  EDIT = 'edit',
+  CREATE = 'create',
 }

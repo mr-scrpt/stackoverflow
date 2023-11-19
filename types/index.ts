@@ -5,10 +5,19 @@ export interface IFilter {
   value: string
 }
 
-export interface IPost {}
-
 export interface IUser
-  extends Pick<IBaseUser, 'clerkId' | 'username' | 'name' | 'picture'> {
+  extends Pick<
+    IBaseUser,
+    | 'clerkId'
+    | 'username'
+    | 'name'
+    | 'picture'
+    | 'postSaved'
+    | 'slug'
+    | 'portfolioWebsite'
+    | 'bio'
+    | 'location'
+  > {
   _id: string
   // name: string
   // img: string
@@ -16,8 +25,10 @@ export interface IUser
 
 export interface IBaseTag {
   name: string
+  slug: string
   description: string
-  questions?: IPost[]
+  questions?: IQuestion[]
+  totalQuestions?: number
   followers?: IUser[]
   createdOn: Date
 }
@@ -47,6 +58,9 @@ export interface IBaseAnswer {
   downVotes: IUser[]
   createdAt: Date
 }
+export interface IAnswer extends IBaseAnswer {
+  _id: string
+}
 
 export interface IBaseInteraction {
   user: IUser
@@ -65,6 +79,7 @@ export interface IBaseUser {
   clerkId: string
   name: string
   username: string
+  slug: string
   picture: string /* not required if login through third party */
   email: string
   password?: string
@@ -104,14 +119,17 @@ export interface Country {
 export interface ParamsProps {
   params: { id: string }
 }
+export interface ISearchParam {
+  [key: string]: string | undefined
+}
 
 export interface SearchParamsProps {
-  searchParams: { [key: string]: string | undefined }
+  searchParams: ISearchParam
 }
 
 export interface URLProps {
   params: { id: string }
-  searchParams: { [key: string]: string | undefined }
+  searchParams: ISearchParam
 }
 
 export interface BadgeCounts {

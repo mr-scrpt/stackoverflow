@@ -9,10 +9,13 @@ interface MenuProps extends HTMLAttributes<HTMLDivElement> {
   pathname: string
   classLink?: string
   classLinkText?: string
+  userProfileSlug?: string
 }
 
 export const Menu: FC<MenuProps> = (props) => {
-  const { menuList, pathname, classLink, classLinkText } = props
+  const { menuList, pathname, classLink, classLinkText, userProfileSlug } =
+    props
+  console.log('slug', userProfileSlug)
 
   const clsLink = cn(
     'flex items-center justify-start gap-4 bg-transparent p-4',
@@ -39,6 +42,14 @@ export const Menu: FC<MenuProps> = (props) => {
           clsLinkText,
           isActive ? 'base-bold' : 'base-medium'
         )
+
+        if (item.route === '/profile') {
+          if (userProfileSlug) {
+            item.route = `${item.route}/${userProfileSlug}`
+          } else {
+            return null
+          }
+        }
 
         return (
           <Link

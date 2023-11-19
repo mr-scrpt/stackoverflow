@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import * as cheerio from 'cheerio'
 import slugify from 'slugify'
 
 export function cn(...inputs: ClassValue[]) {
@@ -16,9 +17,16 @@ const slugifyConfig = {
 
 export const slugGenerator = (str: string) => slugify(str, slugifyConfig)
 
-export const getTimestamp = (createdAt: Date): string => {
+export const getTimestamp = (createdAt: Date | string): string => {
   const now = new Date()
-  const diffMilliseconds = now.getTime() - createdAt.getTime()
+  // const createdAtDate = new Date(createdAt).getTime()
+  // const diffMilliseconds = now.getTime() - createdAtDate
+  let diffMilliseconds
+  if (typeof createdAt === 'string') {
+    diffMilliseconds = now.getTime() - new Date(createdAt).getTime()
+  } else {
+    diffMilliseconds = now.getTime() - createdAt.getTime()
+  }
 
   const diffMinutes = Math.floor(diffMilliseconds / (1000 * 60))
   const diffHours = Math.floor(diffMinutes / 60)
@@ -57,3 +65,23 @@ export function formatNumber(number: number | string): string {
 
   return `${scaled.toFixed(1)}${suffix}`
 }
+
+export const getJoinedDate = (date: Date): string => {
+  // Extract the month and year from the Date object
+  const month = date.toLocaleString('default', { month: 'long' })
+  const year = date.getFullYear()
+
+  // Create the joined date string (e.g., "September 2023")
+  const joinedDate = `${month} ${year}`
+
+  return joinedDate
+}
+
+export const parseHTMLToString = (html: string) => {
+  const $ = cheerio.load(html)
+  return $.text()
+  // const parser = new DOMParser()
+  // return parser.parseFromString(html, 'text/html').textContent
+}
+
+export const toPlainObject = (obj: any) => JSON.parse(JSON.stringify(obj))

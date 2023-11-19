@@ -10,7 +10,7 @@ const Page = async () => {
   const { tagList } = await fetchTagList()
   return (
     <section className="flex flex-col gap-8">
-      <h1 className="h1-bold text-dark100_light900">Tags actual</h1>
+      <h1 className="h1-bold text-dark100_light900">Tags list</h1>
 
       <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <SearchLocal route="/tags" placeholder="Search tags" />
