@@ -56,7 +56,7 @@ export interface IJobFilterParams {
 export interface IGetQuestionsParams {
   page?: number
   limit?: number
-  searchQuery?: string
+  q?: string
   filter?: string
 }
 
@@ -185,4 +185,15 @@ export enum ActionTypeEnum {
 export enum QuestionFormTypeEnum {
   EDIT = 'edit',
   CREATE = 'create',
+}
+
+export interface IUrlQueryParams {
+  params: string
+  key: string
+  value: string | null
+}
+
+export interface IRemoveUrlQueryParams {
+  params: string
+  keysToRemove: string[]
 }

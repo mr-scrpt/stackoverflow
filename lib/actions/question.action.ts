@@ -1,10 +1,11 @@
 'use server'
 
+import { AnswerModel } from '@/database/answer.model'
+import { InteractionModel } from '@/database/interaction.model'
 import { QuestionModel } from '@/database/question.model'
-import { connectToDatabase } from '../mongoose'
 import { TagModel } from '@/database/tag.model'
-import { revalidatePath } from 'next/cache'
 import { UserModel } from '@/database/user.model'
+import { IQuestion, ITag } from '@/types'
 import {
   ICreateQuestionParams,
   IDeleteQuestionParams,
@@ -15,19 +16,27 @@ import {
   IQuestionVoteParams,
   IToggleSaveQuestionParams,
 } from '@/types/shared'
-import { slugGenerator, toPlainObject } from '../utils'
 import { FilterQuery } from 'mongoose'
+import { revalidatePath } from 'next/cache'
+import { connectToDatabase } from '../mongoose'
+import { slugGenerator, toPlainObject } from '../utils'
 import { createTag } from './tag.action'
-import { IQuestion, ITag } from '@/types'
-import { AnswerModel } from '@/database/answer.model'
-import { InteractionModel } from '@/database/interaction.model'
 
 export const getQuestions = async (
   params: IGetQuestionsParams
 ): Promise<IQuestion[]> => {
   try {
     await connectToDatabase()
-    const questions = await QuestionModel.find({})
+    const { q } = params
+    const query: FilterQuery<typeof QuestionModel> = q
+      ? {
+          $or: [
+            { title: { $regex: new RegExp(q, 'i') } },
+            { content: { $regex: new RegExp(q, 'i') } },
+          ],
+        }
+      : {}
+    const questions = await QuestionModel.find(query)
       .populate({ path: 'tags', model: TagModel }) // Specifies paths which should be populated with other documents
       .populate({ path: 'author', model: UserModel })
       .sort({ createdAt: -1 })
@@ -60,7 +69,9 @@ export const fetchQuestionBySlug = async (slug: string) => {
   }
 }
 
-export async function getQuestionByTagSlug(params: IGetQuestionsByTagIdParams) {
+export async function getQuestionByTagSlug(
+  params: IGetQuestionsByTagIdParams
+): Promise<{ tagTitle: string; questions: IQuestion[] }> {
   try {
     connectToDatabase()
 
@@ -113,7 +124,7 @@ export async function getQuestionByTagSlug(params: IGetQuestionsByTagIdParams) {
 
     const questions = tag.questions
 
-    return { tagTitle: tag.name, questions }
+    return { tagTitle: tag.name, questions: toPlainObject(questions) }
   } catch (error) {
     console.log(error)
     throw error

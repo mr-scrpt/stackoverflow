@@ -35,7 +35,7 @@ export const Search: FC<SearchProps> = (props) => {
           onChange={(e) => onSearch(e.target?.value)}
           // value={value}
           // value=""
-          className={`${classBg} paragraph-regular no-focus placeholder border-none shadow-none outline-none`}
+          className={`${classBg} paragraph-regular no-focus placeholder border-none shadow-none outline-none text-dark200_light900`}
         />
         {icon && iconPosition === 'right' && (
           <Image

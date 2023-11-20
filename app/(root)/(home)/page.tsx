@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestions } from '@/lib/actions/question.action'
 import { getUserById } from '@/lib/actions/user.action'
+import { ISearchParamsProps } from '@/types'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 
-const Home = async () => {
-  const questions = await getQuestions({})
+const Home = async (props: ISearchParamsProps) => {
+  const { searchParams } = props
+  const questions = await getQuestions({ q: searchParams.q })
 
   const { userId: clerkId } = auth()
   const userActual = await getUserById(clerkId)
