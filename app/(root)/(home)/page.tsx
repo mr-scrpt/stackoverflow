@@ -1,4 +1,5 @@
 import { Filter } from '@/components/shared/Filter/Filter'
+import { FilterRowContent } from '@/components/shared/FilterContend/FilterContent'
 import { FilterRow } from '@/components/shared/FilterRow/FilterRow'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
 import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
@@ -37,7 +38,8 @@ const HomePage = async (props: ISearchParamsProps) => {
           className="hidden max-md:flex"
         />
       </div>
-      <FilterRow list={HOME_PAGE_FILTER} />
+      {/* <FilterRow list={HOME_PAGE_FILTER} /> */}
+      <FilterRowContent list={HOME_PAGE_FILTER} />
 
       <div className="custom-scrollbar flex w-full flex-col gap-6 overflow-y-auto">
         {questions.length ? (

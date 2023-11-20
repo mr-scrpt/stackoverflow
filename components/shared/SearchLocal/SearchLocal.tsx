@@ -1,9 +1,9 @@
 'use client'
+import { TIME_DEBOUNCE_DELAY } from '@/constants'
+import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FC, HTMLAttributes, useEffect, useState } from 'react'
 import { Search } from '../Search/Search'
-import { usePathname, useSearchParams, useRouter } from 'next/navigation'
-import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils'
-import { TIME_DEBOUNCE_DELAY } from '@/constants'
 
 interface SearchLocalProps extends HTMLAttributes<HTMLDivElement> {
   route: string
@@ -15,15 +15,11 @@ export const SearchLocal: FC<SearchLocalProps> = (props) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const query = searchParams.get('q')?.trim()
-  console.log('query', query?.length)
+  const query = searchParams.get('q')
 
   const [search, setSearch] = useState(query || '')
-  console.log('search', search.length)
 
   useEffect(() => {
-    // Do not send request on every change event happened
-    // fire request after specific delay => debounce
     const delayDebounceFn = setTimeout(() => {
       if (search && search !== ' ') {
         const newUrl = formUrlQuery({
@@ -37,12 +33,12 @@ export const SearchLocal: FC<SearchLocalProps> = (props) => {
         // if input is cleared
         if (pathname === route) {
           // delete query
-          // const newUrl = removeKeysFromQuery({
-          //   params: searchParams.toString(),
-          //   keysToRemove: ['q'],
-          // })
+          const newUrl = removeKeysFromQuery({
+            params: searchParams.toString(),
+            keysToRemove: ['q'],
+          })
 
-          router.push(route, { scroll: true })
+          router.push(newUrl, { scroll: true })
         }
       }
     }, TIME_DEBOUNCE_DELAY)
