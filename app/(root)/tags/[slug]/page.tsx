@@ -5,7 +5,9 @@ import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestionByTagSlug } from '@/lib/actions/question.action'
+import { getUserById } from '@/lib/actions/user.action'
 import { ISearchParam } from '@/types'
+import { auth } from '@clerk/nextjs'
 
 interface TagPageProps {
   params: {
@@ -18,6 +20,10 @@ const TagPage = async ({ params, searchParams }: TagPageProps) => {
   const { slug } = params
 
   const { tagTitle, questions } = await getQuestionByTagSlug({ slug })
+  console.log('qu', questions)
+  const { userId: clerkId } = auth()
+  const userActual = await getUserById(clerkId)
+  console.log('userActual', userActual)
 
   return (
     <section className="flex flex-col gap-8">
@@ -44,10 +50,7 @@ const TagPage = async ({ params, searchParams }: TagPageProps) => {
             <QuestionCard
               key={item._id}
               item={item}
-              // isAuthor={
-              //   !!userActual &&
-              //   JSON.stringify(item.author._id) === JSON.stringify(userActual)
-              // }
+              isAuthor={!!userActual && item.author._id === userActual._id}
             />
           ))
         ) : (
