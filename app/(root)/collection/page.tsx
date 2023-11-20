@@ -6,10 +6,12 @@ import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { USER_PAGE_FILTER } from '@/constants/filters'
 import { getSavedQuestions } from '@/lib/actions/question.action'
 import { getUserById } from '@/lib/actions/user.action'
+import { ISearchParamsProps } from '@/types'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 
-const CollectionPage = async () => {
+const CollectionPage = async (props: ISearchParamsProps) => {
+  const { searchParams } = props
   const { userId } = auth()
 
   if (!userId) {
@@ -26,7 +28,10 @@ const CollectionPage = async () => {
       </div>
     )
   }
-  const { questions } = await getSavedQuestions({ clerkId: userId })
+  const { questions } = await getSavedQuestions({
+    clerkId: userId,
+    q: searchParams.q,
+  })
   const userActual = await getUserById(userId)
   return (
     <section className="flex flex-col gap-8">

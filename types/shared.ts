@@ -154,7 +154,7 @@ export interface IGetSavedQuestionsParams {
   page?: number
   limit?: number
   filter?: string
-  searchQuery?: string
+  q?: string
 }
 
 export interface IGetUserStatsParams {

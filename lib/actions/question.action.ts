@@ -346,11 +346,11 @@ export const getSavedQuestions = async (params: IGetSavedQuestionsParams) => {
   try {
     connectToDatabase()
 
-    const { clerkId, searchQuery } = params
+    const { clerkId, q } = params
     // const { clerkId, searchQuery, filter, page = 1, pageSize = 10 } = params
 
-    const query: FilterQuery<typeof QuestionModel> = searchQuery
-      ? { title: { $regex: new RegExp(searchQuery, 'i') } }
+    const query: FilterQuery<typeof QuestionModel> = q
+      ? { title: { $regex: new RegExp(q, 'i') } }
       : {}
 
     const user = await UserModel.findOne({ clerkId }).populate({
