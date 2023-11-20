@@ -102,7 +102,7 @@ export interface IGetAllTagsParams {
   page?: number
   limit?: number
   filter?: string
-  searchQuery?: string
+  q?: string
 }
 
 export interface IGetQuestionsByTagIdParams {
@@ -110,7 +110,7 @@ export interface IGetQuestionsByTagIdParams {
   tagId?: string
   page?: number
   limit?: number
-  searchQuery?: string
+  q?: string
 }
 
 export interface IGetTopInteractedTagsParams {

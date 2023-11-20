@@ -5,9 +5,12 @@ import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { TagCard } from '@/components/shared/TagCard/TagCard'
 import { TAG_PAGE_FILTE } from '@/constants/filters'
 import { fetchTagList } from '@/lib/actions/tag.action'
+import { ISearchParamsProps } from '@/types'
 
-const Page = async () => {
-  const { tagList } = await fetchTagList()
+const TagsPage = async (props: ISearchParamsProps) => {
+  const { searchParams } = props
+
+  const { tagList } = await fetchTagList({ q: searchParams.q })
   return (
     <section className="flex flex-col gap-8">
       <h1 className="h1-bold text-dark100_light900">Tags list</h1>
@@ -41,4 +44,4 @@ const Page = async () => {
   )
 }
 
-export default Page
+export default TagsPage

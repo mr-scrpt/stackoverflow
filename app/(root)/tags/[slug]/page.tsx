@@ -13,13 +13,17 @@ interface TagPageProps {
   params: {
     slug: string
   }
-  searchParams?: ISearchParam
+  searchParams: ISearchParam
 }
 
-const TagPage = async ({ params, searchParams }: TagPageProps) => {
+const TagPage = async (props: TagPageProps) => {
+  const { params, searchParams } = props
   const { slug } = params
 
-  const { tagTitle, questions } = await getQuestionByTagSlug({ slug })
+  const { tagTitle, questions } = await getQuestionByTagSlug({
+    slug,
+    q: searchParams.q,
+  })
   const { userId: clerkId } = auth()
   const userActual = await getUserById(clerkId)
 
@@ -33,7 +37,10 @@ const TagPage = async ({ params, searchParams }: TagPageProps) => {
         </div>
       </div>
       <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">
-        <SearchLocal route="/" placeholder="Search questions" />
+        <SearchLocal
+          route={`/tags/${params.slug}`}
+          placeholder="Search questions"
+        />
         <Filter
           list={HOME_PAGE_FILTER}
           classTrigger="min-h-[56px] sm:min-w-[170px] bg-light-700 dark:bg-dark-400"

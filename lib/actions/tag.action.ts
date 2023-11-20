@@ -2,10 +2,15 @@
 
 import { UserModel } from '@/database/user.model'
 import { connectToDatabase } from '../mongoose'
-import { ICreateTagParams, IGetTopInteractedTagsParams } from '@/types/shared'
+import {
+  ICreateTagParams,
+  IGetAllTagsParams,
+  IGetTopInteractedTagsParams,
+} from '@/types/shared'
 import { TagModel } from '@/database/tag.model'
 import { slugGenerator, toPlainObject } from '../utils'
 import { ITag } from '@/types'
+import { FilterQuery } from 'mongoose'
 
 export const fetchTagsByUserId = async (
   params: IGetTopInteractedTagsParams
@@ -35,10 +40,16 @@ export const fetchTagsByUserId = async (
   }
 }
 
-export const fetchTagList = async () => {
+export const fetchTagList = async (params: IGetAllTagsParams) => {
   try {
     connectToDatabase()
-    const tagList = await TagModel.find({})
+    const { q } = params
+    const query: FilterQuery<typeof TagModel> = q
+      ? {
+          $or: [{ name: { $regex: new RegExp(q, 'i') } }],
+        }
+      : {}
+    const tagList = await TagModel.find(query)
 
     if (!tagList) throw new Error('tag list not be fetched')
 

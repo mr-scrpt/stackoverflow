@@ -76,37 +76,23 @@ export async function getQuestionByTagSlug(
     connectToDatabase()
 
     // const { tagId, searchQuery, page = 1, pageSize = 10 } = params
-    const { searchQuery, slug } = params
-
-    // const tagIds = await TagModel.find({ slug }).distinct('_id')
-    // let query = { tags: { $in: tagIds } }
-    //
-    // // Добавляем условие поиска по регулярному выражению, если searchQuery передан
-    // if (searchQuery) {
-    //   query.title = { $regex: new RegExp(searchQuery, 'i') }
-    // }
-    //
-    // const questions = await QuestionModel.find(query)
-    //   .populate('tags') // Заполняем данные о тегах
-    //   .populate('author')
-    //   .exec()
-    //
-    // return questions
-
-    // const questions = await QuestionModel.find({ 'tags.slug': slug })
-    //   .populate({ path: 'tags', model: TagModel }) // Specifies paths which should be populated with other documents
-    //   .populate({ path: 'author', model: UserModel })
-    //   .sort({ createdAt: -1 })
-    // console.log('questions =====', questions)
+    const { q, slug } = params
+    console.log('q =>', q)
+    const query: FilterQuery<typeof QuestionModel> = q?.trim()
+      ? {
+          $or: [
+            { title: { $regex: new RegExp(q, 'i') } },
+            { content: { $regex: new RegExp(q, 'i') } },
+          ],
+        }
+      : {}
 
     const tagFilter: FilterQuery<ITag> = { slug }
 
     const tag = await TagModel.findOne(tagFilter).populate({
       path: 'questions',
       model: QuestionModel,
-      match: searchQuery
-        ? { title: { $regex: new RegExp(searchQuery, 'i') } }
-        : {},
+      match: query,
       options: {
         sort: { createdAt: -1 },
       },
