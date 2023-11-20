@@ -11,7 +11,7 @@ import { ISearchParamsProps } from '@/types'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 
-const Home = async (props: ISearchParamsProps) => {
+const HomePage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
   const questions = await getQuestions({ q: searchParams.q })
 
@@ -63,4 +63,4 @@ const Home = async (props: ISearchParamsProps) => {
   )
 }
 
-export default Home
+export default HomePage

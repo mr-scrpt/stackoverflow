@@ -17,6 +17,7 @@ export const SearchLocal: FC<SearchLocalProps> = (props) => {
 
   const query = searchParams.get('q')
   const [search, setSearch] = useState(query || '')
+  console.log('search', search)
 
   useEffect(() => {
     // Do not send request on every change event happened
@@ -34,10 +35,10 @@ export const SearchLocal: FC<SearchLocalProps> = (props) => {
         // if input is cleared
         if (pathname === route) {
           // delete query
-          const newUrl = removeKeysFromQuery({
-            params: searchParams.toString(),
-            keysToRemove: ['q'],
-          })
+          // const newUrl = removeKeysFromQuery({
+          //   params: searchParams.toString(),
+          //   keysToRemove: ['q'],
+          // })
 
           router.push(route, { scroll: true })
         }

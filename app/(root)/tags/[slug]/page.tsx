@@ -20,10 +20,8 @@ const TagPage = async ({ params, searchParams }: TagPageProps) => {
   const { slug } = params
 
   const { tagTitle, questions } = await getQuestionByTagSlug({ slug })
-  console.log('qu', questions)
   const { userId: clerkId } = auth()
   const userActual = await getUserById(clerkId)
-  console.log('userActual', userActual)
 
   return (
     <section className="flex flex-col gap-8">

@@ -15,6 +15,7 @@ import { AnswerModel } from '@/database/answer.model'
 import { TagModel } from '@/database/tag.model'
 import { slugGenerator, toPlainObject } from '../utils'
 import { IUser } from '@/types'
+import { FilterQuery } from 'mongoose'
 
 export async function getUserProfileBySlug(slug: string) {
   try {
@@ -57,15 +58,25 @@ export const getUserById = async (
   }
 }
 
-export const getAllUsers = async (params: IGetAllUsersParams) => {
+export const getAllUsers = async (
+  params: IGetAllUsersParams
+): Promise<IUser[]> => {
   try {
     await connectToDatabase()
-    console.log('getAllUsers', params)
 
-    // const { page = 1, limit = 20, filter, searchQuery } = params
+    const { q } = params
+    console.log('q', q)
 
-    const users = await UserModel.find({}).sort({ createdAt: -1 })
-    return { users }
+    const query: FilterQuery<typeof UserModel> = q
+      ? {
+          $or: [
+            { username: { $regex: new RegExp(q, 'i') } },
+            { name: { $regex: new RegExp(q, 'i') } },
+          ],
+        }
+      : {}
+    const users = await UserModel.find(query).sort({ createdAt: -1 })
+    return users
   } catch (error) {
     console.log(error)
     throw error

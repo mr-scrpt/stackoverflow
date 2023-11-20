@@ -134,7 +134,7 @@ export interface IGetAllUsersParams {
   page?: number
   limit?: number
   filter?: string
-  searchQuery?: string // Add searchQuery parameter
+  q?: string // Add searchQuery parameter
 }
 
 export interface IUpdateUserParams {

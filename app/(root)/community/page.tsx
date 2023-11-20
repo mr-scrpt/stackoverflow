@@ -6,10 +6,12 @@ import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { UserCard } from '@/components/shared/UserCard/UserCard'
 import { USER_PAGE_FILTER } from '@/constants/filters'
 import { getAllUsers } from '@/lib/actions/user.action'
+import { ISearchParamsProps } from '@/types'
 import Link from 'next/link'
 
-const CommunityPage = async () => {
-  const { users } = await getAllUsers({})
+const CommunityPage = async (props: ISearchParamsProps) => {
+  const { searchParams } = props
+  const users = await getAllUsers({ q: searchParams.q })
   return (
     <section className="flex flex-col gap-8">
       <h1 className="h1-bold text-dark100_light900">Community Page</h1>
