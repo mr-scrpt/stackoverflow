@@ -7,6 +7,7 @@ import { TagModel } from '@/database/tag.model'
 import { UserModel } from '@/database/user.model'
 import { IQuestion, ITag } from '@/types'
 import {
+  HomePageFilterT,
   ICreateQuestionParams,
   IDeleteQuestionParams,
   IEditQuestionParams,
@@ -27,7 +28,7 @@ export const getQuestions = async (
 ): Promise<IQuestion[]> => {
   try {
     await connectToDatabase()
-    const { q } = params
+    const { q, filter } = params
     const query: FilterQuery<typeof QuestionModel> = q
       ? {
           $or: [
@@ -36,10 +37,30 @@ export const getQuestions = async (
           ],
         }
       : {}
+
+    let sortOption = {}
+
+    switch (filter) {
+      case 'newest':
+        sortOption = { createdAt: -1 }
+        break
+      case 'frequent':
+        sortOption = { views: -1 }
+        break
+      case 'recommended':
+        query.answers = { $size: 0 } // update the find query
+        break
+      default:
+        sortOption = { createdAt: -1 }
+        break
+    }
+
+    // console.log('sortOption', filter, sortOption)
+
     const questions = await QuestionModel.find(query)
       .populate({ path: 'tags', model: TagModel }) // Specifies paths which should be populated with other documents
       .populate({ path: 'author', model: UserModel })
-      .sort({ createdAt: -1 })
+      .sort(sortOption)
 
     return toPlainObject(questions)
   } catch (error) {
@@ -75,10 +96,8 @@ export async function getQuestionByTagSlug(
   try {
     connectToDatabase()
 
-    // const { tagId, searchQuery, page = 1, pageSize = 10 } = params
     const { q, slug } = params
-    console.log('q =>', q)
-    const query: FilterQuery<typeof QuestionModel> = q?.trim()
+    const query: FilterQuery<typeof QuestionModel> = q
       ? {
           $or: [
             { title: { $regex: new RegExp(q, 'i') } },

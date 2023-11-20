@@ -46,8 +46,8 @@ export const AnswerForm: FC<AnswerFormProps> = (props) => {
     try {
       await createAnswer({
         content: values.answer,
-        author: JSON.parse(authorId),
-        question: JSON.parse(questionId),
+        author: authorId,
+        question: questionId,
         path: pathname,
       })
 

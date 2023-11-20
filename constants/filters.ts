@@ -3,13 +3,13 @@ export const AnswerFilters = [
   { name: 'Lowest Upvotes', value: 'lowestUpvotes' },
   { name: 'Most Recent', value: 'recent' },
   { name: 'Oldest', value: 'old' },
-]
+] as const
 
 export const USER_PAGE_FILTER = [
   { name: 'New Users', value: 'new_users' },
   { name: 'Old Users', value: 'old_users' },
   { name: 'Top Contributors', value: 'top_contributors' },
-]
+] as const
 
 export const QuestionFilters = [
   { name: 'Most Recent', value: 'most_recent' },
@@ -17,25 +17,38 @@ export const QuestionFilters = [
   { name: 'Most Voted', value: 'most_voted' },
   { name: 'Most Viewed', value: 'most_viewed' },
   { name: 'Most Answered', value: 'most_answered' },
-]
+] as const
 
-export const TAG_PAGE_FILTE = [
+export const TAG_PAGE_FILTER = [
   { name: 'Popular', value: 'popular' },
   { name: 'Recent', value: 'recent' },
   { name: 'Name', value: 'name' },
   { name: 'Old', value: 'old' },
-]
+] as const
 
 export const HOME_PAGE_FILTER = [
   { name: 'Newest', value: 'newest' },
   { name: 'Recommended', value: 'recommended' },
   { name: 'Frequent', value: 'frequent' },
   { name: 'Unanswered', value: 'unanswered' },
-]
+] as const
+
+// export enum FilterDataEnum {
+//   NEWEST = 'newest',
+//   RECOMMENDED = 'recommended',
+//   FREQUENT = 'frequent',
+//   UNANSWERED = 'answered',
+// }
+// export const HOME_PAGE_FILTER = [
+//   { name: FilterDataEnum.NEWEST, value: FilterDataEnum.NEWEST },
+//   { name: FilterDataEnum.RECOMMENDED, value: FilterDataEnum.RECOMMENDED},
+//   { name: FilterDataEnum.FREQUENT, value: FilterDataEnum.FREQUENT},
+//   { name: FilterDataEnum.UNANSWERED, value: FilterDataEnum.UNANSWERED },
+// ]
 
 export const GlobalSearchFilters = [
   { name: 'Question', value: 'question' },
   { name: 'Answer', value: 'answer' },
   { name: 'User', value: 'user' },
   { name: 'Tag', value: 'tag' },
-]
+] as const

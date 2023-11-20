@@ -1,6 +1,7 @@
 // import { IDBUser } from '@/database/user.model'
 // import { Schema } from 'mongoose'
 // import { IDBUser } from '@/mongodb'
+import { TAG_PAGE_FILTER } from '@/constants/filters'
 
 import { IDBUser } from '@/database/user.model'
 
@@ -197,3 +198,4 @@ export interface IRemoveUrlQueryParams {
   params: string
   keysToRemove: string[]
 }
+export type TagPageFilterValue = (typeof TAG_PAGE_FILTER)[number]['value']

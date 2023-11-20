@@ -43,13 +43,33 @@ export const fetchTagsByUserId = async (
 export const fetchTagList = async (params: IGetAllTagsParams) => {
   try {
     connectToDatabase()
-    const { q } = params
+    const { q, filter } = params
     const query: FilterQuery<typeof TagModel> = q
       ? {
           $or: [{ name: { $regex: new RegExp(q, 'i') } }],
         }
       : {}
-    const tagList = await TagModel.find(query)
+
+    let sortOption = {}
+
+    switch (filter) {
+      case 'popular':
+        sortOption = { questions: -1 }
+        break
+      case 'recent':
+        sortOption = { createdOn: -1 }
+        break
+      case 'name':
+        sortOption = { name: 1 }
+        break
+      case 'old':
+        sortOption = { createdOn: 1 }
+        break
+      default:
+        break
+    }
+
+    const tagList = await TagModel.find(query).sort(sortOption)
 
     if (!tagList) throw new Error('tag list not be fetched')
 

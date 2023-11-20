@@ -11,7 +11,7 @@ import { ISearchParamsProps } from '@/types'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 
-const HomePage = async (props: ISearchParamsProps) => {
+export const HomePage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
   const questions = await getQuestions({
     q: searchParams.q,
@@ -35,7 +35,7 @@ const HomePage = async (props: ISearchParamsProps) => {
       <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <SearchLocal route="/" placeholder="Search questions" />
         <Filter
-          list={...HOME_PAGE_FILTER}
+          list={HOME_PAGE_FILTER}
           classTrigger="min-h-[56px] sm:min-w-[170px] bg-light-700 dark:bg-dark-400"
           className="hidden max-md:flex"
         />
@@ -66,5 +66,3 @@ const HomePage = async (props: ISearchParamsProps) => {
     </section>
   )
 }
-
-export default HomePage
