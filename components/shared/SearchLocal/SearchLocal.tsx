@@ -15,19 +15,21 @@ export const SearchLocal: FC<SearchLocalProps> = (props) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const query = searchParams.get('q')
+  const query = searchParams.get('q')?.trim()
+  console.log('query', query?.length)
+
   const [search, setSearch] = useState(query || '')
-  console.log('search', search)
+  console.log('search', search.length)
 
   useEffect(() => {
     // Do not send request on every change event happened
     // fire request after specific delay => debounce
     const delayDebounceFn = setTimeout(() => {
-      if (search) {
+      if (search && search !== ' ') {
         const newUrl = formUrlQuery({
           params: searchParams.toString(), // original params in Url
           key: 'q',
-          value: search,
+          value: search.trim(),
         })
 
         router.push(newUrl, { scroll: true })
