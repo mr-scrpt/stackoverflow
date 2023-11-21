@@ -1,6 +1,7 @@
 // interface pageProps extends HTMLAttributes<HTMLDivElement> {}
 
 import { Filter } from '@/components/shared/Filter/Filter'
+import { FilterRowContent } from '@/components/shared/FilterContend/FilterContent'
 import { FilterRow } from '@/components/shared/FilterRow/FilterRow'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { UserCard } from '@/components/shared/UserCard/UserCard'
@@ -11,7 +12,10 @@ import Link from 'next/link'
 
 const CommunityPage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
-  const users = await getAllUsers({ q: searchParams.q })
+  const users = await getAllUsers({
+    q: searchParams.q,
+    filter: searchParams.filter,
+  })
   return (
     <section className="flex flex-col gap-8">
       <h1 className="h1-bold text-dark100_light900">Community Page</h1>
@@ -24,7 +28,7 @@ const CommunityPage = async (props: ISearchParamsProps) => {
           className="hidden max-md:flex"
         />
       </div>
-      <FilterRow list={USER_PAGE_FILTER} />
+      <FilterRowContent list={USER_PAGE_FILTER} />
       <div className="custom-scrollbar flex flex-col items-center flex-wrap md:flex-row md:justify-start  w-full gap-6 overflow-y-auto">
         {users.length > 0 ? (
           users.map((user) => {

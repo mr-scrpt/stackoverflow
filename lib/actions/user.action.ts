@@ -64,8 +64,7 @@ export const getAllUsers = async (
   try {
     await connectToDatabase()
 
-    const { q } = params
-    console.log('q', q)
+    const { q, filter } = params
 
     const query: FilterQuery<typeof UserModel> = q
       ? {
@@ -75,7 +74,24 @@ export const getAllUsers = async (
           ],
         }
       : {}
-    const users = await UserModel.find(query).sort({ createdAt: -1 })
+    let sortOption = {}
+
+    switch (filter) {
+      case 'new_users':
+        sortOption = { joinedAt: -1 }
+        break
+      case 'old_users':
+        sortOption = { joinedAt: 1 }
+        break
+      case 'top_contributors':
+        sortOption = { reputation: -1 }
+        break
+      default:
+        sortOption = { reputation: -1 }
+        break
+    }
+
+    const users = await UserModel.find(query).sort(sortOption)
     return users
   } catch (error) {
     console.log(error)
