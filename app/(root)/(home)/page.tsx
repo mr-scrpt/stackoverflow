@@ -15,7 +15,6 @@ import Link from 'next/link'
 const HomePage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
   const { q, filter, page } = searchParams
-  console.log('page =>', page)
   const { questions, hasNextPage } = await getQuestions({
     q,
     filter,
@@ -68,10 +67,11 @@ const HomePage = async (props: ISearchParamsProps) => {
         )}
       </div>
 
-      {page && (
-        <div>
-          <PaginationContent hasNextPage={hasNextPage} pageCurrent={+page} />
-        </div>
+      {questions.length && (
+        <PaginationContent
+          hasNextPage={hasNextPage}
+          pageCurrent={page ? +page : 1}
+        />
       )}
     </section>
   )
