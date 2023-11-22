@@ -1,6 +1,7 @@
 import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
 import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
+import { PaginationContent } from '@/components/shared/PaginationContent/PaginationContent'
 import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { QUESTION_PAGE_FILTER } from '@/constants/filters'
@@ -12,6 +13,8 @@ import Link from 'next/link'
 
 const CollectionPage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
+  const { q, filter, page } = searchParams
+
   const { userId } = auth()
 
   if (!userId) {
@@ -28,17 +31,19 @@ const CollectionPage = async (props: ISearchParamsProps) => {
       </div>
     )
   }
-  const { questions } = await getSavedQuestions({
+  const { questions, hasNextPage } = await getSavedQuestions({
     clerkId: userId,
-    q: searchParams.q,
-    filter: searchParams.filter,
+    q,
+    filter,
+    page: page ? +page : 1,
   })
+
   const userActual = await getUserById(userId)
   return (
     <section className="flex flex-col gap-8">
       <h1 className="h1-bold text-dark100_light900">Saved Pages</h1>
 
-      <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">
+      <div className="flex jusify-between gap-5 max-sm:flex-col sm:items-center">
         <SearchLocal route="/collection" placeholder="Search users" />
         <FilterContent
           list={QUESTION_PAGE_FILTER}
@@ -69,6 +74,13 @@ const CollectionPage = async (props: ISearchParamsProps) => {
           />
         )}
       </div>
+
+      {questions.length && (
+        <PaginationContent
+          hasNextPage={hasNextPage}
+          pageCurrent={page ? +page : 1}
+        />
+      )}
     </section>
   )
 }

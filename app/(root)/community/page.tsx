@@ -2,6 +2,7 @@
 
 import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
 import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
+import { PaginationContent } from '@/components/shared/PaginationContent/PaginationContent'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { UserCard } from '@/components/shared/UserCard/UserCard'
 import { USER_PAGE_FILTER } from '@/constants/filters'
@@ -11,9 +12,11 @@ import Link from 'next/link'
 
 const CommunityPage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
-  const users = await getAllUsers({
-    q: searchParams.q,
-    filter: searchParams.filter,
+  const { q, filter, page } = searchParams
+  const { users, hasNextPage } = await getAllUsers({
+    q,
+    filter,
+    page: page ? +page : 1,
   })
   return (
     <section className="flex flex-col gap-8">
@@ -40,6 +43,14 @@ const CommunityPage = async (props: ISearchParamsProps) => {
               Join to be the first!
             </Link>
           </div>
+        )}
+      </div>
+      <div>
+        {users.length && (
+          <PaginationContent
+            hasNextPage={hasNextPage}
+            pageCurrent={page ? +page : 1}
+          />
         )}
       </div>
     </section>

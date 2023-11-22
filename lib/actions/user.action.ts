@@ -16,6 +16,7 @@ import { TagModel } from '@/database/tag.model'
 import { slugGenerator, toPlainObject } from '../utils'
 import { IUser } from '@/types'
 import { FilterQuery } from 'mongoose'
+import { PAGINATION_BASE_LIMIT } from '@/constants'
 
 export async function getUserProfileBySlug(slug: string) {
   try {
@@ -60,11 +61,11 @@ export const getUserById = async (
 
 export const getAllUsers = async (
   params: IGetAllUsersParams
-): Promise<IUser[]> => {
+): Promise<{ users: IUser[]; hasNextPage: boolean }> => {
   try {
     await connectToDatabase()
 
-    const { q, filter } = params
+    const { q, filter, page = 1, limit = PAGINATION_BASE_LIMIT } = params
 
     const query: FilterQuery<typeof UserModel> = q
       ? {
@@ -91,7 +92,23 @@ export const getAllUsers = async (
         break
     }
 
-    const users = await UserModel.find(query).sort(sortOption)
+    const skipPage = (page - 1) * limit
+
+    const users = await UserModel.find(query)
+      .sort(sortOption)
+      .skip(skipPage)
+      .limit(limit)
+      .sort(sortOption)
+
+    // calculate if there is page next
+    const totalUser = await UserModel.countDocuments(query)
+    // if total > amount skip + amount show -> next page
+    const hasNextPage = totalUser > skipPage + users.length
+
+    const resultQuestion = toPlainObject(users)
+
+    return { users: resultQuestion, hasNextPage }
+
     return users
   } catch (error) {
     console.log(error)

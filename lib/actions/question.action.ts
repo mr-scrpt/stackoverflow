@@ -57,17 +57,19 @@ export const getQuestions = async (
 
     // console.log('sortOption', filter, sortOption)
 
+    const skipPage = (page - 1) * limit
+
     const questions = await QuestionModel.find(query)
       .populate({ path: 'tags', model: TagModel }) // Specifies paths which should be populated with other documents
       .populate({ path: 'author', model: UserModel })
-      .skip((page - 1) * limit)
+      .skip(skipPage)
       .limit(limit)
       .sort(sortOption)
 
     // calculate if there is page next
     const totalQuestions = await QuestionModel.countDocuments(query)
     // if total > amount skip + amount show -> next page
-    const hasNextPage = totalQuestions > (page - 1) * limit + questions.length
+    const hasNextPage = totalQuestions > skipPage + questions.length
 
     const resultQuestion = toPlainObject(questions)
 
@@ -373,12 +375,19 @@ export const toggleSaveQuestion = async (params: IToggleSaveQuestionParams) => {
   }
 }
 
-export const getSavedQuestions = async (params: IGetSavedQuestionsParams) => {
+export const getSavedQuestions = async (
+  params: IGetSavedQuestionsParams
+): Promise<{ questions: IQuestion[]; hasNextPage: boolean }> => {
   try {
     connectToDatabase()
 
-    const { clerkId, q, filter } = params
-    // const { clerkId, searchQuery, filter, page = 1, pageSize = 10 } = params
+    const {
+      clerkId,
+      q,
+      filter,
+      page = 1,
+      limit = PAGINATION_BASE_LIMIT,
+    } = params
 
     const query: FilterQuery<typeof QuestionModel> = q
       ? { title: { $regex: new RegExp(q, 'i') } }
@@ -405,12 +414,15 @@ export const getSavedQuestions = async (params: IGetSavedQuestionsParams) => {
       default:
         break
     }
+    const skipPage = (page - 1) * limit
 
     const user = await UserModel.findOne({ clerkId }).populate({
       path: 'postSaved',
       match: query,
       options: {
+        limit,
         sort: sortOption,
+        skip: skipPage,
       },
       populate: [
         {
@@ -423,8 +435,22 @@ export const getSavedQuestions = async (params: IGetSavedQuestionsParams) => {
     })
 
     if (!user) throw new Error('User not found')
+    if (!user.postSaved) {
+      return { questions: [], hasNextPage: false }
+    }
+    const totalSavedPosts = await UserModel.findOne({ clerkId })
+      .select('postSaved')
+      .populate({
+        path: 'postSaved',
+        match: query,
+      })
+      .exec()
 
-    return { questions: user.postSaved }
+    const totalQuestions = totalSavedPosts!.postSaved!.length
+
+    const hasNextPage = totalQuestions! > skipPage + user.postSaved.length
+
+    return { questions: user.postSaved || [], hasNextPage }
   } catch (error) {
     console.log(error)
     throw error
