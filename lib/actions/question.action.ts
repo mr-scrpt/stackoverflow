@@ -25,7 +25,7 @@ import { PAGINATION_BASE_LIMIT } from '@/constants'
 
 export const getQuestions = async (
   params: IGetQuestionsParams
-): Promise<IQuestion[]> => {
+): Promise<{ questions: IQuestion[]; hasNextPage: boolean }> => {
   try {
     await connectToDatabase()
     const { q, filter, page = 1, limit = PAGINATION_BASE_LIMIT } = params
@@ -64,7 +64,14 @@ export const getQuestions = async (
       .limit(limit)
       .sort(sortOption)
 
-    return toPlainObject(questions)
+    // calculate if there is page next
+    const totalQuestions = await QuestionModel.countDocuments(query)
+    // if total > amount skip + amount show -> next page
+    const hasNextPage = totalQuestions > (page - 1) * limit + questions.length
+
+    const resultQuestion = toPlainObject(questions)
+
+    return { questions: resultQuestion, hasNextPage }
   } catch (error) {
     console.log(error)
     throw error

@@ -16,7 +16,7 @@ const HomePage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
   const { q, filter, page } = searchParams
   console.log('page =>', page)
-  const questions = await getQuestions({
+  const { questions, hasNextPage } = await getQuestions({
     q,
     filter,
     page: page ? +page : 1,
@@ -70,7 +70,7 @@ const HomePage = async (props: ISearchParamsProps) => {
 
       {page && (
         <div>
-          <PaginationContent hasNextPage={true} pageCurrent={+page} />
+          <PaginationContent hasNextPage={hasNextPage} pageCurrent={+page} />
         </div>
       )}
     </section>
