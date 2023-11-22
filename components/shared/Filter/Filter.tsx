@@ -13,15 +13,22 @@ import {
 
 interface FilterProps extends HTMLAttributes<HTMLDivElement> {
   list: IFilter[]
+  handleSelect: (value: string) => void
+  active?: IFilter | null
   classTrigger?: string
   classList?: string
 }
 
 export const Filter: FC<FilterProps> = (props) => {
-  const { list, className, classTrigger, classList } = props
+  const { list, className, classTrigger, classList, active, handleSelect } =
+    props
   return (
     <div className={`relative ${className}`}>
-      <Select>
+      <Select
+        defaultValue={active?.value || list[0].value}
+        value={active?.value}
+        onValueChange={handleSelect}
+      >
         <SelectTrigger
           className={`${classTrigger} body-regular light-border rounded-xl text-dark500_light700 border px-5 py-2.5`}
         >
@@ -29,7 +36,9 @@ export const Filter: FC<FilterProps> = (props) => {
             <SelectValue placeholder="Select a Filter" />
           </div>
         </SelectTrigger>
-        <SelectContent className={`${classList} text-dark500_light700 `}>
+        <SelectContent
+          className={`${classList} text-dark500_light700 bg-light800_dark300`}
+        >
           <SelectGroup>
             {list.map((item) => (
               <SelectItem key={item.value} value={item.value}>
