@@ -64,7 +64,27 @@ export const deleteAnswer = async (params: IDeleteAnswerParams) => {
 export const getAnswerList = async (params: IGetAnswersParams) => {
   try {
     connectToDatabase()
-    const { questionId } = params
+    const { questionId, sortBy, page = 1, pageSize = 10 } = params
+
+    let sortOption = {}
+
+    switch (sortBy) {
+      case 'highestUpvotes':
+        sortOption = { upVotes: -1 }
+        break
+      case 'lowestUpvotes':
+        sortOption = { upVotes: 1 }
+        break
+      case 'recent':
+        sortOption = { createdAt: -1 }
+        break
+      case 'old':
+        sortOption = { createdAt: 1 }
+        break
+      default:
+        sortOption = { createdAt: -1 }
+        break
+    }
 
     const answers = await AnswerModel.find({ question: questionId })
       .populate({
@@ -72,7 +92,7 @@ export const getAnswerList = async (params: IGetAnswersParams) => {
         model: UserModel,
         select: '_id clerkId picture name',
       })
-      .sort({ createdAt: -1 })
+      .sort(sortOption)
 
     return answers
   } catch (error) {

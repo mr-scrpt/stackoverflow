@@ -1,4 +1,4 @@
-export const AnswerFilters = [
+export const ANSWER_PAGE_FILTER = [
   { name: 'Highest Upvotes', value: 'highestUpvotes' },
   { name: 'Lowest Upvotes', value: 'lowestUpvotes' },
   { name: 'Most Recent', value: 'recent' },

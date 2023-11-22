@@ -7,6 +7,7 @@ import { VoteBar } from '@/components/shared/VoteBar/VoteBar'
 import { fetchQuestionBySlug } from '@/lib/actions/question.action'
 import { getUserById } from '@/lib/actions/user.action'
 import { formatNumber, getTimestamp } from '@/lib/utils'
+import { ISearchParam } from '@/types'
 import { VoteTypeEnum } from '@/types/shared'
 import { auth } from '@clerk/nextjs'
 import Image from 'next/image'
@@ -16,9 +17,13 @@ interface QuestionDetailsProps {
   params: {
     slug: string
   }
+  searchParams: ISearchParam
 }
 
-const QuestionDetailsPage = async ({ params }: QuestionDetailsProps) => {
+const QuestionDetailsPage = async ({
+  params,
+  searchParams,
+}: QuestionDetailsProps) => {
   const { slug } = params
   const { userId } = auth()
 
@@ -115,6 +120,8 @@ const QuestionDetailsPage = async ({ params }: QuestionDetailsProps) => {
       <AnswerList
         questionId={question._id}
         userId={user?._id}
+        filter={searchParams.filter}
+        page={searchParams.page}
         // totalAnswers={question.answers.length}
       />
       {user && (
