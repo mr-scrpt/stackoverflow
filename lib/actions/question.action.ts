@@ -21,13 +21,14 @@ import { revalidatePath } from 'next/cache'
 import { connectToDatabase } from '../mongoose'
 import { slugGenerator, toPlainObject } from '../utils'
 import { createTag } from './tag.action'
+import { PAGINATION_BASE_LIMIT } from '@/constants'
 
 export const getQuestions = async (
   params: IGetQuestionsParams
 ): Promise<IQuestion[]> => {
   try {
     await connectToDatabase()
-    const { q, filter } = params
+    const { q, filter, page = 1, limit = PAGINATION_BASE_LIMIT } = params
     const query: FilterQuery<typeof QuestionModel> = q
       ? {
           $or: [
@@ -59,6 +60,8 @@ export const getQuestions = async (
     const questions = await QuestionModel.find(query)
       .populate({ path: 'tags', model: TagModel }) // Specifies paths which should be populated with other documents
       .populate({ path: 'author', model: UserModel })
+      .skip((page - 1) * limit)
+      .limit(limit)
       .sort(sortOption)
 
     return toPlainObject(questions)

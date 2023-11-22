@@ -1,7 +1,6 @@
 import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
 import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
-import { Pagination } from '@/components/shared/Pagination/Pagination'
 import { PaginationContent } from '@/components/shared/PaginationContent/PaginationContent'
 import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
@@ -15,9 +14,12 @@ import Link from 'next/link'
 
 const HomePage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
+  const { q, filter, page } = searchParams
+  console.log('page =>', page)
   const questions = await getQuestions({
-    q: searchParams.q,
-    filter: searchParams.filter,
+    q,
+    filter,
+    page: page ? +page : 1,
   })
 
   const { userId: clerkId } = auth()
@@ -65,9 +67,12 @@ const HomePage = async (props: ISearchParamsProps) => {
           />
         )}
       </div>
-      <div>
-        <PaginationContent hasNextPage={true} pageCurrent={1} />
-      </div>
+
+      {page && (
+        <div>
+          <PaginationContent hasNextPage={true} pageCurrent={+page} />
+        </div>
+      )}
     </section>
   )
 }

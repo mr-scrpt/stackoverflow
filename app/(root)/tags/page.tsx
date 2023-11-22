@@ -14,6 +14,7 @@ const TagsPage = async (props: ISearchParamsProps) => {
     q: searchParams.q,
     filter: searchParams.filter,
   })
+
   return (
     <section className="flex flex-col gap-8">
       <h1 className="h1-bold text-dark100_light900">Tags list</h1>

@@ -189,6 +189,11 @@ export enum QuestionFormTypeEnum {
   CREATE = 'create',
 }
 
+export enum PaginationDirectionEnum {
+  NEXT = 'next',
+  PREV = 'prev',
+}
+
 export interface IUrlQueryParams {
   params: string
   key: string
