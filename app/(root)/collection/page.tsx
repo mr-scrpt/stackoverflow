@@ -1,9 +1,9 @@
-import { Filter } from '@/components/shared/Filter/Filter'
-import { FilterRow } from '@/components/shared/FilterRow/FilterRow'
+import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
+import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
 import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
-import { USER_PAGE_FILTER } from '@/constants/filters'
+import { QUESTION_PAGE_FILTER } from '@/constants/filters'
 import { getSavedQuestions } from '@/lib/actions/question.action'
 import { getUserById } from '@/lib/actions/user.action'
 import { ISearchParamsProps } from '@/types'
@@ -31,6 +31,7 @@ const CollectionPage = async (props: ISearchParamsProps) => {
   const { questions } = await getSavedQuestions({
     clerkId: userId,
     q: searchParams.q,
+    filter: searchParams.filter,
   })
   const userActual = await getUserById(userId)
   return (
@@ -38,14 +39,14 @@ const CollectionPage = async (props: ISearchParamsProps) => {
       <h1 className="h1-bold text-dark100_light900">Saved Pages</h1>
 
       <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">
-        <SearchLocal route="/community" placeholder="Search users" />
-        <Filter
-          list={USER_PAGE_FILTER}
+        <SearchLocal route="/collection" placeholder="Search users" />
+        <FilterContent
+          list={QUESTION_PAGE_FILTER}
           classTrigger="min-h-[56px] sm:min-w-[170px] bg-light-700 dark:bg-dark-400"
           className="hidden max-md:flex"
         />
       </div>
-      <FilterRow list={USER_PAGE_FILTER} />
+      <FilterRowContent list={QUESTION_PAGE_FILTER} />
       <div className="custom-scrollbar flex flex-col items-center flex-wrap md:flex-row md:justify-start  w-full gap-6 overflow-y-auto">
         {questions && questions.length > 0 ? (
           questions.map((item) => {

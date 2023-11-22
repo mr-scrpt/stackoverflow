@@ -46,7 +46,7 @@ export const getQuestions = async (
       case 'frequent':
         sortOption = { views: -1 }
         break
-      case 'recommended':
+      case 'unanswered':
         query.answers = { $size: 0 } // update the find query
         break
       default:
@@ -350,18 +350,40 @@ export const getSavedQuestions = async (params: IGetSavedQuestionsParams) => {
   try {
     connectToDatabase()
 
-    const { clerkId, q } = params
+    const { clerkId, q, filter } = params
     // const { clerkId, searchQuery, filter, page = 1, pageSize = 10 } = params
 
     const query: FilterQuery<typeof QuestionModel> = q
       ? { title: { $regex: new RegExp(q, 'i') } }
       : {}
 
+    let sortOption = {}
+
+    switch (filter) {
+      case 'most_recent':
+        sortOption = { createdAt: -1 }
+        break
+      case 'oldest':
+        sortOption = { createdAt: 1 }
+        break
+      case 'most_voted':
+        sortOption = { upVotes: -1 }
+        break
+      case 'most_viewed':
+        sortOption = { views: -1 }
+        break
+      case 'most_answered':
+        sortOption = { answers: -1 }
+        break
+      default:
+        break
+    }
+
     const user = await UserModel.findOne({ clerkId }).populate({
       path: 'postSaved',
       match: query,
       options: {
-        sort: { createdAt: -1 },
+        sort: sortOption,
       },
       populate: [
         {

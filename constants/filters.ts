@@ -11,7 +11,7 @@ export const USER_PAGE_FILTER = [
   { name: 'Top Contributors', value: 'top_contributors' },
 ]
 
-export const QuestionFilters = [
+export const QUESTION_PAGE_FILTER = [
   { name: 'Most Recent', value: 'most_recent' },
   { name: 'Oldest', value: 'oldest' },
   { name: 'Most Voted', value: 'most_voted' },

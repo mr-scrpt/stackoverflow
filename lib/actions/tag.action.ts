@@ -44,17 +44,31 @@ export const fetchTagList = async (params: IGetAllTagsParams) => {
   try {
     connectToDatabase()
     const { q, filter } = params
+
     const query: FilterQuery<typeof TagModel> = q
       ? {
           $or: [{ name: { $regex: new RegExp(q, 'i') } }],
         }
       : {}
 
-    let sortOption = {}
+    const aggregationPipeline: any[] = [
+      { $match: query },
+      {
+        $lookup: {
+          from: 'questions',
+          localField: 'questions',
+          foreignField: '_id',
+          as: 'questionDetails',
+        },
+      },
+      { $addFields: { questionCount: { $size: '$questionDetails' } } },
+    ]
+
+    let sortOption: any = {}
 
     switch (filter) {
       case 'popular':
-        sortOption = { questions: -1 }
+        sortOption = { questionCount: -1 }
         break
       case 'recent':
         sortOption = { createdOn: -1 }
@@ -66,16 +80,21 @@ export const fetchTagList = async (params: IGetAllTagsParams) => {
         sortOption = { createdOn: 1 }
         break
       default:
+        sortOption = { createdOn: -1 }
         break
     }
 
-    const tagList = await TagModel.find(query).sort(sortOption)
+    aggregationPipeline.push({ $sort: sortOption })
+
+    const tagList = await TagModel.aggregate(aggregationPipeline)
+
+    console.log('list tag+', tagList)
 
     if (!tagList) throw new Error('tag list not be fetched')
 
     return { tagList }
   } catch (e) {
-    console.log(e)
+    console.error(e)
     throw e
   }
 }
@@ -135,7 +154,6 @@ export const getPopularTags = async (): Promise<ITag[]> => {
       { $sort: { totalQuestions: -1 } },
       { $limit: 5 },
     ])
-    console.log('', popularTags)
 
     return toPlainObject(popularTags)
   } catch (error) {

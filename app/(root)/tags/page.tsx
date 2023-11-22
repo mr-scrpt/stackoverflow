@@ -1,4 +1,4 @@
-import { Filter } from '@/components/shared/Filter/Filter'
+import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
 import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
@@ -20,7 +20,7 @@ const TagsPage = async (props: ISearchParamsProps) => {
 
       <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <SearchLocal route="/tags" placeholder="Search tags" />
-        <Filter
+        <FilterContent
           list={TAG_PAGE_FILTER}
           classTrigger="min-h-[56px] sm:min-w-[170px] bg-light-700 dark:bg-dark-400"
           className="hidden max-md:flex"
