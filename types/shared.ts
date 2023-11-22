@@ -111,6 +111,7 @@ export interface IGetQuestionsByTagIdParams {
   tagId?: string
   page?: number
   limit?: number
+  filter?: string
   q?: string
 }
 

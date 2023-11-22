@@ -1,5 +1,5 @@
-import { Filter } from '@/components/shared/Filter/Filter'
-import { FilterRow } from '@/components/shared/FilterRow/FilterRow'
+import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
+import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
 import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
@@ -23,6 +23,7 @@ const TagPage = async (props: TagPageProps) => {
   const { tagTitle, questions } = await getQuestionByTagSlug({
     slug,
     q: searchParams.q,
+    filter: searchParams.filter,
   })
   const { userId: clerkId } = auth()
   const userActual = await getUserById(clerkId)
@@ -41,13 +42,13 @@ const TagPage = async (props: TagPageProps) => {
           route={`/tags/${params.slug}`}
           placeholder="Search questions"
         />
-        <Filter
+        <FilterContent
           list={HOME_PAGE_FILTER}
           classTrigger="min-h-[56px] sm:min-w-[170px] bg-light-700 dark:bg-dark-400"
           className="hidden max-md:flex"
         />
       </div>
-      <FilterRow list={HOME_PAGE_FILTER} />
+      <FilterRowContent list={HOME_PAGE_FILTER} />
 
       <div className="custom-scrollbar flex w-full flex-col gap-6 overflow-y-auto">
         {questions && questions.length ? (

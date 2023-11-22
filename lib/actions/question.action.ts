@@ -95,7 +95,7 @@ export async function getQuestionByTagSlug(
   try {
     connectToDatabase()
 
-    const { q, slug } = params
+    const { q, slug, filter } = params
     const query: FilterQuery<typeof QuestionModel> = q
       ? {
           $or: [
@@ -105,6 +105,23 @@ export async function getQuestionByTagSlug(
         }
       : {}
 
+    let sortOption = {}
+
+    switch (filter) {
+      case 'newest':
+        sortOption = { createdAt: -1 }
+        break
+      case 'frequent':
+        sortOption = { views: -1 }
+        break
+      case 'unanswered':
+        query.answers = { $size: 0 } // update the find query
+        break
+      default:
+        sortOption = { createdAt: -1 }
+        break
+    }
+
     const tagFilter: FilterQuery<ITag> = { slug }
 
     const tag = await TagModel.findOne(tagFilter).populate({
@@ -112,7 +129,7 @@ export async function getQuestionByTagSlug(
       model: QuestionModel,
       match: query,
       options: {
-        sort: { createdAt: -1 },
+        sort: sortOption,
       },
       populate: [
         {
