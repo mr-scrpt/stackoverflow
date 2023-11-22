@@ -1,6 +1,8 @@
 import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
 import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
+import { Pagination } from '@/components/shared/Pagination/Pagination'
+import { PaginationContent } from '@/components/shared/PaginationContent/PaginationContent'
 import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { Button } from '@/components/ui/button'
@@ -62,6 +64,9 @@ const HomePage = async (props: ISearchParamsProps) => {
             linkTitle="Ask a Question"
           />
         )}
+      </div>
+      <div>
+        <PaginationContent hasNextPage={true} pageCurrent={1} />
       </div>
     </section>
   )
