@@ -7,7 +7,6 @@ import { TagModel } from '@/database/tag.model'
 import { UserModel } from '@/database/user.model'
 import { IQuestion, ITag } from '@/types'
 import {
-  HomePageFilterT,
   ICreateQuestionParams,
   IDeleteQuestionParams,
   IEditQuestionParams,

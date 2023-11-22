@@ -1,8 +1,7 @@
 // interface pageProps extends HTMLAttributes<HTMLDivElement> {}
 
-import { Filter } from '@/components/shared/Filter/Filter'
-import { FilterRowContent } from '@/components/shared/FilterContend/FilterContent'
-import { FilterRow } from '@/components/shared/FilterRow/FilterRow'
+import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
+import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { UserCard } from '@/components/shared/UserCard/UserCard'
 import { USER_PAGE_FILTER } from '@/constants/filters'
@@ -22,7 +21,7 @@ const CommunityPage = async (props: ISearchParamsProps) => {
 
       <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <SearchLocal route="/community" placeholder="Search users" />
-        <Filter
+        <FilterContent
           list={USER_PAGE_FILTER}
           classTrigger="min-h-[56px] sm:min-w-[170px] bg-light-700 dark:bg-dark-400"
           className="hidden max-md:flex"

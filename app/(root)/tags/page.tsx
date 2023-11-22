@@ -1,6 +1,5 @@
 import { Filter } from '@/components/shared/Filter/Filter'
-import { FilterRowContent } from '@/components/shared/FilterContend/FilterContent'
-import { FilterRow } from '@/components/shared/FilterRow/FilterRow'
+import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { TagCard } from '@/components/shared/TagCard/TagCard'
