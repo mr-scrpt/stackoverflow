@@ -1,27 +1,27 @@
 'use server'
 
+import { PAGINATION_BASE_LIMIT } from '@/constants'
 import { AnswerModel } from '@/database/answer.model'
 import { InteractionModel } from '@/database/interaction.model'
 import { QuestionModel } from '@/database/question.model'
 import { TagModel } from '@/database/tag.model'
 import { UserModel } from '@/database/user.model'
-import { IQuestion, ITag } from '@/types'
+import { IQuestion } from '@/types'
 import {
-  ICreateQuestionParams,
-  IDeleteQuestionParams,
-  IEditQuestionParams,
-  IGetQuestionsByTagIdParams,
-  IGetQuestionsParams,
-  IGetSavedQuestionsParams,
-  IQuestionVoteParams,
-  IToggleSaveQuestionParams,
+    ICreateQuestionParams,
+    IDeleteQuestionParams,
+    IEditQuestionParams,
+    IGetQuestionsByTagIdParams,
+    IGetQuestionsParams,
+    IGetSavedQuestionsParams,
+    IQuestionVoteParams,
+    IToggleSaveQuestionParams,
 } from '@/types/shared'
 import { FilterQuery } from 'mongoose'
 import { revalidatePath } from 'next/cache'
 import { connectToDatabase } from '../mongoose'
 import { slugGenerator, toPlainObject } from '../utils'
 import { createTag } from './tag.action'
-import { PAGINATION_BASE_LIMIT } from '@/constants'
 
 export const getQuestions = async (
   params: IGetQuestionsParams
