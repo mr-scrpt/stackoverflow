@@ -23,6 +23,8 @@ const HomePage = async (props: ISearchParamsProps) => {
 
   const { userId: clerkId } = auth()
   const userActual = await getUserById(clerkId)
+  console.log('page', page)
+  console.log('hasNextPage', hasNextPage)
 
   return (
     <section className="flex flex-col gap-8">
@@ -67,12 +69,10 @@ const HomePage = async (props: ISearchParamsProps) => {
         )}
       </div>
 
-      {questions.length && (
-        <PaginationContent
-          hasNextPage={hasNextPage}
-          pageCurrent={page ? +page : 1}
-        />
-      )}
+      <PaginationContent
+        hasNextPage={hasNextPage}
+        pageCurrent={page ? +page : 1}
+      />
     </section>
   )
 }

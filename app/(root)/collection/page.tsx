@@ -75,12 +75,10 @@ const CollectionPage = async (props: ISearchParamsProps) => {
         )}
       </div>
 
-      {questions.length && (
-        <PaginationContent
-          hasNextPage={hasNextPage}
-          pageCurrent={page ? +page : 1}
-        />
-      )}
+      <PaginationContent
+        hasNextPage={hasNextPage}
+        pageCurrent={page ? +page : 1}
+      />
     </section>
   )
 }

@@ -12,10 +12,11 @@ interface PaginationContentProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const PaginationContent: FC<PaginationContentProps> = (props) => {
-  const { pageCurrent, hasNextPage } = props
-
   const router = useRouter()
   const searchParams = useSearchParams()
+
+  const { pageCurrent, hasNextPage } = props
+  if (!hasNextPage && pageCurrent === 1) return null
 
   const handleNav = (direction: PaginationDirectionEnum) => {
     const nextPageNumber =

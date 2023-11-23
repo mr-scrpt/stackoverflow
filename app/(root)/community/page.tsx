@@ -46,12 +46,10 @@ const CommunityPage = async (props: ISearchParamsProps) => {
         )}
       </div>
       <div>
-        {users.length && (
-          <PaginationContent
-            hasNextPage={hasNextPage}
-            pageCurrent={page ? +page : 1}
-          />
-        )}
+        <PaginationContent
+          hasNextPage={hasNextPage}
+          pageCurrent={page ? +page : 1}
+        />
       </div>
     </section>
   )
