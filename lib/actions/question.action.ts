@@ -139,42 +139,31 @@ export const getQuestionByTagSlug = async (
     }
     const skipPage = (page - 1) * limit
 
-    const tagFilter: FilterQuery<ITag> = { slug }
+    // const tagFilter: FilterQuery<ITag> = { slug }
+    const tag = await TagModel.findOne({ slug })
 
-    const tag = await TagModel.findOne(tagFilter).populate({
-      path: 'questions',
-      model: QuestionModel,
-      match: query,
-      options: {
-        sort: sortOption,
-        skip: skipPage,
-        limit,
-      },
-      populate: [
+    if (!tag) throw new Error('No tag found')
+    const totalQuestionsAggregate = await QuestionModel.aggregate([
+      { $match: { tags: tag._id, ...query } },
+      { $count: 'count' },
+    ])
+    const totalQuestions = totalQuestionsAggregate[0]?.count || 0
+
+    // Запрос вопросов с учетом пагинации
+    const questions = await QuestionModel.find({ tags: tag._id, ...query })
+      .sort(sortOption)
+      .skip(skipPage)
+      .limit(limit)
+      .populate([
         {
           path: 'author',
           model: UserModel,
           select: '_id name clerkId picture',
         },
         { path: 'tags', model: TagModel, select: '_id name' },
-      ],
-    })
+      ])
 
-    if (!tag) throw new Error('No tag found')
-    const questionsAll = await TagModel.findOne(tagFilter).populate({
-      path: 'questions',
-      model: QuestionModel,
-      match: query,
-    })
-
-    const questions = tag.questions
-    const totalQuestions = questionsAll?.questions?.length
-    console.log('totalQuestions', totalQuestions)
-    const totalQuestions2 = await QuestionModel.countDocuments(query)
-    console.log('totalQuestions2', totalQuestions2)
-    if (!questions) throw new Error('Questions by tag found')
-
-    const hasNextPage = totalQuestions! > skipPage + questions!.length
+    const hasNextPage = totalQuestions > skipPage + questions.length
 
     return {
       tagTitle: tag.name,

@@ -1,14 +1,18 @@
 import { FC, HTMLAttributes } from 'react'
 import { QuestionCard } from '../QuestionCard/QuestionCard'
 import { IQuestion } from '@/types'
+import { Pagination } from '../Pagination/Pagination'
+import { PaginationContent } from '../PaginationContent/PaginationContent'
 
 interface QuestionTabProps extends HTMLAttributes<HTMLDivElement> {
   list: IQuestion[]
   userId: string | undefined
+  hasNextPage: boolean
+  pageCurrent: number
 }
 
 export const QuestionTab: FC<QuestionTabProps> = (props) => {
-  const { list, userId } = props
+  const { list, userId, hasNextPage, pageCurrent } = props
   return (
     <>
       {list.map((question) => {
@@ -26,6 +30,7 @@ export const QuestionTab: FC<QuestionTabProps> = (props) => {
           />
         )
       })}
+      <PaginationContent hasNextPage={hasNextPage} pageCurrent={pageCurrent} />
     </>
   )
 }

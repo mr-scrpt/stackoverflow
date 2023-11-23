@@ -20,10 +20,9 @@ interface QuestionDetailsProps {
   searchParams: ISearchParam
 }
 
-const QuestionDetailsPage = async ({
-  params,
-  searchParams,
-}: QuestionDetailsProps) => {
+const QuestionDetailsPage = async (props: QuestionDetailsProps) => {
+  const { searchParams, params } = props
+  const { filter, page } = searchParams
   const { slug } = params
   const { userId } = auth()
 
@@ -64,15 +63,6 @@ const QuestionDetailsPage = async ({
                 hasUpVoted={question.upVotes.includes(user?._id)}
                 hasDownVoted={question.downVotes.includes(user?._id)}
                 hasSaved={user?.postSaved?.includes(question._id)}
-                // hasUpVoted={question.upVotes.some((item) => {
-                //   return item._id.toString() === user?._id.toString()
-                // })}
-                // hasDownVoted={question.downVotes.some(
-                //   (item) => item._id.toString() === user?._id.toString()
-                // )}
-                // hasSaved={user?.postSaved?.some(
-                //   (item) => item._id.toString() === question._id.toString()
-                // )}
               />
             )}
           </div>
@@ -120,8 +110,8 @@ const QuestionDetailsPage = async ({
       <AnswerList
         questionId={question._id}
         userId={user?._id}
-        filter={searchParams.filter}
-        page={searchParams.page}
+        filter={filter}
+        page={page}
         // totalAnswers={question.answers.length}
       />
       {user && (

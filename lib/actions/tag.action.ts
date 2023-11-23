@@ -55,7 +55,6 @@ export const fetchTagList = async (
       : {}
 
     const skipPage = (page - 1) * limit
-    console.log('skip', skipPage)
 
     const aggregationPipeline: any[] = [
       { $match: query },
@@ -90,22 +89,10 @@ export const fetchTagList = async (
         break
     }
 
+    const totalTag = (await TagModel.aggregate(aggregationPipeline)).length
     aggregationPipeline.push({ $sort: sortOption })
-
-    const tagToCount = await TagModel.aggregate(aggregationPipeline)
-    const totalTag = tagToCount.length
-    console.log('totalTag', totalTag)
-
-    // aggregationPipeline.push({ $limit: limit })
-    // aggregationPipeline.push({ $skip: 1 })
-    // aggregationPipeline.push({
-    //   $facet: {
-    //     tags: [{ $skip: skipPage }, { $limit: limit }],
-    //   },
-    // })
     aggregationPipeline.push({ $skip: skipPage }, { $limit: limit })
     const tagList = await TagModel.aggregate(aggregationPipeline)
-    console.log('tagList.length', tagList.length)
 
     if (!tagList) throw new Error('tag list not be fetched')
     const hasNextPage = totalTag > skipPage + tagList.length
