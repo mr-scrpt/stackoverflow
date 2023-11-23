@@ -1,20 +1,30 @@
-import { Filter } from '@/components/shared/Filter/Filter'
-import { FilterRow } from '@/components/shared/FilterRow/FilterRow'
+import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
+import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
+import { PaginationContent } from '@/components/shared/PaginationContent/PaginationContent'
 import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { Button } from '@/components/ui/button'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestions } from '@/lib/actions/question.action'
 import { getUserById } from '@/lib/actions/user.action'
+import { ISearchParamsProps } from '@/types'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 
-const Home = async () => {
-  const questions = await getQuestions({})
+const HomePage = async (props: ISearchParamsProps) => {
+  const { searchParams } = props
+  const { q, filter, page } = searchParams
+  const { questions, hasNextPage } = await getQuestions({
+    q,
+    filter,
+    page: page ? +page : 1,
+  })
 
   const { userId: clerkId } = auth()
   const userActual = await getUserById(clerkId)
+  console.log('page', page)
+  console.log('hasNextPage', hasNextPage)
 
   return (
     <section className="flex flex-col gap-8">
@@ -29,13 +39,14 @@ const Home = async () => {
 
       <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <SearchLocal route="/" placeholder="Search questions" />
-        <Filter
+        <FilterContent
           list={HOME_PAGE_FILTER}
           classTrigger="min-h-[56px] sm:min-w-[170px] bg-light-700 dark:bg-dark-400"
-          className="hidden max-md:flex"
+          // className="hidden max-md:flex"
         />
       </div>
-      <FilterRow list={HOME_PAGE_FILTER} />
+      {/* <FilterRow list={HOME_PAGE_FILTER} /> */}
+      <FilterRowContent list={HOME_PAGE_FILTER} />
 
       <div className="custom-scrollbar flex w-full flex-col gap-6 overflow-y-auto">
         {questions.length ? (
@@ -57,8 +68,13 @@ const Home = async () => {
           />
         )}
       </div>
+
+      <PaginationContent
+        hasNextPage={hasNextPage}
+        pageCurrent={page ? +page : 1}
+      />
     </section>
   )
 }
 
-export default Home
+export default HomePage

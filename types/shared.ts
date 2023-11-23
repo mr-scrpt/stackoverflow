@@ -1,6 +1,7 @@
 // import { IDBUser } from '@/database/user.model'
 // import { Schema } from 'mongoose'
 // import { IDBUser } from '@/mongodb'
+import { TAG_PAGE_FILTER } from '@/constants/filters'
 
 import { IDBUser } from '@/database/user.model'
 
@@ -56,7 +57,7 @@ export interface IJobFilterParams {
 export interface IGetQuestionsParams {
   page?: number
   limit?: number
-  searchQuery?: string
+  q?: string
   filter?: string
 }
 
@@ -102,7 +103,7 @@ export interface IGetAllTagsParams {
   page?: number
   limit?: number
   filter?: string
-  searchQuery?: string
+  q?: string
 }
 
 export interface IGetQuestionsByTagIdParams {
@@ -110,7 +111,8 @@ export interface IGetQuestionsByTagIdParams {
   tagId?: string
   page?: number
   limit?: number
-  searchQuery?: string
+  filter?: string
+  q?: string
 }
 
 export interface IGetTopInteractedTagsParams {
@@ -134,7 +136,7 @@ export interface IGetAllUsersParams {
   page?: number
   limit?: number
   filter?: string
-  searchQuery?: string // Add searchQuery parameter
+  q?: string // Add searchQuery parameter
 }
 
 export interface IUpdateUserParams {
@@ -154,7 +156,7 @@ export interface IGetSavedQuestionsParams {
   page?: number
   limit?: number
   filter?: string
-  searchQuery?: string
+  q?: string
 }
 
 export interface IGetUserStatsParams {
@@ -186,3 +188,20 @@ export enum QuestionFormTypeEnum {
   EDIT = 'edit',
   CREATE = 'create',
 }
+
+export enum PaginationDirectionEnum {
+  NEXT = 'next',
+  PREV = 'prev',
+}
+
+export interface IUrlQueryParams {
+  params: string
+  key: string
+  value: string | null
+}
+
+export interface IRemoveUrlQueryParams {
+  params: string
+  keysToRemove: string[]
+}
+export type TagPageFilterValue = (typeof TAG_PAGE_FILTER)[number]['value']

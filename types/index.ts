@@ -123,7 +123,7 @@ export interface ISearchParam {
   [key: string]: string | undefined
 }
 
-export interface SearchParamsProps {
+export interface ISearchParamsProps {
   searchParams: ISearchParam
 }
 

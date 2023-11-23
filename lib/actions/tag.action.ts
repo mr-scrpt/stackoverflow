@@ -2,10 +2,16 @@
 
 import { UserModel } from '@/database/user.model'
 import { connectToDatabase } from '../mongoose'
-import { ICreateTagParams, IGetTopInteractedTagsParams } from '@/types/shared'
+import {
+  ICreateTagParams,
+  IGetAllTagsParams,
+  IGetTopInteractedTagsParams,
+} from '@/types/shared'
 import { TagModel } from '@/database/tag.model'
 import { slugGenerator, toPlainObject } from '../utils'
 import { ITag } from '@/types'
+import { FilterQuery } from 'mongoose'
+import { PAGINATION_BASE_LIMIT } from '@/constants'
 
 export const fetchTagsByUserId = async (
   params: IGetTopInteractedTagsParams
@@ -35,16 +41,67 @@ export const fetchTagsByUserId = async (
   }
 }
 
-export const fetchTagList = async () => {
+export const fetchTagList = async (
+  params: IGetAllTagsParams
+): Promise<{ tagList: ITag[]; hasNextPage: boolean }> => {
   try {
     connectToDatabase()
-    const tagList = await TagModel.find({})
+    const { q, filter, page = 1, limit = PAGINATION_BASE_LIMIT } = params
+
+    const query: FilterQuery<typeof TagModel> = q
+      ? {
+          $or: [{ name: { $regex: new RegExp(q, 'i') } }],
+        }
+      : {}
+
+    const skipPage = (page - 1) * limit
+
+    const aggregationPipeline: any[] = [
+      { $match: query },
+      {
+        $lookup: {
+          from: 'questions',
+          localField: 'questions',
+          foreignField: '_id',
+          as: 'questionDetails',
+        },
+      },
+      { $addFields: { questionCount: { $size: '$questionDetails' } } },
+    ]
+
+    let sortOption: any = {}
+
+    switch (filter) {
+      case 'popular':
+        sortOption = { questionCount: -1 }
+        break
+      case 'recent':
+        sortOption = { createdOn: -1 }
+        break
+      case 'name':
+        sortOption = { name: 1 }
+        break
+      case 'old':
+        sortOption = { createdOn: 1 }
+        break
+      default:
+        sortOption = { createdOn: -1 }
+        break
+    }
+
+    const totalTag = (await TagModel.aggregate(aggregationPipeline)).length
+    aggregationPipeline.push({ $sort: sortOption })
+    aggregationPipeline.push({ $skip: skipPage }, { $limit: limit })
+    const tagList = await TagModel.aggregate(aggregationPipeline)
 
     if (!tagList) throw new Error('tag list not be fetched')
+    const hasNextPage = totalTag > skipPage + tagList.length
 
-    return { tagList }
+    const resultTag = toPlainObject(tagList)
+
+    return { tagList: resultTag, hasNextPage }
   } catch (e) {
-    console.log(e)
+    console.error(e)
     throw e
   }
 }
@@ -104,7 +161,6 @@ export const getPopularTags = async (): Promise<ITag[]> => {
       { $sort: { totalQuestions: -1 } },
       { $limit: 5 },
     ])
-    console.log('', popularTags)
 
     return toPlainObject(popularTags)
   } catch (error) {

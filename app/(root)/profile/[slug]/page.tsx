@@ -143,6 +143,8 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
               <QuestionTab
                 list={questions}
                 userId={userActual?._id}
+                // pageCurrent={}
+                // hasNextPage={}
                 // searchParams={searchParams}
                 // clerkId={clerkId}
                 // userId={userInfo.user._id}

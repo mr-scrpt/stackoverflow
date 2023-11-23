@@ -1,26 +1,36 @@
-import { Filter } from '@/components/shared/Filter/Filter'
-import { FilterRow } from '@/components/shared/FilterRow/FilterRow'
+import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
+import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
+import { PaginationContent } from '@/components/shared/PaginationContent/PaginationContent'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { TagCard } from '@/components/shared/TagCard/TagCard'
-import { TAG_PAGE_FILTE } from '@/constants/filters'
+import { TAG_PAGE_FILTER } from '@/constants/filters'
 import { fetchTagList } from '@/lib/actions/tag.action'
+import { ISearchParamsProps } from '@/types'
 
-const Page = async () => {
-  const { tagList } = await fetchTagList()
+const TagsPage = async (props: ISearchParamsProps) => {
+  const { searchParams } = props
+  const { q, filter, page } = searchParams
+
+  const { tagList, hasNextPage } = await fetchTagList({
+    q,
+    filter,
+    page: page ? +page : 1,
+  })
+
   return (
     <section className="flex flex-col gap-8">
       <h1 className="h1-bold text-dark100_light900">Tags list</h1>
 
       <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <SearchLocal route="/tags" placeholder="Search tags" />
-        <Filter
-          list={TAG_PAGE_FILTE}
+        <FilterContent
+          list={TAG_PAGE_FILTER}
           classTrigger="min-h-[56px] sm:min-w-[170px] bg-light-700 dark:bg-dark-400"
           className="hidden max-md:flex"
         />
       </div>
-      <FilterRow list={TAG_PAGE_FILTE} />
+      <FilterRowContent list={TAG_PAGE_FILTER} />
       <div className="custom-scrollbar flex flex-col items-center flex-wrap md:flex-row md:justify-start  w-full gap-6 overflow-y-auto">
         {tagList.length > 0 ? (
           tagList.map((tag) => {
@@ -35,10 +45,14 @@ const Page = async () => {
           />
         )}
       </div>
+      <PaginationContent
+        hasNextPage={hasNextPage}
+        pageCurrent={page ? +page : 1}
+      />
 
-      <div className="flex flex-col"></div>
+      {/* <div className="flex flex-col"></div> */}
     </section>
   )
 }
 
-export default Page
+export default TagsPage

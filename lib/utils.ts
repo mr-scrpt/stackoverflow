@@ -2,6 +2,8 @@ import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import * as cheerio from 'cheerio'
 import slugify from 'slugify'
+import qs from 'query-string'
+import { IRemoveUrlQueryParams, IUrlQueryParams } from '@/types/shared'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -85,3 +87,34 @@ export const parseHTMLToString = (html: string) => {
 }
 
 export const toPlainObject = (obj: any) => JSON.parse(JSON.stringify(obj))
+
+export const formUrlQuery = ({ params, key, value }: IUrlQueryParams) => {
+  const currentUrl = qs.parse(params) // obj
+
+  currentUrl[key] = value
+
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentUrl,
+    },
+    { skipNull: true }
+  )
+}
+
+export const removeKeysFromQuery = ({
+  params,
+  keysToRemove,
+}: IRemoveUrlQueryParams) => {
+  const currentParams = qs.parse(params) // obj
+
+  keysToRemove.forEach((key) => delete currentParams[key])
+
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentParams,
+    },
+    { skipNull: true }
+  )
+}

@@ -1,10 +1,12 @@
+import { IQuestion } from '@/types'
 import { FC, HTMLAttributes } from 'react'
 import { QuestionCard } from '../QuestionCard/QuestionCard'
-import { IQuestion } from '@/types'
 
 interface QuestionTabProps extends HTMLAttributes<HTMLDivElement> {
   list: IQuestion[]
   userId: string | undefined
+  // hasNextPage: boolean
+  // pageCurrent: number
 }
 
 export const QuestionTab: FC<QuestionTabProps> = (props) => {

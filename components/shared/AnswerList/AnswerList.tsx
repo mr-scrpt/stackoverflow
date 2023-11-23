@@ -6,17 +6,28 @@ import { FC, HTMLAttributes } from 'react'
 import { ParseHTML } from '../ParseHTML/ParseHTML'
 import { VoteBar } from '../VoteBar/VoteBar'
 import { VoteTypeEnum } from '@/types/shared'
+import { FilterContent } from '../FilterContent/FilterContent'
+import { ANSWER_PAGE_FILTER } from '@/constants/filters'
+import { PaginationContent } from '../PaginationContent/PaginationContent'
 
 interface AnswerListProps extends HTMLAttributes<HTMLDivElement> {
   questionId: string
-  userId: string | undefined
-  page?: number
-  filter?: number
+  userId?: string
+  page?: string
+  filter?: string
 }
 
 export const AnswerList: FC<AnswerListProps> = async (props) => {
-  const { questionId, userId } = props
-  const answerList = await getAnswerList({ questionId })
+  const { questionId, userId, filter, page } = props
+  const {
+    answers: answerList,
+    totalAnswers,
+    hasNextPage,
+  } = await getAnswerList({
+    questionId,
+    sortBy: filter,
+    page: page ? +page : 1,
+  })
   console.log('userId', userId)
   if (!answerList) {
     return null
@@ -24,9 +35,9 @@ export const AnswerList: FC<AnswerListProps> = async (props) => {
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between">
-        <h3 className="primary-text-gradient">{answerList.length} Answers</h3>
+        <h3 className="primary-text-gradient">{totalAnswers} Answers</h3>
 
-        {/* <Filter filters={AnswerFilters} /> */}
+        <FilterContent list={ANSWER_PAGE_FILTER} />
       </div>
 
       <div>
@@ -79,6 +90,10 @@ export const AnswerList: FC<AnswerListProps> = async (props) => {
             <ParseHTML data={answer.content} />
           </article>
         ))}
+        <PaginationContent
+          hasNextPage={hasNextPage}
+          pageCurrent={page ? +page : 1}
+        />
       </div>
     </div>
   )

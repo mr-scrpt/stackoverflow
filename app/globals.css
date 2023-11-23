@@ -102,6 +102,9 @@ body {
 }
 
 /* Markdown Start */
+.markdown {
+  word-break: break-all;
+}
 .markdown a {
   color: #1da1f2;
 }

@@ -15,6 +15,8 @@ import { AnswerModel } from '@/database/answer.model'
 import { TagModel } from '@/database/tag.model'
 import { slugGenerator, toPlainObject } from '../utils'
 import { IUser } from '@/types'
+import { FilterQuery } from 'mongoose'
+import { PAGINATION_BASE_LIMIT } from '@/constants'
 
 export async function getUserProfileBySlug(slug: string) {
   try {
@@ -57,15 +59,55 @@ export const getUserById = async (
   }
 }
 
-export const getAllUsers = async (params: IGetAllUsersParams) => {
+export const getAllUsers = async (
+  params: IGetAllUsersParams
+): Promise<{ users: IUser[]; hasNextPage: boolean }> => {
   try {
     await connectToDatabase()
-    console.log('getAllUsers', params)
 
-    // const { page = 1, limit = 20, filter, searchQuery } = params
+    const { q, filter, page = 1, limit = PAGINATION_BASE_LIMIT } = params
 
-    const users = await UserModel.find({}).sort({ createdAt: -1 })
-    return { users }
+    const query: FilterQuery<typeof UserModel> = q
+      ? {
+          $or: [
+            { username: { $regex: new RegExp(q, 'i') } },
+            { name: { $regex: new RegExp(q, 'i') } },
+          ],
+        }
+      : {}
+    let sortOption = {}
+
+    switch (filter) {
+      case 'new_users':
+        sortOption = { joinedAt: -1 }
+        break
+      case 'old_users':
+        sortOption = { joinedAt: 1 }
+        break
+      case 'top_contributors':
+        sortOption = { reputation: -1 }
+        break
+      default:
+        sortOption = { reputation: -1 }
+        break
+    }
+
+    const skipPage = (page - 1) * limit
+
+    const users = await UserModel.find(query)
+      .sort(sortOption)
+      .skip(skipPage)
+      .limit(limit)
+      .sort(sortOption)
+
+    // calculate if there is page next
+    const totalUser = await UserModel.countDocuments(query)
+    // if total > amount skip + amount show -> next page
+    const hasNextPage = totalUser > skipPage + users.length
+
+    const resultQuestion = toPlainObject(users)
+
+    return { users: resultQuestion, hasNextPage }
   } catch (error) {
     console.log(error)
     throw error

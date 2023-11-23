@@ -1,18 +1,7 @@
 import { IBaseQuestion } from '@/types'
 import { Document, Model, Schema, model, models } from 'mongoose'
 
-// Document possess the types of database properties, such as "_id"
-export interface IDBQuestion extends Document, IBaseQuestion {
-  // title: string
-  // content: string
-  // views: number
-  // tags: Schema.Types.ObjectId[] /* connection to another model */
-  // author: Schema.Types.ObjectId
-  // answers: Schema.Types.ObjectId[]
-  // upVotes: Schema.Types.ObjectId[]
-  // downVotes: Schema.Types.ObjectId[]
-  // createdAt: Date
-}
+export interface IDBQuestion extends Document, IBaseQuestion {}
 
 export const QuestionSchema = new Schema<IDBQuestion>({
   title: { type: String, required: true },

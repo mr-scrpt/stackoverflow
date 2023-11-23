@@ -1,38 +1,79 @@
 'use server'
 
-import { QuestionModel } from '@/database/question.model'
-import { connectToDatabase } from '../mongoose'
-import { TagModel } from '@/database/tag.model'
-import { revalidatePath } from 'next/cache'
-import { UserModel } from '@/database/user.model'
-import {
-  ICreateQuestionParams,
-  IDeleteQuestionParams,
-  IEditQuestionParams,
-  IGetQuestionsByTagIdParams,
-  IGetQuestionsParams,
-  IGetSavedQuestionsParams,
-  IQuestionVoteParams,
-  IToggleSaveQuestionParams,
-} from '@/types/shared'
-import { slugGenerator, toPlainObject } from '../utils'
-import { FilterQuery } from 'mongoose'
-import { createTag } from './tag.action'
-import { IQuestion, ITag } from '@/types'
+import { PAGINATION_BASE_LIMIT } from '@/constants'
 import { AnswerModel } from '@/database/answer.model'
 import { InteractionModel } from '@/database/interaction.model'
+import { QuestionModel } from '@/database/question.model'
+import { TagModel } from '@/database/tag.model'
+import { UserModel } from '@/database/user.model'
+import { IQuestion } from '@/types'
+import {
+    ICreateQuestionParams,
+    IDeleteQuestionParams,
+    IEditQuestionParams,
+    IGetQuestionsByTagIdParams,
+    IGetQuestionsParams,
+    IGetSavedQuestionsParams,
+    IQuestionVoteParams,
+    IToggleSaveQuestionParams,
+} from '@/types/shared'
+import { FilterQuery } from 'mongoose'
+import { revalidatePath } from 'next/cache'
+import { connectToDatabase } from '../mongoose'
+import { slugGenerator, toPlainObject } from '../utils'
+import { createTag } from './tag.action'
 
 export const getQuestions = async (
   params: IGetQuestionsParams
-): Promise<IQuestion[]> => {
+): Promise<{ questions: IQuestion[]; hasNextPage: boolean }> => {
   try {
     await connectToDatabase()
-    const questions = await QuestionModel.find({})
+    const { q, filter, page = 1, limit = PAGINATION_BASE_LIMIT } = params
+    const query: FilterQuery<typeof QuestionModel> = q
+      ? {
+          $or: [
+            { title: { $regex: new RegExp(q, 'i') } },
+            { content: { $regex: new RegExp(q, 'i') } },
+          ],
+        }
+      : {}
+
+    let sortOption = {}
+
+    switch (filter) {
+      case 'newest':
+        sortOption = { createdAt: -1 }
+        break
+      case 'frequent':
+        sortOption = { views: -1 }
+        break
+      case 'unanswered':
+        query.answers = { $size: 0 } // update the find query
+        break
+      default:
+        sortOption = { createdAt: -1 }
+        break
+    }
+
+    // console.log('sortOption', filter, sortOption)
+
+    const skipPage = (page - 1) * limit
+
+    const questions = await QuestionModel.find(query)
       .populate({ path: 'tags', model: TagModel }) // Specifies paths which should be populated with other documents
       .populate({ path: 'author', model: UserModel })
-      .sort({ createdAt: -1 })
+      .skip(skipPage)
+      .limit(limit)
+      .sort(sortOption)
 
-    return toPlainObject(questions)
+    // calculate if there is page next
+    const totalQuestions = await QuestionModel.countDocuments(query)
+    // if total > amount skip + amount show -> next page
+    const hasNextPage = totalQuestions > skipPage + questions.length
+
+    const resultQuestion = toPlainObject(questions)
+
+    return { questions: resultQuestion, hasNextPage }
   } catch (error) {
     console.log(error)
     throw error
@@ -60,60 +101,75 @@ export const fetchQuestionBySlug = async (slug: string) => {
   }
 }
 
-export async function getQuestionByTagSlug(params: IGetQuestionsByTagIdParams) {
+export const getQuestionByTagSlug = async (
+  params: IGetQuestionsByTagIdParams
+): Promise<{
+  tagTitle: string
+  questions: IQuestion[]
+  hasNextPage: boolean
+}> => {
   try {
     connectToDatabase()
 
-    // const { tagId, searchQuery, page = 1, pageSize = 10 } = params
-    const { searchQuery, slug } = params
+    const { q, filter, page = 1, limit = PAGINATION_BASE_LIMIT, slug } = params
+    const query: FilterQuery<typeof QuestionModel> = q
+      ? {
+          $or: [
+            { title: { $regex: new RegExp(q, 'i') } },
+            { content: { $regex: new RegExp(q, 'i') } },
+          ],
+        }
+      : {}
 
-    // const tagIds = await TagModel.find({ slug }).distinct('_id')
-    // let query = { tags: { $in: tagIds } }
-    //
-    // // Добавляем условие поиска по регулярному выражению, если searchQuery передан
-    // if (searchQuery) {
-    //   query.title = { $regex: new RegExp(searchQuery, 'i') }
-    // }
-    //
-    // const questions = await QuestionModel.find(query)
-    //   .populate('tags') // Заполняем данные о тегах
-    //   .populate('author')
-    //   .exec()
-    //
-    // return questions
+    let sortOption = {}
 
-    // const questions = await QuestionModel.find({ 'tags.slug': slug })
-    //   .populate({ path: 'tags', model: TagModel }) // Specifies paths which should be populated with other documents
-    //   .populate({ path: 'author', model: UserModel })
-    //   .sort({ createdAt: -1 })
-    // console.log('questions =====', questions)
+    switch (filter) {
+      case 'newest':
+        sortOption = { createdAt: -1 }
+        break
+      case 'frequent':
+        sortOption = { views: -1 }
+        break
+      case 'unanswered':
+        query.answers = { $size: 0 } // update the find query
+        break
+      default:
+        sortOption = { createdAt: -1 }
+        break
+    }
+    const skipPage = (page - 1) * limit
 
-    const tagFilter: FilterQuery<ITag> = { slug }
+    // const tagFilter: FilterQuery<ITag> = { slug }
+    const tag = await TagModel.findOne({ slug })
 
-    const tag = await TagModel.findOne(tagFilter).populate({
-      path: 'questions',
-      model: QuestionModel,
-      match: searchQuery
-        ? { title: { $regex: new RegExp(searchQuery, 'i') } }
-        : {},
-      options: {
-        sort: { createdAt: -1 },
-      },
-      populate: [
+    if (!tag) throw new Error('No tag found')
+    const totalQuestionsAggregate = await QuestionModel.aggregate([
+      { $match: { tags: tag._id, ...query } },
+      { $count: 'count' },
+    ])
+    const totalQuestions = totalQuestionsAggregate[0]?.count || 0
+
+    // Запрос вопросов с учетом пагинации
+    const questions = await QuestionModel.find({ tags: tag._id, ...query })
+      .sort(sortOption)
+      .skip(skipPage)
+      .limit(limit)
+      .populate([
         {
           path: 'author',
           model: UserModel,
           select: '_id name clerkId picture',
         },
         { path: 'tags', model: TagModel, select: '_id name' },
-      ],
-    })
+      ])
 
-    if (!tag) throw new Error('No tag found')
+    const hasNextPage = totalQuestions > skipPage + questions.length
 
-    const questions = tag.questions
-
-    return { tagTitle: tag.name, questions }
+    return {
+      tagTitle: tag.name,
+      questions: toPlainObject(questions),
+      hasNextPage,
+    }
   } catch (error) {
     console.log(error)
     throw error
@@ -331,22 +387,54 @@ export const toggleSaveQuestion = async (params: IToggleSaveQuestionParams) => {
   }
 }
 
-export const getSavedQuestions = async (params: IGetSavedQuestionsParams) => {
+export const getSavedQuestions = async (
+  params: IGetSavedQuestionsParams
+): Promise<{ questions: IQuestion[]; hasNextPage: boolean }> => {
   try {
     connectToDatabase()
 
-    const { clerkId, searchQuery } = params
-    // const { clerkId, searchQuery, filter, page = 1, pageSize = 10 } = params
+    const {
+      clerkId,
+      q,
+      filter,
+      page = 1,
+      limit = PAGINATION_BASE_LIMIT,
+    } = params
 
-    const query: FilterQuery<typeof QuestionModel> = searchQuery
-      ? { title: { $regex: new RegExp(searchQuery, 'i') } }
+    const query: FilterQuery<typeof QuestionModel> = q
+      ? { title: { $regex: new RegExp(q, 'i') } }
       : {}
+
+    let sortOption = {}
+
+    switch (filter) {
+      case 'most_recent':
+        sortOption = { createdAt: -1 }
+        break
+      case 'oldest':
+        sortOption = { createdAt: 1 }
+        break
+      case 'most_voted':
+        sortOption = { upVotes: -1 }
+        break
+      case 'most_viewed':
+        sortOption = { views: -1 }
+        break
+      case 'most_answered':
+        sortOption = { answers: -1 }
+        break
+      default:
+        break
+    }
+    const skipPage = (page - 1) * limit
 
     const user = await UserModel.findOne({ clerkId }).populate({
       path: 'postSaved',
       match: query,
       options: {
-        sort: { createdAt: -1 },
+        limit,
+        sort: sortOption,
+        skip: skipPage,
       },
       populate: [
         {
@@ -359,8 +447,22 @@ export const getSavedQuestions = async (params: IGetSavedQuestionsParams) => {
     })
 
     if (!user) throw new Error('User not found')
+    if (!user.postSaved) {
+      return { questions: [], hasNextPage: false }
+    }
+    const totalSavedPosts = await UserModel.findOne({ clerkId })
+      .select('postSaved')
+      .populate({
+        path: 'postSaved',
+        match: query,
+      })
+      .exec()
 
-    return { questions: user.postSaved }
+    const totalQuestions = totalSavedPosts!.postSaved!.length
+
+    const hasNextPage = totalQuestions! > skipPage + user.postSaved.length
+
+    return { questions: user.postSaved || [], hasNextPage }
   } catch (error) {
     console.log(error)
     throw error

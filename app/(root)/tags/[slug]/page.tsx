@@ -1,23 +1,35 @@
-import { Filter } from '@/components/shared/Filter/Filter'
-import { FilterRow } from '@/components/shared/FilterRow/FilterRow'
+import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
+import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
+import { PaginationContent } from '@/components/shared/PaginationContent/PaginationContent'
 import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestionByTagSlug } from '@/lib/actions/question.action'
+import { getUserById } from '@/lib/actions/user.action'
 import { ISearchParam } from '@/types'
+import { auth } from '@clerk/nextjs'
 
 interface TagPageProps {
   params: {
     slug: string
   }
-  searchParams?: ISearchParam
+  searchParams: ISearchParam
 }
 
-const TagPage = async ({ params, searchParams }: TagPageProps) => {
+const TagPage = async (props: TagPageProps) => {
+  const { params, searchParams } = props
+  const { q, filter, page } = searchParams
   const { slug } = params
 
-  const { tagTitle, questions } = await getQuestionByTagSlug({ slug })
+  const { tagTitle, questions, hasNextPage } = await getQuestionByTagSlug({
+    slug,
+    q,
+    filter,
+    page: page ? +page : 1,
+  })
+  const { userId: clerkId } = auth()
+  const userActual = await getUserById(clerkId)
 
   return (
     <section className="flex flex-col gap-8">
@@ -29,14 +41,17 @@ const TagPage = async ({ params, searchParams }: TagPageProps) => {
         </div>
       </div>
       <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">
-        <SearchLocal route="/" placeholder="Search questions" />
-        <Filter
+        <SearchLocal
+          route={`/tags/${params.slug}`}
+          placeholder="Search questions"
+        />
+        <FilterContent
           list={HOME_PAGE_FILTER}
           classTrigger="min-h-[56px] sm:min-w-[170px] bg-light-700 dark:bg-dark-400"
           className="hidden max-md:flex"
         />
       </div>
-      <FilterRow list={HOME_PAGE_FILTER} />
+      <FilterRowContent list={HOME_PAGE_FILTER} />
 
       <div className="custom-scrollbar flex w-full flex-col gap-6 overflow-y-auto">
         {questions && questions.length ? (
@@ -44,10 +59,7 @@ const TagPage = async ({ params, searchParams }: TagPageProps) => {
             <QuestionCard
               key={item._id}
               item={item}
-              // isAuthor={
-              //   !!userActual &&
-              //   JSON.stringify(item.author._id) === JSON.stringify(userActual)
-              // }
+              isAuthor={!!userActual && item.author._id === userActual._id}
             />
           ))
         ) : (
@@ -61,6 +73,10 @@ const TagPage = async ({ params, searchParams }: TagPageProps) => {
           />
         )}
       </div>
+      <PaginationContent
+        hasNextPage={hasNextPage}
+        pageCurrent={page ? +page : 1}
+      />
     </section>
   )
 }

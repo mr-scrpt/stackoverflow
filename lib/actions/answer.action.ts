@@ -12,6 +12,7 @@ import {
 import { QuestionModel } from '@/database/question.model'
 import { UserModel } from '@/database/user.model'
 import { InteractionModel } from '@/database/interaction.model'
+import { PAGINATION_BASE_LIMIT } from '@/constants'
 
 export const createAnswer = async (params: ICreateAnswerParams) => {
   try {
@@ -64,7 +65,33 @@ export const deleteAnswer = async (params: IDeleteAnswerParams) => {
 export const getAnswerList = async (params: IGetAnswersParams) => {
   try {
     connectToDatabase()
-    const { questionId } = params
+    const {
+      questionId,
+      sortBy,
+      page = 1,
+      limit = PAGINATION_BASE_LIMIT,
+    } = params
+
+    let sortOption = {}
+
+    switch (sortBy) {
+      case 'highestUpvotes':
+        sortOption = { upVotes: -1 }
+        break
+      case 'lowestUpvotes':
+        sortOption = { upVotes: 1 }
+        break
+      case 'recent':
+        sortOption = { createdAt: -1 }
+        break
+      case 'old':
+        sortOption = { createdAt: 1 }
+        break
+      default:
+        sortOption = { createdAt: -1 }
+        break
+    }
+    const skipPage = (page - 1) * limit
 
     const answers = await AnswerModel.find({ question: questionId })
       .populate({
@@ -72,9 +99,15 @@ export const getAnswerList = async (params: IGetAnswersParams) => {
         model: UserModel,
         select: '_id clerkId picture name',
       })
-      .sort({ createdAt: -1 })
+      .skip(skipPage)
+      .limit(limit)
+      .sort(sortOption)
+    const totalAnswers = await AnswerModel.countDocuments({
+      question: questionId,
+    })
+    const hasNextPage = totalAnswers > limit * (page - 1) + answers.length
 
-    return answers
+    return { answers, hasNextPage, totalAnswers }
   } catch (error) {
     console.log(error)
     throw error

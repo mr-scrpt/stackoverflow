@@ -1,13 +1,7 @@
 import { IBaseTag } from '@/types'
 import { Document, Model, Schema, model, models } from 'mongoose'
 
-export interface IDBTag extends Document, IBaseTag {
-  // name: string,
-  // description: string,
-  // questions?: Schema.Types.ObjectId[],
-  // followers?: Schema.Types.ObjectId[],
-  // createdOn: Date
-}
+export interface IDBTag extends Document, IBaseTag {}
 
 export const TagSchema = new Schema<IDBTag>({
   name: { type: String, required: true, unique: true },
