@@ -101,13 +101,17 @@ export const fetchQuestionBySlug = async (slug: string) => {
   }
 }
 
-export async function getQuestionByTagSlug(
+export const getQuestionByTagSlug = async (
   params: IGetQuestionsByTagIdParams
-): Promise<{ tagTitle: string; questions: IQuestion[] }> {
+): Promise<{
+  tagTitle: string
+  questions: IQuestion[]
+  hasNextPage: boolean
+}> => {
   try {
     connectToDatabase()
 
-    const { q, slug, filter } = params
+    const { q, filter, page = 1, limit = PAGINATION_BASE_LIMIT, slug } = params
     const query: FilterQuery<typeof QuestionModel> = q
       ? {
           $or: [
@@ -133,6 +137,7 @@ export async function getQuestionByTagSlug(
         sortOption = { createdAt: -1 }
         break
     }
+    const skipPage = (page - 1) * limit
 
     const tagFilter: FilterQuery<ITag> = { slug }
 
@@ -142,6 +147,8 @@ export async function getQuestionByTagSlug(
       match: query,
       options: {
         sort: sortOption,
+        skip: skipPage,
+        limit,
       },
       populate: [
         {
@@ -154,10 +161,26 @@ export async function getQuestionByTagSlug(
     })
 
     if (!tag) throw new Error('No tag found')
+    const questionsAll = await TagModel.findOne(tagFilter).populate({
+      path: 'questions',
+      model: QuestionModel,
+      match: query,
+    })
 
     const questions = tag.questions
+    const totalQuestions = questionsAll?.questions?.length
+    console.log('totalQuestions', totalQuestions)
+    const totalQuestions2 = await QuestionModel.countDocuments(query)
+    console.log('totalQuestions2', totalQuestions2)
+    if (!questions) throw new Error('Questions by tag found')
 
-    return { tagTitle: tag.name, questions: toPlainObject(questions) }
+    const hasNextPage = totalQuestions! > skipPage + questions!.length
+
+    return {
+      tagTitle: tag.name,
+      questions: toPlainObject(questions),
+      hasNextPage,
+    }
   } catch (error) {
     console.log(error)
     throw error

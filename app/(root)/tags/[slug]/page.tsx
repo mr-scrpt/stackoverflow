@@ -1,6 +1,7 @@
 import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
 import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
+import { PaginationContent } from '@/components/shared/PaginationContent/PaginationContent'
 import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
@@ -18,12 +19,14 @@ interface TagPageProps {
 
 const TagPage = async (props: TagPageProps) => {
   const { params, searchParams } = props
+  const { q, filter, page } = searchParams
   const { slug } = params
 
-  const { tagTitle, questions } = await getQuestionByTagSlug({
+  const { tagTitle, questions, hasNextPage } = await getQuestionByTagSlug({
     slug,
-    q: searchParams.q,
-    filter: searchParams.filter,
+    q,
+    filter,
+    page: page ? +page : 1,
   })
   const { userId: clerkId } = auth()
   const userActual = await getUserById(clerkId)
@@ -70,6 +73,10 @@ const TagPage = async (props: TagPageProps) => {
           />
         )}
       </div>
+      <PaginationContent
+        hasNextPage={hasNextPage}
+        pageCurrent={page ? +page : 1}
+      />
     </section>
   )
 }

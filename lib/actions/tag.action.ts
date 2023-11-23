@@ -11,6 +11,7 @@ import { TagModel } from '@/database/tag.model'
 import { slugGenerator, toPlainObject } from '../utils'
 import { ITag } from '@/types'
 import { FilterQuery } from 'mongoose'
+import { PAGINATION_BASE_LIMIT } from '@/constants'
 
 export const fetchTagsByUserId = async (
   params: IGetTopInteractedTagsParams
@@ -40,16 +41,21 @@ export const fetchTagsByUserId = async (
   }
 }
 
-export const fetchTagList = async (params: IGetAllTagsParams) => {
+export const fetchTagList = async (
+  params: IGetAllTagsParams
+): Promise<{ tagList: ITag[]; hasNextPage: boolean }> => {
   try {
     connectToDatabase()
-    const { q, filter } = params
+    const { q, filter, page = 1, limit = PAGINATION_BASE_LIMIT } = params
 
     const query: FilterQuery<typeof TagModel> = q
       ? {
           $or: [{ name: { $regex: new RegExp(q, 'i') } }],
         }
       : {}
+
+    const skipPage = (page - 1) * limit
+    console.log('skip', skipPage)
 
     const aggregationPipeline: any[] = [
       { $match: query },
@@ -86,13 +92,27 @@ export const fetchTagList = async (params: IGetAllTagsParams) => {
 
     aggregationPipeline.push({ $sort: sortOption })
 
-    const tagList = await TagModel.aggregate(aggregationPipeline)
+    const tagToCount = await TagModel.aggregate(aggregationPipeline)
+    const totalTag = tagToCount.length
+    console.log('totalTag', totalTag)
 
-    console.log('list tag+', tagList)
+    // aggregationPipeline.push({ $limit: limit })
+    // aggregationPipeline.push({ $skip: 1 })
+    // aggregationPipeline.push({
+    //   $facet: {
+    //     tags: [{ $skip: skipPage }, { $limit: limit }],
+    //   },
+    // })
+    aggregationPipeline.push({ $skip: skipPage }, { $limit: limit })
+    const tagList = await TagModel.aggregate(aggregationPipeline)
+    console.log('tagList.length', tagList.length)
 
     if (!tagList) throw new Error('tag list not be fetched')
+    const hasNextPage = totalTag > skipPage + tagList.length
 
-    return { tagList }
+    const resultTag = toPlainObject(tagList)
+
+    return { tagList: resultTag, hasNextPage }
   } catch (e) {
     console.error(e)
     throw e

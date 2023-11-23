@@ -1,6 +1,7 @@
 import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
 import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { NoResult } from '@/components/shared/NoResult/NoResult'
+import { PaginationContent } from '@/components/shared/PaginationContent/PaginationContent'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { TagCard } from '@/components/shared/TagCard/TagCard'
 import { TAG_PAGE_FILTER } from '@/constants/filters'
@@ -9,10 +10,12 @@ import { ISearchParamsProps } from '@/types'
 
 const TagsPage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
+  const { q, filter, page } = searchParams
 
-  const { tagList } = await fetchTagList({
-    q: searchParams.q,
-    filter: searchParams.filter,
+  const { tagList, hasNextPage } = await fetchTagList({
+    q,
+    filter,
+    page: page ? +page : 1,
   })
 
   return (
@@ -42,8 +45,12 @@ const TagsPage = async (props: ISearchParamsProps) => {
           />
         )}
       </div>
+      <PaginationContent
+        hasNextPage={hasNextPage}
+        pageCurrent={page ? +page : 1}
+      />
 
-      <div className="flex flex-col"></div>
+      {/* <div className="flex flex-col"></div> */}
     </section>
   )
 }
