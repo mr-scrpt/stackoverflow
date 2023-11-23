@@ -108,8 +108,6 @@ export const getAllUsers = async (
     const resultQuestion = toPlainObject(users)
 
     return { users: resultQuestion, hasNextPage }
-
-    return users
   } catch (error) {
     console.log(error)
     throw error

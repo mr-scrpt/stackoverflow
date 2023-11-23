@@ -1,6 +1,6 @@
 import { SidebarLink } from '@/types'
 
-export const PAGINATION_BASE_LIMIT = 3
+export const PAGINATION_BASE_LIMIT = 10
 export const TIME_DEBOUNCE_DELAY = 300
 export const THEME_LIGHT = 'light'
 export const THEME_DARK = 'dark'
