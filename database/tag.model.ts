@@ -13,4 +13,4 @@ export const TagSchema = new Schema<IDBTag>({
 })
 
 export const TagModel =
-  (models.Tag as Model<IDBTag>) || model<IDBTag>('Tag', TagSchema)
+  (models?.Tag as Model<IDBTag>) || model<IDBTag>('Tag', TagSchema)

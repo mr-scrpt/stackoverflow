@@ -21,5 +21,5 @@ export const InteractionSchema = new Schema<IDBInteraction>({
 })
 
 export const InteractionModel =
-  (models.Interaction as Model<IDBInteraction>) ||
+  (models?.Interaction as Model<IDBInteraction>) ||
   model<IDBInteraction>('Interaction', InteractionSchema)

@@ -17,5 +17,5 @@ export const QuestionSchema = new Schema<IDBQuestion>({
 })
 
 export const QuestionModel =
-  (models.Question as Model<IDBQuestion>) ||
+  (models?.Question as Model<IDBQuestion>) ||
   model<IDBQuestion>('Question', QuestionSchema)

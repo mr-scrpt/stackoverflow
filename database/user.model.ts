@@ -33,4 +33,4 @@ export const UserSchema = new Schema<IDBUser>({
 })
 
 export const UserModel =
-  (models.User as Model<IDBUser>) || model<IDBUser>('User', UserSchema)
+  (models?.User as Model<IDBUser>) || model<IDBUser>('User', UserSchema)
