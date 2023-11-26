@@ -13,6 +13,8 @@ import { QuestionModel } from '@/database/question.model'
 import { UserModel } from '@/database/user.model'
 import { InteractionModel } from '@/database/interaction.model'
 import { PAGINATION_BASE_LIMIT } from '@/constants'
+import { toPlainObject } from '../utils'
+import { IAnswer } from '@/types'
 
 export const createAnswer = async (params: ICreateAnswerParams) => {
   try {
@@ -108,6 +110,30 @@ export const getAnswerList = async (params: IGetAnswersParams) => {
     const hasNextPage = totalAnswers > limit * (page - 1) + answers.length
 
     return { answers, hasNextPage, totalAnswers }
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const getAnswerSearchByContent = async (
+  content: string,
+  limit?: number
+): Promise<IAnswer[]> => {
+  try {
+    connectToDatabase()
+    const regexQuery = { $regex: content, $options: 'i' }
+
+    let query = AnswerModel.find({ content: regexQuery }).populate({
+      path: 'question',
+      model: QuestionModel,
+      select: 'slug title',
+    })
+    if (limit) {
+      query = query.limit(limit)
+    }
+
+    return toPlainObject(await query)
   } catch (error) {
     console.log(error)
     throw error

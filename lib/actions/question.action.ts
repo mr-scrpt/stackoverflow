@@ -8,14 +8,14 @@ import { TagModel } from '@/database/tag.model'
 import { UserModel } from '@/database/user.model'
 import { IQuestion } from '@/types'
 import {
-    ICreateQuestionParams,
-    IDeleteQuestionParams,
-    IEditQuestionParams,
-    IGetQuestionsByTagIdParams,
-    IGetQuestionsParams,
-    IGetSavedQuestionsParams,
-    IQuestionVoteParams,
-    IToggleSaveQuestionParams,
+  ICreateQuestionParams,
+  IDeleteQuestionParams,
+  IEditQuestionParams,
+  IGetQuestionsByTagIdParams,
+  IGetQuestionsParams,
+  IGetSavedQuestionsParams,
+  IQuestionVoteParams,
+  IToggleSaveQuestionParams,
 } from '@/types/shared'
 import { FilterQuery } from 'mongoose'
 import { revalidatePath } from 'next/cache'
@@ -95,6 +95,24 @@ export const fetchQuestionBySlug = async (slug: string) => {
 
     // return question
     return toPlainObject(question)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+export const getQuestionsSearchByName = async (
+  title: string,
+  limit?: number
+): Promise<IQuestion[]> => {
+  try {
+    connectToDatabase()
+    const regexQuery = { $regex: title, $options: 'i' }
+    let query = QuestionModel.find({ title: regexQuery })
+    if (limit) {
+      query = query.limit(limit)
+    }
+
+    return toPlainObject(await query)
   } catch (error) {
     console.log(error)
     throw error

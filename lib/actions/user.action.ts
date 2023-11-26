@@ -59,6 +59,26 @@ export const getUserById = async (
   }
 }
 
+export const getUserSearchByUsername = async (
+  username: string,
+  limit?: number
+): Promise<IUser[]> => {
+  try {
+    connectToDatabase()
+    const regexQuery = { $regex: username, $options: 'i' }
+
+    let query = UserModel.find({ username: regexQuery })
+    if (limit) {
+      query = query.limit(limit)
+    }
+
+    return toPlainObject(await query)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
 export const getAllUsers = async (
   params: IGetAllUsersParams
 ): Promise<{ users: IUser[]; hasNextPage: boolean }> => {

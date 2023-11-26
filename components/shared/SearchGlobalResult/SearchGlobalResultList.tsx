@@ -4,6 +4,12 @@ import { IFilteredResultItem } from '@/types'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { FC, HTMLAttributes, useEffect, useState } from 'react'
+import {
+  ISearchGlobalResult,
+  ISearchGlobalTransformedResult,
+  SearchTypeEnum,
+} from '@/types/shared'
+import { transformSearchData } from './SearchGlobalResult.helper'
 
 interface SearchGlobalResultListProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -13,22 +19,23 @@ export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
   const searchParams = useSearchParams()
 
   const [isLoading, setIsLoading] = useState(false)
-  const [result, setResult] = useState<IFilteredResultItem[]>([])
+  const [result, setResult] = useState<ISearchGlobalTransformedResult[]>([])
 
   const global = searchParams.get('global')
   const type = searchParams.get('type')
 
   useEffect(() => {
     const fetchResult = async () => {
-      console.log('fetch')
       // setResult([])
+      if (!global) return null
       setIsLoading(true)
 
       try {
         // EVERYTHING EVERYWHERE ALL AT ONCE...
         const res = await globalSearch({ query: global, type })
-        console.log('res', res)
-        setResult(res)
+        const searchData = transformSearchData(res)
+        console.log('searchData', searchData)
+        setResult(searchData)
       } catch (error) {
         console.log(error)
         throw error
@@ -39,22 +46,6 @@ export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
 
     if (global) fetchResult()
   }, [global, type])
-
-  // how to render specific link
-  function renderLink(type: string, slug: string, id?: string) {
-    switch (type) {
-      case 'question':
-        return `/question/${slug}`
-      case 'answer':
-        return `/question/${slug}#${id}`
-      case 'tag':
-        return `/tag/${slug}`
-      case 'user':
-        return `/profile/${slug}`
-      default:
-        return '/'
-    }
-  }
 
   return (
     <div className="mt-3 bg-light-800 dark:bg-dark-400 w-full absolute top-full z-10 rounded-xl py-5 shadow-sm">
@@ -77,7 +68,7 @@ export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
             {result.length ? (
               result.map((item) => {
                 const title =
-                  item.link === '' ? (
+                  item.type === SearchTypeEnum.ANSWER ? (
                     <span key={item.type} className="text-light400_light500">
                       {item.title}
                     </span>
@@ -100,7 +91,7 @@ export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
                     <div className="flex flex-col gap-3">
                       {item.data.map((inner) => (
                         <Link
-                          href={renderLink(item.type, inner.link, inner.id)}
+                          href={inner.link}
                           key={inner.id}
                           className="flex items-start gap-2 items-center cursor-pointer"
                         >
