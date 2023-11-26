@@ -5,8 +5,9 @@ import { FC, HTMLAttributes, useEffect, useRef, useState } from 'react'
 import { Search } from '../Search/Search'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils'
-import { SearchGlobalResultList } from '../SearchGlobalResult/SearchGlobalResultList'
+import { SearchGlobalResultList } from './SearchGlobalResultList'
 import { useOutsideClick } from '@/lib/hook/clickOutside'
+import { TIME_DEBOUNCE_DELAY } from '@/constants'
 
 interface SearchGlobalProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -14,6 +15,8 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  console.log('pathname', pathname)
+  console.log('router', router.asPath)
 
   const queryLocal = searchParams.get('q') // local search value
   const queryGlobal = searchParams.get('global')
@@ -35,13 +38,14 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
     callback: () => {
       if (isOpen) {
         setIsOpen(false)
-        setSearch('')
+        // setSearch('')
       }
     },
   })
   //
   useEffect(() => {
     setIsOpen(false)
+    setSearch('')
   }, [pathname])
 
   useEffect(() => {
@@ -55,27 +59,7 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
 
         router.push(newUrl, { scroll: false })
       }
-      if (search) {
-        const newUrl = formUrlQuery({
-          params: searchParams.toString(),
-          key: 'global',
-          value: search,
-        })
-
-        router.push(newUrl, { scroll: false })
-      } else {
-        // if local search exist -> clear
-        if (queryLocal) {
-          console.log('query', queryLocal)
-          const newUrl = removeKeysFromQuery({
-            params: searchParams.toString(),
-            keysToRemove: ['q', 'type'],
-          })
-          router.push(newUrl, { scroll: false })
-          console.log('remove', newUrl)
-        }
-      }
-    }, 300)
+    }, TIME_DEBOUNCE_DELAY)
 
     return () => clearTimeout(delayDebouncedFn)
   }, [search, router, pathname, queryLocal, searchParams])

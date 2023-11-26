@@ -1,3 +1,4 @@
+'use client'
 import { globalSearch } from '@/lib/actions/global.action'
 import { ISearchGlobalTransformedResult } from '@/types/shared'
 import { useSearchParams } from 'next/navigation'
@@ -22,7 +23,6 @@ export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
 
   useEffect(() => {
     const fetchResult = async () => {
-      // setResult([])
       if (!global) return null
       setIsLoading(true)
 

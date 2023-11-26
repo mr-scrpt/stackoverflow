@@ -1,6 +1,6 @@
+'use client'
 import { ISearchGlobalTransformedResult, SearchTypeEnum } from '@/types/shared'
 import Link from 'next/link'
-import Image from 'next/image'
 import { FC, HTMLAttributes } from 'react'
 import { SearchGlobalResultItem } from './SearchGlobalResultItem'
 

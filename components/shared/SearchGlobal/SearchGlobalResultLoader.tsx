@@ -1,3 +1,4 @@
+'use client'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { FC, HTMLAttributes } from 'react'
 

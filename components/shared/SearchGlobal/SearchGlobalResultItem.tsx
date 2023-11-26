@@ -1,3 +1,4 @@
+'use client'
 import { ISearchGlobalDataItem } from '@/types/shared'
 import Link from 'next/link'
 import Image from 'next/image'
