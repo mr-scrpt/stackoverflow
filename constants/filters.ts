@@ -46,7 +46,7 @@ export const HOME_PAGE_FILTER = [
 //   { name: FilterDataEnum.UNANSWERED, value: FilterDataEnum.UNANSWERED },
 // ]
 
-export const GlobalSearchFilters = [
+export const GLOBAL_SEARCH_FILTER = [
   { name: 'Question', value: 'question' },
   { name: 'Answer', value: 'answer' },
   { name: 'User', value: 'user' },

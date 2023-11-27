@@ -1,5 +1,6 @@
 'use client'
 import { ISearchGlobalDataItem } from '@/types/shared'
+import TagIcon from '@/public/assets/icons/tag.svg'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FC, HTMLAttributes } from 'react'
@@ -16,17 +17,18 @@ export const SearchGlobalResultItem: FC<SearchGlobalResultItemProps> = (
     <Link
       href={item.link}
       key={item.id}
-      className="flex items-start gap-2 items-center cursor-pointer"
+      className="flex items-start gap-2 items-center cursor-pointer group"
     >
-      <Image
-        src="/assets/icons/tag.svg"
-        alt="tag"
-        width={16}
-        height={16}
-        className="invert-colors object-contain"
-      />
+      {/* <Image */}
+      {/*   src={tagIcon} */}
+      {/*   alt="tag" */}
+      {/*   width={16} */}
+      {/*   height={16} */}
+      {/*   className="object-contain fill-red-400" */}
+      {/* /> */}
+      <TagIcon className="object-contain stroke-dark-500 group opacity-60 dark:stroke-light-400 group-hover:stroke-primary-500 transition-all hover:opacity-100" />
       <div className="flex flex-col">
-        <span className="body-medium text-dark200_light800 line-clamp-1">
+        <span className="body-medium transition-all line-clamp-1 group-hover:text-primary-500 dark:text-light-800 dark:group-hover:text-primary-500">
           {item.title}
         </span>
       </div>

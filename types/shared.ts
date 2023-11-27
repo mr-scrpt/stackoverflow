@@ -224,7 +224,7 @@ export interface ISearchGlobalResult {
 }
 export interface ISearchGlobalTransformedResult {
   type: string
-  title: string
+  title?: string
   link: string
   data: ISearchGlobalDataItem[]
 }

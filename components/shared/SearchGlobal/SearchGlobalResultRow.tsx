@@ -32,7 +32,7 @@ export const SearchGlobalResultRow: FC<SearchGlobalResultItemProps> = (
       key={item.type}
       className="flex flex-wrap w-full items-start gap-3 px-5 py-2.5 hover:bg-light-700/5 dark:bg-dark-700/50"
     >
-      <div className="w-full">{title}</div>
+      {item.title && <div className="w-full">{title}</div>}
       <div className="flex flex-col gap-3">
         {item.data.map((inner) => (
           <SearchGlobalResultItem key={inner.id} item={inner} />

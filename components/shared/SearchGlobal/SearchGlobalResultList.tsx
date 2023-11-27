@@ -3,10 +3,11 @@ import { globalSearch } from '@/lib/actions/global.action'
 import { ISearchGlobalTransformedResult } from '@/types/shared'
 import { useSearchParams } from 'next/navigation'
 import { FC, HTMLAttributes, useEffect, useState } from 'react'
-import { transformSearchData } from './SearchGlobalResult.helper'
+import { transformSearchData } from './SearchGlobal.helper'
 import { SearchGlobalResultEmpty } from './SearchGlobalResultEmpty'
 import { SearchGlobalResultLoader } from './SearchGlobalResultLoader'
 import { SearchGlobalResultRow } from './SearchGlobalResultRow'
+import { SearchGlobalFilterList } from './SearchGlobalFilterList'
 
 interface SearchGlobalResultListProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -43,8 +44,7 @@ export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
 
   return (
     <div className="mt-3 bg-light-800 dark:bg-dark-400 w-full absolute top-full z-10 rounded-xl py-5 shadow-sm">
-      {/* <GlobalFilter /> */}
-
+      <SearchGlobalFilterList />
       {/* divider */}
       <div className="my-5 h-[1px] bg-light-700/50 dark:bg-dark-500/50" />
 
