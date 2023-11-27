@@ -51,12 +51,12 @@ export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
   }, [global, type])
 
   return (
-    <div className="mt-3 bg-light-800 dark:bg-dark-400 w-full absolute top-full z-10 rounded-xl py-5 shadow-sm">
+    <div className="mt-3 bg-light-700 dark:bg-dark-400 w-full absolute top-full z-10 rounded-xl py-5 shadow-sm">
       <SearchGlobalFilterList />
       {/* divider */}
       <div className="my-5 h-[1px] bg-light-700/50 dark:bg-dark-500/50" />
 
-      <div className="space-y-5">
+      <div className="space-y-5 max-h-[300px] overflow-auto custom-scrollbar">
         <p className="base-bold text-dark400_light800 px-5">Top Match</p>
         {isLoading ? (
           <SearchGlobalResultLoader />

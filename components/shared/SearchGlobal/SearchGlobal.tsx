@@ -2,12 +2,12 @@
 
 import { FC, HTMLAttributes, useEffect, useRef, useState } from 'react'
 
-import { Search } from '../Search/Search'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils'
-import { SearchGlobalResultList } from './SearchGlobalResultList'
-import { useOutsideClick } from '@/lib/hook/clickOutside'
 import { TIME_DEBOUNCE_DELAY } from '@/constants'
+import { useOutsideClick } from '@/lib/hook/clickOutside'
+import { formUrlQuery } from '@/lib/utils'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { Search } from '../Search/Search'
+import { SearchGlobalResultList } from './SearchGlobalResultList'
 
 interface SearchGlobalProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -16,7 +16,6 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   console.log('pathname', pathname)
-  console.log('router', router.asPath)
 
   const queryLocal = searchParams.get('q') // local search value
   const queryGlobal = searchParams.get('global')
