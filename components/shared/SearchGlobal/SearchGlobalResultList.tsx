@@ -56,7 +56,7 @@ export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
       {/* divider */}
       <div className="my-5 h-[1px] bg-light-700/50 dark:bg-dark-500/50" />
 
-      <div className="space-y-5 max-h-[300px] overflow-auto custom-scrollbar">
+      <div className="space-y-5 max-h-[300px] overflow-auto custom-scrollbar md:max-h-[600px]">
         <p className="base-bold text-dark400_light800 px-5">Top Match</p>
         {isLoading ? (
           <SearchGlobalResultLoader />
