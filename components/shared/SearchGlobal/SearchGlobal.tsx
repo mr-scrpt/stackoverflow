@@ -4,7 +4,7 @@ import { FC, HTMLAttributes, useEffect, useRef, useState } from 'react'
 
 import { TIME_DEBOUNCE_DELAY } from '@/constants'
 import { useOutsideClick } from '@/lib/hook/clickOutside'
-import { formUrlQuery } from '@/lib/utils'
+import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Search } from '../Search/Search'
 import { SearchGlobalResultList } from './SearchGlobalResultList'
@@ -15,40 +15,55 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  console.log('pathname', pathname)
 
-  const queryLocal = searchParams.get('q') // local search value
-  const queryGlobal = searchParams.get('global')
+  const query = searchParams.get('global')
 
-  const [search, setSearch] = useState(queryGlobal || '')
+  const [search, setSearch] = useState('')
   const [isOpen, setIsOpen] = useState(false)
-  const searchContainerRef = useRef<HTMLDivElement>(null)
-
-  // const globalPathRemove = () => {
-  //   const newUrl = removeKeysFromQuery({
-  //     params: searchParams.toString(),
-  //     keysToRemove: ['global'],
-  //   })
-  //   router.push(newUrl, { scroll: false })
-  // }
-
-  useOutsideClick({
-    ref: searchContainerRef,
-    callback: () => {
-      if (isOpen) {
-        setIsOpen(false)
-        // setSearch('')
-      }
-    },
-  })
-  //
   useEffect(() => {
-    setIsOpen(false)
-    setSearch('')
+    if (query) {
+      setIsOpen(true)
+      setSearch(query)
+    }
+  }, [query])
+  const searchContainerRef = useRef(null)
+  // useOutsideClick({
+  //   ref: searchContainerRef,
+  //   callback: () => {
+  //     if (isOpen) {
+  //       setIsOpen(false)
+  //       setSearch('')
+  //     }
+  //   },
+  // })
+
+  useEffect(() => {
+    // click outside global search -> close and rest
+    const handleOutsideClick = (e: any) => {
+      const anchor = e.target.closest('a')
+      if (anchor) {
+        router.push(anchor.getAttribute('href'))
+      }
+
+      // @ts-ignore
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(e.target)
+      ) {
+        setIsOpen(false)
+        setSearch('')
+      }
+    }
+
+    setIsOpen(false) // if path changes -> close
+
+    document.addEventListener('click', handleOutsideClick)
+
+    return () => document.removeEventListener('click', handleOutsideClick)
   }, [pathname])
 
   useEffect(() => {
-    const delayDebouncedFn = setTimeout(() => {
+    const delayDebounceFn = setTimeout(() => {
       if (search) {
         const newUrl = formUrlQuery({
           params: searchParams.toString(),
@@ -57,11 +72,20 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
         })
 
         router.push(newUrl, { scroll: false })
-      }
-    }, TIME_DEBOUNCE_DELAY)
+      } else {
+        if (query) {
+          const newUrl = removeKeysFromQuery({
+            params: searchParams.toString(),
+            keysToRemove: ['global', 'type'],
+          })
 
-    return () => clearTimeout(delayDebouncedFn)
-  }, [search, router, pathname, queryLocal, searchParams])
+          router.push(newUrl, { scroll: false })
+        }
+      }
+    }, 300)
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [search, pathname, router, searchParams, query])
 
   const onSearch = (str: string) => {
     setSearch(str)
