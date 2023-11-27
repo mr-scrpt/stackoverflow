@@ -1,6 +1,6 @@
 'use server'
 
-import { GLOBAL_SEARCH_LIMIT } from '@/constants'
+import { GLOBAL_SEARCH_LIMIT, GLOBAL_SEARCH_LIMIT_SINGLE } from '@/constants'
 import {
   ISearchGlobalResult,
   ISearchParams,
@@ -64,7 +64,7 @@ export const globalSearch = async (
       ]
       results.push(...data)
     } else {
-      const requestList = requestCollection(query, limit)
+      const requestList = requestCollection(query, GLOBAL_SEARCH_LIMIT_SINGLE)
       const data = { type, data: mapData(await requestList[type](), type) }
       results.push(data)
     }
