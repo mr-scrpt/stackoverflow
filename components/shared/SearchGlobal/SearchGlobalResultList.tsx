@@ -8,6 +8,7 @@ import { SearchGlobalResultEmpty } from './SearchGlobalResultEmpty'
 import { SearchGlobalResultLoader } from './SearchGlobalResultLoader'
 import { SearchGlobalResultRow } from './SearchGlobalResultRow'
 import { SearchGlobalFilterList } from './SearchGlobalFilterList'
+import { GLOBAL_SEARCH_FILTER } from '@/constants/filters'
 
 interface SearchGlobalResultListProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -28,8 +29,15 @@ export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
       setIsLoading(true)
 
       try {
-        const res = await globalSearch({ query: global, type })
+        const typeExisting = GLOBAL_SEARCH_FILTER.find(
+          (item) => item.value === type
+        )
+        const res = await globalSearch({
+          query: global,
+          type: typeExisting?.value,
+        })
         const searchData = transformSearchData(res)
+        // console.log('searchData', searchData)
         setResult(searchData)
       } catch (error) {
         console.log(error)

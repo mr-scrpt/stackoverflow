@@ -32,9 +32,16 @@ export interface IDeleteAnswerParams {
   path: string
 }
 
+export enum SearchTypeEnum {
+  TAG = 'tag',
+  QUESTION = 'question',
+  USER = 'user',
+  ANSWER = 'answer',
+}
+
 export interface ISearchParams {
   query: string
-  type?: string | null
+  type?: SearchTypeEnum
   limit?: number
 }
 
@@ -207,12 +214,13 @@ export interface IRemoveUrlQueryParams {
 }
 export type TagPageFilterValue = (typeof TAG_PAGE_FILTER)[number]['value']
 
-export enum SearchTypeEnum {
-  TAG = 'tag',
-  QUESTION = 'question',
-  USER = 'user',
-  ANSWER = 'answer',
-}
+// export enum SearchTypeEnum {
+//   TAG = 'tag',
+//   QUESTION = 'question',
+//   USER = 'user',
+//   ANSWER = 'answer',
+// }
+
 export interface ISearchGlobalDataItem {
   title: string
   link: string

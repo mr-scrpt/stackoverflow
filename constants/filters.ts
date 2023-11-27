@@ -1,3 +1,5 @@
+import { SearchTypeEnum } from '@/types/shared'
+
 export const ANSWER_PAGE_FILTER = [
   { name: 'Highest Upvotes', value: 'highestUpvotes' },
   { name: 'Lowest Upvotes', value: 'lowestUpvotes' },
@@ -47,8 +49,8 @@ export const HOME_PAGE_FILTER = [
 // ]
 
 export const GLOBAL_SEARCH_FILTER = [
-  { name: 'Question', value: 'question' },
-  { name: 'Answer', value: 'answer' },
-  { name: 'User', value: 'user' },
-  { name: 'Tag', value: 'tag' },
+  { name: 'Question', value: SearchTypeEnum.QUESTION },
+  { name: 'Answer', value: SearchTypeEnum.ANSWER },
+  { name: 'User', value: SearchTypeEnum.USER },
+  { name: 'Tag', value: SearchTypeEnum.TAG },
 ] as const
