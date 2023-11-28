@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import { Search } from '../Search/Search'
 import { SearchGlobalResultList } from './SearchGlobalResultList'
+import { useOutsideClick } from '@/lib/hook/clickOutside'
 
 interface SearchGlobalProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -28,28 +29,38 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
     }
   }, [query])
 
-  const handleOutsideClick = (e: any) => {
-    const anchor = e.target.closest('a')
-    const ref = searchContainerRef.current
-    const isOutside = !ref.contains(e.target) || null
-    if (isOutside) {
+  useOutsideClick({
+    ref: searchContainerRef,
+    callback: () => {
       setSearch('')
       setIsOpen(false)
-      if (!anchor) {
-        const newUrl = removeKeysFromQuery({
-          params: searchParams.toString(),
-          keysToRemove: ['global', 'type'],
-        })
+    },
+    keysToRemove: ['global', 'type'],
+    params: searchParams.toString(),
+  })
 
-        router.replace(newUrl, { scroll: false })
-      }
-    }
-  }
-  useEffect(() => {
-    document.addEventListener('click', handleOutsideClick)
-
-    return () => document.removeEventListener('click', handleOutsideClick)
-  }, [])
+  // const handleOutsideClick = (e: any) => {
+  //   const anchor = e.target.closest('a')
+  //   const ref = searchContainerRef.current
+  //   const isOutside = !ref.contains(e.target) || null
+  //   if (isOutside) {
+  //     setSearch('')
+  //     setIsOpen(false)
+  //     if (!anchor) {
+  //       const newUrl = removeKeysFromQuery({
+  //         params: searchParams.toString(),
+  //         keysToRemove: ['global', 'type'],
+  //       })
+  //
+  //       router.replace(newUrl, { scroll: false })
+  //     }
+  //   }
+  // }
+  // useEffect(() => {
+  //   document.addEventListener('click', handleOutsideClick)
+  //
+  //   return () => document.removeEventListener('click', handleOutsideClick)
+  // }, [])
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {

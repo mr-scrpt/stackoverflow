@@ -1,26 +1,34 @@
 import { RefObject, useEffect } from 'react'
+import { removeKeysFromQuery } from '../utils'
+import { useRouter } from 'next/navigation'
 interface UseClickOutsideProps {
   ref: RefObject<HTMLElement>
   callback: () => void
-  paramsToRremove?: Array<string>
+  keysToRemove?: Array<string>
+  params?: string
 }
 
 export const useOutsideClick = (props: UseClickOutsideProps) => {
-  const { ref, callback, paramsToRemove } = props
+  const { ref, callback, keysToRemove, params } = props
+  const router = useRouter()
 
-  const handleOutsideClick = (event: any) => {
-    const anchor = event.target.closest('a')
-    setSearch('')
-    setIsOpen(false)
-    if (!anchor) {
-      const newUrl = removeKeysFromQuery({
-        params: searchParams.toString(),
-        keysToRemove: ['global', 'type'],
-      })
+  const handleOutsideClick = (e: any) => {
+    const anchor = e.target.closest('a')
+    const r = ref.current
+    const isOutside = !r.contains(e.target) || null
+    if (isOutside) {
+      callback()
+      if (!anchor && params && keysToRemove) {
+        const newUrl = removeKeysFromQuery({
+          params,
+          keysToRemove,
+        })
 
-      router.replace(newUrl, { scroll: false })
+        router.replace(newUrl, { scroll: false })
+      }
     }
   }
+
   useEffect(() => {
     document.addEventListener('click', handleOutsideClick)
 
