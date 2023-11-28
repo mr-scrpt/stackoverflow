@@ -53,4 +53,4 @@ export const GLOBAL_SEARCH_FILTER = [
   { name: 'Answer', value: SearchTypeEnum.ANSWER },
   { name: 'User', value: SearchTypeEnum.USER },
   { name: 'Tag', value: SearchTypeEnum.TAG },
-] as const
+]

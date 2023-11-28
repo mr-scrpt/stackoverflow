@@ -11,7 +11,6 @@ interface PaginationProps extends HTMLAttributes<HTMLDivElement> {
 
 export const Pagination: FC<PaginationProps> = (props) => {
   const { handleNavigation, pageCurrent, hasNextPage } = props
-  console.log('pageCurrent', pageCurrent)
   return (
     <div className="flex w-full justify-center items-center gap-2">
       <Button
