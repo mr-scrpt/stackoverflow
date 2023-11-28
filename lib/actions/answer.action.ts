@@ -23,12 +23,24 @@ export const createAnswer = async (params: ICreateAnswerParams) => {
     const { author, content, question, path } = params
     const newAnswer = await AnswerModel.create({ author, content, question })
 
+    if (!newAnswer) throw new Error('Answer is not created')
     // Add answer into question's answer array
-    await QuestionModel.findByIdAndUpdate(question, {
+    const result = await QuestionModel.findByIdAndUpdate(question, {
       $push: { answers: newAnswer._id },
     })
 
-    // TODO: Add interaction...
+    if (!result) throw new Error('Answer is not add to question')
+
+    await InteractionModel.create({
+      user: author,
+      action: 'answer',
+      question,
+      answer: newAnswer._id,
+      tags: result.tags,
+    })
+
+    // reputation + 10
+    await UserModel.findByIdAndUpdate(author, { $inc: { reputation: 10 } })
 
     revalidatePath(path)
 
@@ -165,7 +177,17 @@ export const upVoteAnswer = async (params: IAnswerVoteParams) => {
 
     if (!answer) throw new Error('Answer not found')
 
-    // TODO: interaction
+    // reputation
+    if (userId !== answer.author.toString()) {
+      // user reputation + 2
+      await UserModel.findByIdAndUpdate(userId, {
+        $inc: { reputation: hasupVoted ? -2 : 2 },
+      })
+      // author reputation + 10
+      await UserModel.findByIdAndUpdate(answer.author, {
+        $inc: { reputation: hasupVoted ? -10 : 10 },
+      })
+    }
 
     revalidatePath(path)
   } catch (error) {
@@ -199,7 +221,16 @@ export const downVoteAnswer = async (params: IAnswerVoteParams) => {
 
     if (!answer) throw new Error('Answer not found')
 
-    // TODO: interaction
+    if (userId !== answer.author.toString()) {
+      // user reputation - 2
+      await UserModel.findByIdAndUpdate(userId, {
+        $inc: { reputation: hasdownVoted ? 2 : -2 },
+      })
+      // author reputation + 10
+      await UserModel.findByIdAndUpdate(answer.author, {
+        $inc: { reputation: hasdownVoted ? 10 : -10 },
+      })
+    }
 
     revalidatePath(path)
   } catch (error) {
