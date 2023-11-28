@@ -1,7 +1,7 @@
 'use client'
 import { FC, HTMLAttributes, useEffect, useRef, useState } from 'react'
 
-import { formUrlQuery } from '@/lib/utils'
+import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import { useOutsideClick } from '@/lib/hook/clickOutside'
@@ -17,9 +17,6 @@ interface SearchGlobalProps extends HTMLAttributes<HTMLDivElement> {}
 export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
   const router = useRouter()
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [result, setResult] = useState<ISearchGlobalTransformedResult[]>([])
-
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const queryGlobal = searchParams.get(URL_SEARCH_PARMS.global)
@@ -29,18 +26,26 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
 
   const [search, setSearch] = useState('')
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoadingData, setIsLoadingData] = useState(false)
+  const [result, setResult] = useState<ISearchGlobalTransformedResult[]>([])
+  const [activeFilter, setActiveFilter] = useState('')
 
   useEffect(() => {
     if (queryGlobal) {
       setIsOpen(true)
       setSearch(queryGlobal)
     }
-  }, [queryGlobal])
+    if (queryType) {
+      setIsOpen(true)
+      setActiveFilter(queryType)
+    }
+  }, [queryGlobal, queryType])
 
   useOutsideClick({
     ref: searchContainerRef,
     callback: () => {
       setSearch('')
+      setActiveFilter('')
       setIsOpen(false)
     },
     keysToRemove: [URL_SEARCH_PARMS.global, URL_SEARCH_PARMS.type],
@@ -67,7 +72,7 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
   useEffect(() => {
     if (queryGlobal) {
       const fetchResult = async () => {
-        setIsLoading(true)
+        setIsLoadingData(true)
 
         try {
           const typeExisting = GLOBAL_SEARCH_FILTER.find(
@@ -83,13 +88,38 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
           console.log(error)
           throw error
         } finally {
-          setIsLoading(false)
+          setIsLoadingData(false)
         }
       }
 
       fetchResult()
     }
   }, [queryType, queryGlobal])
+
+  const onFilterClick = (type: string) => {
+    console.log('click activeFilter', activeFilter)
+    if (activeFilter === type) {
+      // if tag being clicked === active tag => clear filter
+      setActiveFilter('')
+
+      const newUrl = removeKeysFromQuery({
+        params: searchParams.toString(),
+        keysToRemove: [URL_SEARCH_PARMS.type],
+      })
+
+      router.push(newUrl, { scroll: false })
+    } else {
+      setActiveFilter(type)
+
+      const newUrl = formUrlQuery({
+        params: searchParams.toString(),
+        key: URL_SEARCH_PARMS.type,
+        value: type.toLowerCase(),
+      })
+
+      router.push(newUrl, { scroll: false })
+    }
+  }
 
   const onSearch = (str: string) => {
     setSearch(str)
@@ -109,7 +139,15 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
         iconPosition="left"
         className="max-w-[600px] w-full max-lg:hidden"
       />
-      {isOpen && <SearchGlobalResultList list={result} isLoading={isLoading} />}
+      {isOpen && (
+        <SearchGlobalResultList
+          list={result}
+          listFilter={GLOBAL_SEARCH_FILTER}
+          activeFilter={activeFilter}
+          isLoading={isLoadingData}
+          onFilterClick={onFilterClick}
+        />
+      )}
     </div>
   )
 }

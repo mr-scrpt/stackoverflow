@@ -5,7 +5,6 @@ import {
   ISearchGlobalTransformedResult,
   SearchTypeEnum,
 } from '@/types/shared'
-import { ISearchGlobalDataItem } from './ISearchGlobalDataItem'
 
 export const transformSearchData = (
   data: ISearchGlobalResult[]

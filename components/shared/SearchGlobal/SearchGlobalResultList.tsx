@@ -1,28 +1,36 @@
 'use client'
-import { globalSearch } from '@/lib/actions/global.action'
-import { ISearchGlobalTransformedResult } from '@/types/shared'
-import { useSearchParams } from 'next/navigation'
-import { FC, HTMLAttributes, useEffect, useState } from 'react'
-import { transformSearchData } from './SearchGlobal.helper'
+import {
+  ISearchGlobalFiter,
+  ISearchGlobalTransformedResult,
+  SearchTypeEnum,
+} from '@/types/shared'
+import { FC, HTMLAttributes } from 'react'
+import { SearchGlobalFilterList } from './SearchGlobalFilterList'
 import { SearchGlobalResultEmpty } from './SearchGlobalResultEmpty'
 import { SearchGlobalResultLoader } from './SearchGlobalResultLoader'
 import { SearchGlobalResultRow } from './SearchGlobalResultRow'
-import { SearchGlobalFilterList } from './SearchGlobalFilterList'
-import { GLOBAL_SEARCH_FILTER, URL_SEARCH_PARMS } from '@/constants/filters'
 
 interface SearchGlobalResultListProps extends HTMLAttributes<HTMLDivElement> {
   list: ISearchGlobalTransformedResult[]
+  listFilter: ISearchGlobalFiter[]
+  activeFilter: string
   isLoading: boolean
+
+  onFilterClick: (str: SearchTypeEnum) => void
 }
 
 export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
   props
 ) => {
-  const { isLoading, list } = props
+  const { isLoading, list, listFilter, activeFilter, onFilterClick } = props
 
   return (
     <div className="mt-3 bg-light-700 dark:bg-dark-400 w-full absolute top-full z-10 rounded-xl py-5 shadow-sm">
-      <SearchGlobalFilterList />
+      <SearchGlobalFilterList
+        listFilter={listFilter}
+        activeFilter={activeFilter}
+        onFilterClick={onFilterClick}
+      />
       {/* divider */}
       <div className="my-5 h-[1px] bg-light-700/50 dark:bg-dark-500/50" />
 

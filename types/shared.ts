@@ -237,6 +237,11 @@ export interface ISearchGlobalTransformedResult {
   data: ISearchGlobalDataItem[]
 }
 
+export type ISearchGlobalFiter = {
+  name: string
+  value: SearchTypeEnum
+}
+
 export interface ISearchGlobalCategoryInfo {
   title: string
   link: string
