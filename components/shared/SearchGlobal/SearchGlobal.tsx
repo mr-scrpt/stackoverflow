@@ -16,6 +16,8 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
   const searchParams = useSearchParams()
   const query = searchParams.get('global')
 
+  const searchContainerRef = useRef(null)
+
   const [search, setSearch] = useState('')
   const [isOpen, setIsOpen] = useState(false)
 
@@ -25,19 +27,22 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
       setSearch(query)
     }
   }, [query])
-  const searchContainerRef = useRef(null)
 
-  const handleOutsideClick = (event: any) => {
-    const anchor = event.target.closest('a')
-    setSearch('')
-    setIsOpen(false)
-    if (!anchor) {
-      const newUrl = removeKeysFromQuery({
-        params: searchParams.toString(),
-        keysToRemove: ['global', 'type'],
-      })
+  const handleOutsideClick = (e: any) => {
+    const anchor = e.target.closest('a')
+    const ref = searchContainerRef.current
+    const isOutside = !ref.contains(e.target) || null
+    if (isOutside) {
+      setSearch('')
+      setIsOpen(false)
+      if (!anchor) {
+        const newUrl = removeKeysFromQuery({
+          params: searchParams.toString(),
+          keysToRemove: ['global', 'type'],
+        })
 
-      router.replace(newUrl, { scroll: false })
+        router.replace(newUrl, { scroll: false })
+      }
     }
   }
   useEffect(() => {
