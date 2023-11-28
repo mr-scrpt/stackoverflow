@@ -222,11 +222,9 @@ export const downVoteAnswer = async (params: IAnswerVoteParams) => {
     if (!answer) throw new Error('Answer not found')
 
     if (userId !== answer.author.toString()) {
-      // user reputation - 2
       await UserModel.findByIdAndUpdate(userId, {
         $inc: { reputation: hasdownVoted ? 2 : -2 },
       })
-      // author reputation + 10
       await UserModel.findByIdAndUpdate(answer.author, {
         $inc: { reputation: hasdownVoted ? 10 : -10 },
       })
