@@ -224,6 +224,18 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
       tagDocuments.push(existingTag.tag._id)
     }
 
+    await InteractionModel.create({
+      user: author,
+      action: 'ask_question',
+      question: question._id,
+      tags: tagDocuments,
+    })
+
+    // reputation + 5
+    if (question) {
+      await UserModel.findByIdAndUpdate(author, { $inc: { reputation: 5 } })
+    }
+
     const result = await QuestionModel.findByIdAndUpdate(question._id, {
       $push: { tags: { $each: tagDocuments } },
     }).lean()
@@ -315,6 +327,17 @@ export const upVoteQuestion = async (params: IQuestionVoteParams) => {
 
     if (!question) throw new Error('Question not found!')
 
+    // reputation
+    if (userId !== question.author.toString()) {
+      // user reputation + 1
+      await UserModel.findByIdAndUpdate(userId, {
+        $inc: { reputation: hasupVoted ? -1 : 1 },
+      })
+      // author reputation + 10
+      await UserModel.findByIdAndUpdate(question.author, {
+        $inc: { reputation: hasupVoted ? -10 : 10 },
+      })
+    }
     // TODO: interaction
 
     revalidatePath(path)
@@ -353,7 +376,17 @@ export const downVoteQuestion = async (params: IQuestionVoteParams) => {
 
     if (!question) throw new Error('Question not found!')
 
-    // TODO: interaction
+    // reputation
+    if (userId !== question.author.toString()) {
+      // user reputation - 1
+      await UserModel.findByIdAndUpdate(userId, {
+        $inc: { reputation: hasdownVoted ? 1 : -1 },
+      })
+      // author reputation - 2
+      await UserModel.findByIdAndUpdate(question.author, {
+        $inc: { reputation: hasdownVoted ? 10 : -10 },
+      })
+    }
 
     revalidatePath(path)
   } catch (error) {
