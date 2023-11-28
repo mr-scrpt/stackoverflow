@@ -8,47 +8,17 @@ import { SearchGlobalResultEmpty } from './SearchGlobalResultEmpty'
 import { SearchGlobalResultLoader } from './SearchGlobalResultLoader'
 import { SearchGlobalResultRow } from './SearchGlobalResultRow'
 import { SearchGlobalFilterList } from './SearchGlobalFilterList'
-import { GLOBAL_SEARCH_FILTER } from '@/constants/filters'
+import { GLOBAL_SEARCH_FILTER, URL_SEARCH_PARMS } from '@/constants/filters'
 
-interface SearchGlobalResultListProps extends HTMLAttributes<HTMLDivElement> {}
+interface SearchGlobalResultListProps extends HTMLAttributes<HTMLDivElement> {
+  list: ISearchGlobalTransformedResult[]
+  isLoading: boolean
+}
 
 export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
   props
 ) => {
-  const searchParams = useSearchParams()
-
-  const [isLoading, setIsLoading] = useState(false)
-  const [result, setResult] = useState<ISearchGlobalTransformedResult[]>([])
-
-  const global = searchParams.get('global')
-  const type = searchParams.get('type')
-
-  useEffect(() => {
-    const fetchResult = async () => {
-      if (!global) return null
-      setIsLoading(true)
-
-      try {
-        const typeExisting = GLOBAL_SEARCH_FILTER.find(
-          (item) => item.value === type
-        )
-        const res = await globalSearch({
-          query: global,
-          type: typeExisting?.value,
-        })
-        const searchData = transformSearchData(res)
-        // console.log('searchData', searchData)
-        setResult(searchData)
-      } catch (error) {
-        console.log(error)
-        throw error
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    if (global) fetchResult()
-  }, [global, type])
+  const { isLoading, list } = props
 
   return (
     <div className="mt-3 bg-light-700 dark:bg-dark-400 w-full absolute top-full z-10 rounded-xl py-5 shadow-sm">
@@ -62,8 +32,8 @@ export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
           <SearchGlobalResultLoader />
         ) : (
           <div className="flex flex-col gap-2">
-            {result.length ? (
-              result.map((item) => {
+            {list.length ? (
+              list.map((item) => {
                 return <SearchGlobalResultRow key={item.link} item={item} />
               })
             ) : (

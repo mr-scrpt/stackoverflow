@@ -1,21 +1,29 @@
 'use client'
 import { FC, HTMLAttributes, useEffect, useRef, useState } from 'react'
 
-import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils'
+import { formUrlQuery } from '@/lib/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
+import { useOutsideClick } from '@/lib/hook/clickOutside'
 import { Search } from '../Search/Search'
 import { SearchGlobalResultList } from './SearchGlobalResultList'
-import { useOutsideClick } from '@/lib/hook/clickOutside'
+import { GLOBAL_SEARCH_FILTER, URL_SEARCH_PARMS } from '@/constants/filters'
+import { ISearchGlobalTransformedResult } from '@/types/shared'
+import { globalSearch } from '@/lib/actions/global.action'
+import { transformSearchData } from './SearchGlobal.helper'
 
 interface SearchGlobalProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
   const router = useRouter()
 
+  const [isLoading, setIsLoading] = useState(false)
+  const [result, setResult] = useState<ISearchGlobalTransformedResult[]>([])
+
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const query = searchParams.get('global')
+  const queryGlobal = searchParams.get(URL_SEARCH_PARMS.global)
+  const queryType = searchParams.get(URL_SEARCH_PARMS.type)
 
   const searchContainerRef = useRef(null)
 
@@ -23,11 +31,11 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    if (query) {
+    if (queryGlobal) {
       setIsOpen(true)
-      setSearch(query)
+      setSearch(queryGlobal)
     }
-  }, [query])
+  }, [queryGlobal])
 
   useOutsideClick({
     ref: searchContainerRef,
@@ -35,57 +43,53 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
       setSearch('')
       setIsOpen(false)
     },
-    keysToRemove: ['global', 'type'],
+    keysToRemove: [URL_SEARCH_PARMS.global, URL_SEARCH_PARMS.type],
     params: searchParams.toString(),
   })
-
-  // const handleOutsideClick = (e: any) => {
-  //   const anchor = e.target.closest('a')
-  //   const ref = searchContainerRef.current
-  //   const isOutside = !ref.contains(e.target) || null
-  //   if (isOutside) {
-  //     setSearch('')
-  //     setIsOpen(false)
-  //     if (!anchor) {
-  //       const newUrl = removeKeysFromQuery({
-  //         params: searchParams.toString(),
-  //         keysToRemove: ['global', 'type'],
-  //       })
-  //
-  //       router.replace(newUrl, { scroll: false })
-  //     }
-  //   }
-  // }
-  // useEffect(() => {
-  //   document.addEventListener('click', handleOutsideClick)
-  //
-  //   return () => document.removeEventListener('click', handleOutsideClick)
-  // }, [])
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (search) {
         const newUrl = formUrlQuery({
           params: searchParams.toString(),
-          key: 'global',
+          key: URL_SEARCH_PARMS.global,
           value: search,
         })
 
         router.replace(newUrl, { scroll: false })
-      } else {
-        if (query) {
-          // const newUrl = removeKeysFromQuery({
-          //   params: searchParams.toString(),
-          //   keysToRemove: ['global', 'type'],
-          // })
-          //
-          // router.replace(newUrl, { scroll: false })
-        }
       }
     }, 300)
 
     return () => clearTimeout(delayDebounceFn)
-  }, [search, pathname, router, searchParams, query])
+  }, [search, pathname, router, searchParams, queryGlobal])
+
+  // fetching data
+  useEffect(() => {
+    if (queryGlobal) {
+      const fetchResult = async () => {
+        setIsLoading(true)
+
+        try {
+          const typeExisting = GLOBAL_SEARCH_FILTER.find(
+            (item) => item.value === queryType
+          )
+          const res = await globalSearch({
+            query: queryGlobal,
+            type: typeExisting?.value,
+          })
+          const searchData = transformSearchData(res)
+          setResult(searchData)
+        } catch (error) {
+          console.log(error)
+          throw error
+        } finally {
+          setIsLoading(false)
+        }
+      }
+
+      fetchResult()
+    }
+  }, [queryType, queryGlobal])
 
   const onSearch = (str: string) => {
     setSearch(str)
@@ -105,7 +109,7 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
         iconPosition="left"
         className="max-w-[600px] w-full max-lg:hidden"
       />
-      {isOpen && <SearchGlobalResultList />}
+      {isOpen && <SearchGlobalResultList list={result} isLoading={isLoading} />}
     </div>
   )
 }

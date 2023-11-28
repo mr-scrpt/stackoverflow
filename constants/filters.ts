@@ -54,3 +54,9 @@ export const GLOBAL_SEARCH_FILTER = [
   { name: 'User', value: SearchTypeEnum.USER },
   { name: 'Tag', value: SearchTypeEnum.TAG },
 ]
+
+export const URL_SEARCH_PARMS = {
+  q: 'q',
+  global: 'global',
+  type: 'type',
+}

@@ -14,7 +14,7 @@ export const SearchGlobalFilterList: FC<SearchGlobalFilterListProps> = (
 
   const typeParams = searchParams.get('type')
   const [active, setActive] = useState(typeParams || '')
-  function handleTypeClick(type: string) {
+  const handleTypeClick = (type: string) => {
     if (active === type) {
       // if tag being clicked === active tag => clear filter
       setActive('')
