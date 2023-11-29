@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
 import { MenuMobile } from '../MenuMobile/MenuMobile'
-import { SearchGlobal } from '../SearchGlobal/SearchGlobal'
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher'
 
 interface NavbarProps extends HTMLAttributes<HTMLDivElement> {}
@@ -24,7 +23,6 @@ export const Navbar: FC<NavbarProps> = (props) => {
           <span className="text-primary-500">Overflow</span>
         </span>
       </Link>
-      <SearchGlobal />
       <div className="flex-between gap-5 mr-0 ml-auto">
         <ThemeSwitcher />
       </div>

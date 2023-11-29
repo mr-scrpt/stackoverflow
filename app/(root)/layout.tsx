@@ -4,11 +4,9 @@ import { SidebarRight } from '@/components/shared/SidebarRight/SidebarRight'
 import { getUserByClerkId } from '@/lib/actions/user.action'
 import { cn } from '@/lib/utils'
 import { auth } from '@clerk/nextjs'
-import { FC, HTMLAttributes } from 'react'
+import { ReactNode } from 'react'
 
-interface LayoutProps extends HTMLAttributes<HTMLDivElement> {}
-
-const Layout: FC<LayoutProps> = async (props) => {
+const Layout = async (props: { children: ReactNode }) => {
   const { children } = props
   const { userId } = auth()
 
