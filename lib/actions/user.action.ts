@@ -32,7 +32,7 @@ export async function getUserProfileBySlug(slug: string) {
     const totalAnswers = await AnswerModel.countDocuments({ author: user._id })
 
     return {
-      user,
+      user: toPlainObject(user),
       totalAnswers,
       totalQuestions,
     }
@@ -42,7 +42,7 @@ export async function getUserProfileBySlug(slug: string) {
   }
 }
 
-export const getUserById = async (
+export const getUserByClerkId = async (
   userId: string | null
 ): Promise<IUser | null> => {
   try {
@@ -59,6 +59,22 @@ export const getUserById = async (
   }
 }
 
+export const getUserById = async (
+  userId: string | null
+): Promise<IUser | null> => {
+  try {
+    if (!userId) return null
+    await connectToDatabase()
+
+    const user = await UserModel.findOne({ _id: userId })
+
+    // return JSON.parse(JSON.stringify(user))
+    return toPlainObject(user)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
 export const getUserSearchByUsername = async (
   username: string,
   limit?: number

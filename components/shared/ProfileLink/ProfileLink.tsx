@@ -11,8 +11,8 @@ interface ProfileLinkProps extends HTMLAttributes<HTMLDivElement> {
 export const ProfileLink: FC<ProfileLinkProps> = (props) => {
   const { imgUrl, href, title } = props
   return (
-    <div className="flex-center gap-1">
-      <Image src={imgUrl} alt="icon" width={20} height={20} />
+    <div className="flex flex-center gap-1">
+      <Image src={imgUrl} alt="icon" width={18} height={18} />
 
       {href ? (
         <Link

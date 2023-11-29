@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { FC, HTMLAttributes } from 'react'
 import { formatNumber } from '@/lib/utils'
+import { BadgeCounts } from '@/types'
 
 interface StatsCardProps extends HTMLAttributes<HTMLDivElement> {
   imgUrl: string
@@ -24,10 +25,11 @@ export const StatsCard: FC<StatsCardProps> = (props) => {
 interface StatsProps extends HTMLAttributes<HTMLDivElement> {
   totalQuestions: number
   totalAnswers: number
+  badge: BadgeCounts
 }
 
 export const Stats: FC<StatsProps> = (props) => {
-  const { totalQuestions, totalAnswers } = props
+  const { totalQuestions, totalAnswers, badge } = props
   return (
     <div>
       <h4 className="h3-semibold text-dark200_light900">Stats</h4>
@@ -50,17 +52,17 @@ export const Stats: FC<StatsProps> = (props) => {
 
         <StatsCard
           imgUrl="/assets/icons/gold-medal.svg"
-          value={0}
+          value={badge.GOLD}
           title="Gold Badges"
         />
         <StatsCard
           imgUrl="/assets/icons/silver-medal.svg"
-          value={0}
+          value={badge.SILVER}
           title="Silver Badges"
         />
         <StatsCard
           imgUrl="/assets/icons/bronze-medal.svg"
-          value={0}
+          value={badge.BRONZE}
           title="Bronze Badges"
         />
       </div>

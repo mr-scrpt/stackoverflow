@@ -128,6 +128,15 @@ export const getAnswerList = async (params: IGetAnswersParams) => {
   }
 }
 
+export const getAnswerListByAuthorId = async (
+  authorId: string
+): Promise<IAnswer[]> => {
+  const answersList = await AnswerModel.find({ author: authorId })
+  if (!answersList.length) throw new Error('Answers not found')
+
+  return toPlainObject(answersList)
+}
+
 export const getAnswerSearchByContent = async (
   content: string,
   limit?: number

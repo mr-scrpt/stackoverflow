@@ -7,7 +7,7 @@ import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { Button } from '@/components/ui/button'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestions } from '@/lib/actions/question.action'
-import { getUserById } from '@/lib/actions/user.action'
+import { getUserByClerkId } from '@/lib/actions/user.action'
 import { ISearchParamsProps } from '@/types'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
@@ -21,8 +21,9 @@ const HomePage = async (props: ISearchParamsProps) => {
     page: page ? +page : 1,
   })
 
+  console.log('questions', questions)
   const { userId: clerkId } = auth()
-  const userActual = await getUserById(clerkId)
+  const userActual = await getUserByClerkId(clerkId)
   console.log('page', page)
   console.log('hasNextPage', hasNextPage)
 

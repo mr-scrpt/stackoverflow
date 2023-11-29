@@ -80,7 +80,18 @@ export const getQuestions = async (
   }
 }
 
-export const fetchQuestionBySlug = async (slug: string) => {
+export const getQuestionListByAuthorId = async (
+  authorId: string
+): Promise<IQuestion[]> => {
+  const questionList = await QuestionModel.find({ author: authorId })
+  if (!questionList.length) throw new Error('Questions not found')
+
+  return toPlainObject(questionList)
+}
+
+export const fetchQuestionBySlug = async (
+  slug: string
+): Promise<{ questions: IQuestion[] }> => {
   try {
     await connectToDatabase()
     const question = await QuestionModel.findOne({ slug })

@@ -1,5 +1,5 @@
 import { ProfileFrom } from '@/components/shared/ProfileForm/ProfileFrom'
-import { getUserById } from '@/lib/actions/user.action'
+import { getUserByClerkId } from '@/lib/actions/user.action'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -31,7 +31,7 @@ const ProfileEditPage = async () => {
     )
   }
 
-  const userActual = await getUserById(userId)
+  const userActual = await getUserByClerkId(userId)
 
   if (!userActual) {
     redirect('/sign-in')

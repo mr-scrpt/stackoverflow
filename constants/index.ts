@@ -45,7 +45,7 @@ export const SIDEBAR_LINKS: SidebarLink[] = [
     label: 'Find Jobs',
   },
   {
-    imgURL: '/assets/icons/tag.svg',
+    imgURL: '/assets/icons/tag-menu.svg',
     route: '/tags',
     label: 'Tags',
   },

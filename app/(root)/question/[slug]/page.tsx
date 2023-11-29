@@ -5,7 +5,7 @@ import { ParseHTML } from '@/components/shared/ParseHTML/ParseHTML'
 import { Tag } from '@/components/shared/Tag/Tag'
 import { VoteBar } from '@/components/shared/VoteBar/VoteBar'
 import { fetchQuestionBySlug } from '@/lib/actions/question.action'
-import { getUserById } from '@/lib/actions/user.action'
+import { getUserByClerkId } from '@/lib/actions/user.action'
 import { formatNumber, getTimestamp } from '@/lib/utils'
 import { ISearchParam } from '@/types'
 import { VoteTypeEnum } from '@/types/shared'
@@ -26,7 +26,7 @@ const QuestionDetailsPage = async (props: QuestionDetailsProps) => {
   const { slug } = params
   const { userId } = auth()
 
-  const user = await getUserById(userId)
+  const user = await getUserByClerkId(userId)
 
   const question = await fetchQuestionBySlug(slug)
   if (!question) return null

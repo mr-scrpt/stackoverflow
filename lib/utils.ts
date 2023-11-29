@@ -9,6 +9,8 @@ import {
   ISearchGlobalResult,
   IUrlQueryParams,
 } from '@/types/shared'
+import { BadgeCounts } from '@/types'
+import { BADGE_CRITERIA } from '@/constants'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -73,10 +75,16 @@ export function formatNumber(number: number | string): string {
   return `${scaled.toFixed(1)}${suffix}`
 }
 
-export const getJoinedDate = (date: Date): string => {
+export const getJoinedDate = (date: Date | string): string => {
   // Extract the month and year from the Date object
-  const month = date.toLocaleString('default', { month: 'long' })
-  const year = date.getFullYear()
+  let dateInner
+  if (typeof date === 'string') {
+    dateInner = new Date(date)
+  } else {
+    dateInner = date
+  }
+  const month = dateInner.toLocaleString('default', { month: 'long' })
+  const year = dateInner.getFullYear()
 
   // Create the joined date string (e.g., "September 2023")
   const joinedDate = `${month} ${year}`
@@ -122,4 +130,37 @@ export const removeKeysFromQuery = ({
     },
     { skipNull: true }
   )
+}
+interface BadgeParams {
+  criteria: {
+    type: keyof typeof BADGE_CRITERIA
+    count: number
+  }[]
+}
+
+// badge system
+// accept user's scores and compare to criteria
+export function assignBadges(param: BadgeParams) {
+  const userBadges: BadgeCounts = {
+    GOLD: 0,
+    SILVER: 0,
+    BRONZE: 0,
+  }
+
+  const { criteria } = param // user scores
+
+  criteria.forEach((item) => {
+    const { type, count } = item
+    const badgeLevel: any = BADGE_CRITERIA[type] // {type: {GOLD, SILVER, BRONZE}}
+
+    Object.keys(badgeLevel).forEach((level: any) => {
+      // level = 'BRONZE'|| 'SILVER'||'GOLD'
+      if (count > badgeLevel[level]) {
+        // if user's value > criteria
+        userBadges[level as keyof BadgeCounts] += 1
+      }
+    })
+  })
+
+  return userBadges
 }

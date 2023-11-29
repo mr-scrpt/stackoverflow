@@ -1,8 +1,6 @@
 import { Button } from '@/components/ui/button'
-import { formUrlQuery } from '@/lib/utils'
 import { ISearchGlobalFiter, SearchTypeEnum } from '@/types/shared'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { FC, HTMLAttributes, useState } from 'react'
+import { FC, HTMLAttributes } from 'react'
 
 interface SearchGlobalFilterListProps extends HTMLAttributes<HTMLDivElement> {
   listFilter: ISearchGlobalFiter[]
