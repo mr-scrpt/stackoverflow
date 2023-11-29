@@ -26,13 +26,19 @@ interface StatsProps extends HTMLAttributes<HTMLDivElement> {
   totalQuestions: number
   totalAnswers: number
   badge: BadgeCounts
+  score?: number
 }
 
 export const Stats: FC<StatsProps> = (props) => {
-  const { totalQuestions, totalAnswers, badge } = props
+  const { totalQuestions, totalAnswers, badge, score } = props
   return (
     <div>
-      <h4 className="h3-semibold text-dark200_light900">Stats</h4>
+      <h4 className=" text-dark200_light900">
+        <span className="h3-semibold">Stats</span>
+        {score && (
+          <span className="text-[20px]">: {score} reputation score</span>
+        )}
+      </h4>
 
       <div className="mt-5 grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-4">
         <div className="bg-light900_dark300 flex flex-wrap p-6 gap-4 rounded-md items-center justify-evenly light-border border shadow-light-300 dark:shadow-dark-200">

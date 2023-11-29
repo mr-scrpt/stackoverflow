@@ -10,7 +10,6 @@ import { getBadge } from '@/lib/actions/badge.action'
 import {
   getUserAnswers,
   getUserByClerkId,
-  getUserById,
   getUserProfileBySlug,
   getUserQuestions,
 } from '@/lib/actions/user.action'
@@ -30,11 +29,7 @@ const ProfilePage = async (props: ProfilePageProps) => {
   const { params } = props
   const { slug } = params
   const { userId } = auth()
-  const { user: profile } = await getUserProfileBySlug(slug)
-
-  if (!profile) {
-    return <NotFoundUser />
-  }
+  // const { user: profile } = await getUserProfileBySlug(slug)
 
   if (!userId) {
     return <NotFoundUserToLogin />
@@ -50,7 +45,11 @@ const ProfilePage = async (props: ProfilePageProps) => {
     user: userProfile,
     totalAnswers,
     totalQuestions,
-  } = await getUserProfileBySlug(params.slug)
+  } = await getUserProfileBySlug(slug)
+
+  if (!userProfile) {
+    return <NotFoundUser />
+  }
 
   const { questions } = await getUserQuestions({
     userId: userProfile._id,
@@ -129,6 +128,7 @@ const ProfilePage = async (props: ProfilePageProps) => {
         totalQuestions={totalQuestions}
         totalAnswers={totalAnswers}
         badge={badge}
+        score={userProfile.reputation}
       />
 
       <div className="mt-10 flex gap-10">

@@ -18,7 +18,9 @@ import { IUser } from '@/types'
 import { FilterQuery } from 'mongoose'
 import { PAGINATION_BASE_LIMIT } from '@/constants'
 
-export async function getUserProfileBySlug(slug: string) {
+export const getUserProfileBySlug = async (
+  slug: string
+): Promise<{ user: IUser; totalQuestions: number; totalAnswers: number }> => {
   try {
     connectToDatabase()
 

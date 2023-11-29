@@ -17,6 +17,8 @@ export interface IUser
     | 'portfolioWebsite'
     | 'bio'
     | 'location'
+    | 'reputation'
+    | 'joinedAt'
   > {
   _id: string
   // name: string
