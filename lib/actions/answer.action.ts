@@ -76,7 +76,13 @@ export const deleteAnswer = async (params: IDeleteAnswerParams) => {
   }
 }
 
-export const getAnswerList = async (params: IGetAnswersParams) => {
+export const getAnswerList = async (
+  params: IGetAnswersParams
+): Promise<{
+  answers: IAnswer[]
+  hasNextPage: boolean
+  totalAnswers: number
+}> => {
   try {
     connectToDatabase()
     const {
@@ -113,6 +119,16 @@ export const getAnswerList = async (params: IGetAnswersParams) => {
         model: UserModel,
         select: '_id clerkId picture name',
       })
+      .populate({
+        path: 'upVotes',
+        model: UserModel,
+        select: '_id',
+      })
+      .populate({
+        path: 'downVotes',
+        model: UserModel,
+        select: '_id',
+      })
       .skip(skipPage)
       .limit(limit)
       .sort(sortOption)
@@ -121,7 +137,10 @@ export const getAnswerList = async (params: IGetAnswersParams) => {
     })
     const hasNextPage = totalAnswers > limit * (page - 1) + answers.length
 
-    return { answers, hasNextPage, totalAnswers }
+    // answers.map((item) => item.upVotes.map((item) => console.log('item', item)))
+    const answersPlain = toPlainObject(answers)
+    // console.log('answersPlain', answersPlain)
+    return { answers: answersPlain, hasNextPage, totalAnswers }
   } catch (error) {
     console.log(error)
     throw error

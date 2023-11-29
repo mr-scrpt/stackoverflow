@@ -27,9 +27,11 @@ const QuestionDetailsPage = async (props: QuestionDetailsProps) => {
   const { userId } = auth()
 
   const user = await getUserByClerkId(userId)
+  console.log('user::', user)
 
   const question = await fetchQuestionBySlug(slug)
   if (!question) return null
+  console.log('question', question)
 
   return (
     <section className="flex flex-col gap-8">
@@ -52,6 +54,7 @@ const QuestionDetailsPage = async (props: QuestionDetailsProps) => {
             </span>
           </Link>
 
+          {/* {question.upVotes.map(item=>item._id)} */}
           <div className="flex justify-end">
             {user && (
               <VoteBar
@@ -60,9 +63,15 @@ const QuestionDetailsPage = async (props: QuestionDetailsProps) => {
                 userId={user?._id.toString()}
                 upVotes={question.upVotes.length}
                 downVotes={question.downVotes.length}
-                hasUpVoted={question.upVotes.includes(user?._id)}
-                hasDownVoted={question.downVotes.includes(user?._id)}
-                hasSaved={user?.postSaved?.includes(question._id)}
+                hasUpVoted={question.upVotes.some(
+                  (item) => item._id === user?._id
+                )}
+                hasDownVoted={question.downVotes.some(
+                  (item) => item._id === user?._id
+                )}
+                hasSaved={user?.postSaved?.some(
+                  (item) => item._id === question._id
+                )}
               />
             )}
           </div>

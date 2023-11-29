@@ -21,11 +21,8 @@ const HomePage = async (props: ISearchParamsProps) => {
     page: page ? +page : 1,
   })
 
-  console.log('questions', questions)
   const { userId: clerkId } = auth()
   const userActual = await getUserByClerkId(clerkId)
-  console.log('page', page)
-  console.log('hasNextPage', hasNextPage)
 
   return (
     <section className="flex flex-col gap-8">

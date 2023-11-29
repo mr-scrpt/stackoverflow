@@ -51,7 +51,11 @@ export const getUserByClerkId = async (
     if (!userId) return null
     await connectToDatabase()
 
-    const user = await UserModel.findOne({ clerkId: userId })
+    const user = await UserModel.findOne({ clerkId: userId }).populate({
+      path: 'postSaved',
+      model: QuestionModel,
+      select: '_id',
+    })
 
     // return JSON.parse(JSON.stringify(user))
     return toPlainObject(user)

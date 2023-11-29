@@ -89,9 +89,7 @@ export const getQuestionListByAuthorId = async (
   return toPlainObject(questionList)
 }
 
-export const fetchQuestionBySlug = async (
-  slug: string
-): Promise<{ questions: IQuestion[] }> => {
+export const fetchQuestionBySlug = async (slug: string): Promise<IQuestion> => {
   try {
     await connectToDatabase()
     const question = await QuestionModel.findOne({ slug })
@@ -100,6 +98,16 @@ export const fetchQuestionBySlug = async (
         path: 'author',
         model: UserModel,
         select: '_id name clerkId picture',
+      })
+      .populate({
+        path: 'upVotes',
+        model: UserModel,
+        select: '_id',
+      })
+      .populate({
+        path: 'downVotes',
+        model: UserModel,
+        select: '_id',
       })
 
     // console.log('===>>>', question)
