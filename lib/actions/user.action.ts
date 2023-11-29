@@ -155,9 +155,9 @@ export const getAllUsers = async (
 export const createUser = async (userData: ICreateUserParams) => {
   try {
     await connectToDatabase()
+    const userToCreat = { ...userData, slug: slugGenerator(userData.username) }
 
-    const newUser = await UserModel.create(userData)
-    return newUser
+    return await UserModel.create(userToCreat)
   } catch (error) {
     console.log(error)
     throw error
