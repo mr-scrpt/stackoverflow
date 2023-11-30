@@ -1,6 +1,5 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import * as cheerio from 'cheerio'
 import slugify from 'slugify'
 import qs from 'query-string'
 import {
@@ -92,13 +91,6 @@ export const getJoinedDate = (date: Date | string): string => {
   return joinedDate
 }
 
-export const parseHTMLToString = (html: string) => {
-  const $ = cheerio.load(html)
-  return $.text()
-  // const parser = new DOMParser()
-  // return parser.parseFromString(html, 'text/html').textContent
-}
-
 export const toPlainObject = (obj: any) => JSON.parse(JSON.stringify(obj))
 
 export const formUrlQuery = ({ params, key, value }: IUrlQueryParams) => {
@@ -163,4 +155,13 @@ export function assignBadges(param: BadgeParams) {
   })
 
   return userBadges
+}
+
+export const truncateText = (text: string, maxLength: number) => {
+  if (text.length <= maxLength) {
+    return text
+  }
+
+  const lastSpace = text.lastIndexOf(' ', maxLength)
+  return text.substring(0, lastSpace) + '...'
 }

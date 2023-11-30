@@ -28,14 +28,26 @@ import 'prismjs/plugins/line-numbers/prism-line-numbers.js'
 
 interface ParseHTMLProps extends HTMLAttributes<HTMLDivElement> {
   data: string
+  withOutCode?: boolean
 }
 
 export const ParseHTML: FC<ParseHTMLProps> = (props) => {
-  const { data } = props
+  const { data, withOutCode = false } = props
 
   // const [mounted, setMounted] = useState(false)
 
-  const codeHTML = parse(data)
+  const codeHTML = parse(data, {
+    replace(domNode) {
+      if (
+        withOutCode &&
+        domNode.attribs &&
+        domNode.attribs.class === 'language-markup'
+      ) {
+        console.log('====>>>> true', domNode)
+        return <></>
+      }
+    },
+  })
   // useEffect(() => {
   //   setMounted(true)
   // }, [])
