@@ -159,3 +159,6 @@ export const truncateText = (text: string, maxLength: number) => {
   const lastSpace = text.lastIndexOf(' ', maxLength)
   return text.substring(0, lastSpace) + '...'
 }
+
+export const arrayGen = (length: number) =>
+  Array.from({ length }, (_, index) => index + 1)

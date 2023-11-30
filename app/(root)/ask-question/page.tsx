@@ -4,8 +4,6 @@ import { QuestionFormTypeEnum } from '@/types/shared'
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 
-// interface PageProps extends HTMLAttributes<HTMLDivElement> {}
-
 const QuestionPage = async () => {
   const { userId } = auth()
   if (!userId) redirect('/sign-in')

@@ -14,7 +14,7 @@ export const UserCard: FC<UserCardProps> = async (props) => {
   const { user } = props
   const tagList = await fetchTagsByUserId({ userId: user._id })
   return (
-    <div className="bg-light900_dark200 rounded-2xl border light-border shadow-light100_darknone w-full max-xs:min-w-full xs:w-[260px] flex flex-col gap-8 py-8 px-4">
+    <div className="bg-light900_dark200 rounded-2xl border light-border shadow-light100_darknone w-full max-xs:min-w-full flex flex-col gap-8 py-8 px-4">
       <article className="w-full">
         <Link
           href={`/profile/${user.username}`}

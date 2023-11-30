@@ -3,18 +3,11 @@ import { getUserByClerkId } from '@/lib/actions/user.action'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-
-// interface ProfileEdtiPageProps extends HTMLAttributes<HTMLDivElement> {
-// params: {
-//   slug: string
-// }
-// searchParams?: ISearchParam
-// }
+import Loading from './loading'
 
 const ProfileEditPage = async () => {
-  // const { params, searchParams } = props
-
   const { userId } = auth()
+  return <Loading></Loading>
 
   if (!userId) {
     return (
@@ -37,22 +30,8 @@ const ProfileEditPage = async () => {
     redirect('/sign-in')
   }
 
-  // const {
-  //   user: userProfile,
-  //   totalAnswers,
-  //   totalQuestions,
-  // } = await getUserProfileBySlug(params.slug)
-
-  // const { questions } = await getUserQuestions({
-  //   userId: userProfile._id,
-  //   page: 1,
-  // })
-
-  // const { answers } = await getUserAnswers({ userId: userProfile._id, page: 1 })
-  // console.log('answers', answers)
-
   return (
-    <section className="flex flex-col gap-8">
+    <section className="flex flex-col">
       <h1 className="h1-bold text-dark100_light900">Edit question</h1>
 
       {/* <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center"></div> */}

@@ -1,5 +1,3 @@
-// interface pageProps extends HTMLAttributes<HTMLDivElement> {}
-
 import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
 import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { PaginationContent } from '@/components/shared/PaginationContent/PaginationContent'
@@ -31,7 +29,7 @@ const CommunityPage = async (props: ISearchParamsProps) => {
         />
       </div>
       <FilterRowContent list={USER_PAGE_FILTER} />
-      <div className="custom-scrollbar flex flex-col items-center flex-wrap md:flex-row md:justify-start  w-full gap-6 overflow-y-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 custom-scrollbar overflow-y-auto">
         {users.length > 0 ? (
           users.map((user) => {
             return <UserCard user={user} key={user._id} />
