@@ -196,7 +196,7 @@ export const ProfileFrom: FC<ProfileFromProps> = (props) => {
           />
           <Button
             type="submit"
-            className=" mt-7 primary-gradient w-fit !text-light-900 ml-auto"
+            className="mt-7 primary-gradient w-fit !text-light-900 ml-auto"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Saving' : 'Save'}

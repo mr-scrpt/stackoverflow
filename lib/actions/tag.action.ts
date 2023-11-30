@@ -108,6 +108,7 @@ export const fetchTagList = async (
 
 export const getTagBySlug = async (slug: string) => {
   try {
+    connectToDatabase()
     const tag = await TagModel.findOne({ slug })
     return tag
   } catch (e) {
@@ -116,6 +117,25 @@ export const getTagBySlug = async (slug: string) => {
   }
 }
 
+export const getTagSearchByName = async (
+  name: string,
+  limit?: number
+): Promise<ITag[]> => {
+  try {
+    connectToDatabase()
+    const regexQuery = { $regex: name, $options: 'i' }
+    let query = TagModel.find({ name: regexQuery })
+
+    if (limit) {
+      query = query.limit(limit)
+    }
+
+    return toPlainObject(await query)
+  } catch (e) {
+    console.log(e)
+    throw e
+  }
+}
 export const createTag = async (params: ICreateTagParams) => {
   try {
     connectToDatabase()

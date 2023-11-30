@@ -18,7 +18,9 @@ import { IUser } from '@/types'
 import { FilterQuery } from 'mongoose'
 import { PAGINATION_BASE_LIMIT } from '@/constants'
 
-export async function getUserProfileBySlug(slug: string) {
+export const getUserProfileBySlug = async (
+  slug: string
+): Promise<{ user: IUser; totalQuestions: number; totalAnswers: number }> => {
   try {
     connectToDatabase()
 
@@ -32,10 +34,31 @@ export async function getUserProfileBySlug(slug: string) {
     const totalAnswers = await AnswerModel.countDocuments({ author: user._id })
 
     return {
-      user,
+      user: toPlainObject(user),
       totalAnswers,
       totalQuestions,
     }
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const getUserByClerkId = async (
+  userId: string | null
+): Promise<IUser | null> => {
+  try {
+    if (!userId) return null
+    await connectToDatabase()
+
+    const user = await UserModel.findOne({ clerkId: userId }).populate({
+      path: 'postSaved',
+      model: QuestionModel,
+      select: '_id',
+    })
+
+    // return JSON.parse(JSON.stringify(user))
+    return toPlainObject(user)
   } catch (error) {
     console.log(error)
     throw error
@@ -49,10 +72,29 @@ export const getUserById = async (
     if (!userId) return null
     await connectToDatabase()
 
-    const user = await UserModel.findOne({ clerkId: userId })
+    const user = await UserModel.findOne({ _id: userId })
 
     // return JSON.parse(JSON.stringify(user))
     return toPlainObject(user)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+export const getUserSearchByUsername = async (
+  username: string,
+  limit?: number
+): Promise<IUser[]> => {
+  try {
+    connectToDatabase()
+    const regexQuery = { $regex: username, $options: 'i' }
+
+    let query = UserModel.find({ username: regexQuery })
+    if (limit) {
+      query = query.limit(limit)
+    }
+
+    return toPlainObject(await query)
   } catch (error) {
     console.log(error)
     throw error
@@ -117,9 +159,9 @@ export const getAllUsers = async (
 export const createUser = async (userData: ICreateUserParams) => {
   try {
     await connectToDatabase()
+    const userToCreat = { ...userData, slug: slugGenerator(userData.username) }
 
-    const newUser = await UserModel.create(userData)
-    return newUser
+    return await UserModel.create(userToCreat)
   } catch (error) {
     console.log(error)
     throw error

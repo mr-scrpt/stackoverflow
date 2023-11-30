@@ -5,7 +5,7 @@ import { ParseHTML } from '@/components/shared/ParseHTML/ParseHTML'
 import { Tag } from '@/components/shared/Tag/Tag'
 import { VoteBar } from '@/components/shared/VoteBar/VoteBar'
 import { fetchQuestionBySlug } from '@/lib/actions/question.action'
-import { getUserById } from '@/lib/actions/user.action'
+import { getUserByClerkId } from '@/lib/actions/user.action'
 import { formatNumber, getTimestamp } from '@/lib/utils'
 import { ISearchParam } from '@/types'
 import { VoteTypeEnum } from '@/types/shared'
@@ -26,10 +26,12 @@ const QuestionDetailsPage = async (props: QuestionDetailsProps) => {
   const { slug } = params
   const { userId } = auth()
 
-  const user = await getUserById(userId)
+  const user = await getUserByClerkId(userId)
+  console.log('user::', user)
 
   const question = await fetchQuestionBySlug(slug)
   if (!question) return null
+  console.log('question', question)
 
   return (
     <section className="flex flex-col gap-8">
@@ -52,6 +54,7 @@ const QuestionDetailsPage = async (props: QuestionDetailsProps) => {
             </span>
           </Link>
 
+          {/* {question.upVotes.map(item=>item._id)} */}
           <div className="flex justify-end">
             {user && (
               <VoteBar
@@ -60,9 +63,15 @@ const QuestionDetailsPage = async (props: QuestionDetailsProps) => {
                 userId={user?._id.toString()}
                 upVotes={question.upVotes.length}
                 downVotes={question.downVotes.length}
-                hasUpVoted={question.upVotes.includes(user?._id)}
-                hasDownVoted={question.downVotes.includes(user?._id)}
-                hasSaved={user?.postSaved?.includes(question._id)}
+                hasUpVoted={question.upVotes.some(
+                  (item) => item._id === user?._id
+                )}
+                hasDownVoted={question.downVotes.some(
+                  (item) => item._id === user?._id
+                )}
+                hasSaved={user?.postSaved?.some(
+                  (item) => item._id === question._id
+                )}
               />
             )}
           </div>

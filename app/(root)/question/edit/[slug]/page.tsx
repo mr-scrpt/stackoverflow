@@ -1,6 +1,6 @@
 import { QuestionForm } from '@/components/shared/QuestionForm/QuestionForm'
 import { fetchQuestionBySlug } from '@/lib/actions/question.action'
-import { getUserById } from '@/lib/actions/user.action'
+import { getUserByClerkId } from '@/lib/actions/user.action'
 import { QuestionFormTypeEnum } from '@/types/shared'
 import { auth } from '@clerk/nextjs'
 
@@ -16,7 +16,7 @@ const EditQuestionPage = async ({ params }: EditQuestionDetailsProps) => {
 
   if (!userId) return null
 
-  const user = await getUserById(userId)
+  const user = await getUserByClerkId(userId)
   const question = await fetchQuestionBySlug(slug)
 
   if (!user) return null

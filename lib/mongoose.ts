@@ -4,7 +4,6 @@ let isConnected: boolean = false
 
 export const connectToDatabase = async () => {
   mongoose.set('strictQuery', true)
-
   if (!process.env.MONGOM_DB_CONNECT_URL)
     return console.log('MISSING MONGODB_URL')
 
@@ -17,6 +16,7 @@ export const connectToDatabase = async () => {
     await mongoose.connect(process.env.MONGOM_DB_CONNECT_URL, {
       dbName: 'devflow',
     })
+    // mongoose.set('strictQuery', true)
 
     isConnected = true
 

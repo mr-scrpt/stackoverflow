@@ -8,14 +8,14 @@ import { TagModel } from '@/database/tag.model'
 import { UserModel } from '@/database/user.model'
 import { IQuestion } from '@/types'
 import {
-    ICreateQuestionParams,
-    IDeleteQuestionParams,
-    IEditQuestionParams,
-    IGetQuestionsByTagIdParams,
-    IGetQuestionsParams,
-    IGetSavedQuestionsParams,
-    IQuestionVoteParams,
-    IToggleSaveQuestionParams,
+  ICreateQuestionParams,
+  IDeleteQuestionParams,
+  IEditQuestionParams,
+  IGetQuestionsByTagIdParams,
+  IGetQuestionsParams,
+  IGetSavedQuestionsParams,
+  IQuestionVoteParams,
+  IToggleSaveQuestionParams,
 } from '@/types/shared'
 import { FilterQuery } from 'mongoose'
 import { revalidatePath } from 'next/cache'
@@ -80,7 +80,16 @@ export const getQuestions = async (
   }
 }
 
-export const fetchQuestionBySlug = async (slug: string) => {
+export const getQuestionListByAuthorId = async (
+  authorId: string
+): Promise<IQuestion[]> => {
+  const questionList = await QuestionModel.find({ author: authorId })
+  if (!questionList.length) throw new Error('Questions not found')
+
+  return toPlainObject(questionList)
+}
+
+export const fetchQuestionBySlug = async (slug: string): Promise<IQuestion> => {
   try {
     await connectToDatabase()
     const question = await QuestionModel.findOne({ slug })
@@ -90,11 +99,39 @@ export const fetchQuestionBySlug = async (slug: string) => {
         model: UserModel,
         select: '_id name clerkId picture',
       })
+      .populate({
+        path: 'upVotes',
+        model: UserModel,
+        select: '_id',
+      })
+      .populate({
+        path: 'downVotes',
+        model: UserModel,
+        select: '_id',
+      })
 
     // console.log('===>>>', question)
 
     // return question
     return toPlainObject(question)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+export const getQuestionsSearchByName = async (
+  title: string,
+  limit?: number
+): Promise<IQuestion[]> => {
+  try {
+    connectToDatabase()
+    const regexQuery = { $regex: title, $options: 'i' }
+    let query = QuestionModel.find({ title: regexQuery })
+    if (limit) {
+      query = query.limit(limit)
+    }
+
+    return toPlainObject(await query)
   } catch (error) {
     console.log(error)
     throw error
@@ -206,6 +243,18 @@ export const createQuestion = async (params: ICreateQuestionParams) => {
       tagDocuments.push(existingTag.tag._id)
     }
 
+    await InteractionModel.create({
+      user: author,
+      action: 'ask_question',
+      question: question._id,
+      tags: tagDocuments,
+    })
+
+    // reputation + 5
+    if (question) {
+      await UserModel.findByIdAndUpdate(author, { $inc: { reputation: 5 } })
+    }
+
     const result = await QuestionModel.findByIdAndUpdate(question._id, {
       $push: { tags: { $each: tagDocuments } },
     }).lean()
@@ -297,6 +346,17 @@ export const upVoteQuestion = async (params: IQuestionVoteParams) => {
 
     if (!question) throw new Error('Question not found!')
 
+    // reputation
+    if (userId !== question.author.toString()) {
+      // user reputation + 1
+      await UserModel.findByIdAndUpdate(userId, {
+        $inc: { reputation: hasupVoted ? -1 : 1 },
+      })
+      // author reputation + 10
+      await UserModel.findByIdAndUpdate(question.author, {
+        $inc: { reputation: hasupVoted ? -10 : 10 },
+      })
+    }
     // TODO: interaction
 
     revalidatePath(path)
@@ -335,7 +395,17 @@ export const downVoteQuestion = async (params: IQuestionVoteParams) => {
 
     if (!question) throw new Error('Question not found!')
 
-    // TODO: interaction
+    // reputation
+    if (userId !== question.author.toString()) {
+      // user reputation - 1
+      await UserModel.findByIdAndUpdate(userId, {
+        $inc: { reputation: hasdownVoted ? 1 : -1 },
+      })
+      // author reputation - 2
+      await UserModel.findByIdAndUpdate(question.author, {
+        $inc: { reputation: hasdownVoted ? 10 : -10 },
+      })
+    }
 
     revalidatePath(path)
   } catch (error) {

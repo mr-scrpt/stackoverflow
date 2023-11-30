@@ -7,7 +7,7 @@ import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { Button } from '@/components/ui/button'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestions } from '@/lib/actions/question.action'
-import { getUserById } from '@/lib/actions/user.action'
+import { getUserByClerkId } from '@/lib/actions/user.action'
 import { ISearchParamsProps } from '@/types'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
@@ -22,9 +22,7 @@ const HomePage = async (props: ISearchParamsProps) => {
   })
 
   const { userId: clerkId } = auth()
-  const userActual = await getUserById(clerkId)
-  console.log('page', page)
-  console.log('hasNextPage', hasNextPage)
+  const userActual = await getUserByClerkId(clerkId)
 
   return (
     <section className="flex flex-col gap-8">

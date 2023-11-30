@@ -2,6 +2,7 @@
 import parse from 'html-react-parser'
 import Prism from 'prismjs'
 import { FC, HTMLAttributes, useEffect } from 'react'
+import { Element } from 'domhandler'
 
 import 'prismjs/components/prism-aspnet'
 import 'prismjs/components/prism-bash'
@@ -28,25 +29,30 @@ import 'prismjs/plugins/line-numbers/prism-line-numbers.js'
 
 interface ParseHTMLProps extends HTMLAttributes<HTMLDivElement> {
   data: string
+  withOutCode?: boolean
 }
 
 export const ParseHTML: FC<ParseHTMLProps> = (props) => {
-  const { data } = props
+  const { data, withOutCode = false } = props
 
   // const [mounted, setMounted] = useState(false)
 
-  const codeHTML = parse(data)
-  // useEffect(() => {
-  //   setMounted(true)
-  // }, [])
+  const codeHTML = parse(data, {
+    replace(domNode) {
+      if (
+        withOutCode &&
+        domNode instanceof Element &&
+        domNode.attribs &&
+        domNode.attribs.class === 'language-markup'
+      ) {
+        return <></>
+      }
+    },
+  })
 
   useEffect(() => {
     Prism.highlightAll()
-  }, [])
-
-  // if (!mounted) {
-  //   return null
-  // }
+  }, [codeHTML])
 
   return <div className="markdown w-full min-f-full">{codeHTML}</div>
 }

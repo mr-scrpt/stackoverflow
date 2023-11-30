@@ -15,7 +15,6 @@ interface MenuProps extends HTMLAttributes<HTMLDivElement> {
 export const Menu: FC<MenuProps> = (props) => {
   const { menuList, pathname, classLink, classLinkText, userProfileSlug } =
     props
-  console.log('slug', userProfileSlug)
 
   const clsLink = cn(
     'flex items-center justify-start gap-4 bg-transparent p-4',

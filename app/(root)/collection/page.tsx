@@ -6,7 +6,7 @@ import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { QUESTION_PAGE_FILTER } from '@/constants/filters'
 import { getSavedQuestions } from '@/lib/actions/question.action'
-import { getUserById } from '@/lib/actions/user.action'
+import { getUserByClerkId } from '@/lib/actions/user.action'
 import { ISearchParamsProps } from '@/types'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
@@ -38,7 +38,7 @@ const CollectionPage = async (props: ISearchParamsProps) => {
     page: page ? +page : 1,
   })
 
-  const userActual = await getUserById(userId)
+  const userActual = await getUserByClerkId(userId)
   return (
     <section className="flex flex-col gap-8">
       <h1 className="h1-bold text-dark100_light900">Saved Pages</h1>

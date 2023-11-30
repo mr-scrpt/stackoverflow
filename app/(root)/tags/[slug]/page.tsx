@@ -6,7 +6,7 @@ import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestionByTagSlug } from '@/lib/actions/question.action'
-import { getUserById } from '@/lib/actions/user.action'
+import { getUserByClerkId } from '@/lib/actions/user.action'
 import { ISearchParam } from '@/types'
 import { auth } from '@clerk/nextjs'
 
@@ -29,7 +29,7 @@ const TagPage = async (props: TagPageProps) => {
     page: page ? +page : 1,
   })
   const { userId: clerkId } = auth()
-  const userActual = await getUserById(clerkId)
+  const userActual = await getUserByClerkId(clerkId)
 
   return (
     <section className="flex flex-col gap-8">

@@ -1,18 +1,16 @@
 import { Navbar } from '@/components/shared/Navbar'
 import { SidebarLeft } from '@/components/shared/SidebarLeft/SidebarLeft'
 import { SidebarRight } from '@/components/shared/SidebarRight/SidebarRight'
-import { getUserById } from '@/lib/actions/user.action'
+import { getUserByClerkId } from '@/lib/actions/user.action'
 import { cn } from '@/lib/utils'
 import { auth } from '@clerk/nextjs'
-import { FC, HTMLAttributes } from 'react'
+import { ReactNode } from 'react'
 
-interface LayoutProps extends HTMLAttributes<HTMLDivElement> {}
-
-const Layout: FC<LayoutProps> = async (props) => {
+const Layout = async (props: { children: ReactNode }) => {
   const { children } = props
   const { userId } = auth()
 
-  const user = userId ? await getUserById(userId) : undefined
+  const user = userId ? await getUserByClerkId(userId) : undefined
 
   const clsSidebarCommon =
     'bg-light800_dark300 light-border custom-scrollbar sticky left-0 top-0 flex h-screen flex-col  overflow-y-auto p-6 pt-32 shadow-light-300 dark:shadow-none gap-2'
@@ -36,7 +34,7 @@ const Layout: FC<LayoutProps> = async (props) => {
       <div className="flex">
         <SidebarLeft className={clsLeftSide} userSlug={user?.slug} />
         <section className={clsContent}>
-          <div className="mx-auto w-full max-w-5xl">{children}</div>
+          <div className="mx-auto w-full max-w-5xl h-full">{children}</div>
         </section>
         <SidebarRight className={clsRightSide} />
       </div>

@@ -1,12 +1,15 @@
 import { AnswerTab } from '@/components/shared/AnswerTab/AnswerTab'
+import { NotFoundUser } from '@/components/shared/NotFoundUser/NotFoundUser'
+import { NotFoundUserToLogin } from '@/components/shared/NotFoundUserToLogin/NotFoundUserToLogin'
 import { ProfileLink } from '@/components/shared/ProfileLink/ProfileLink'
 import { QuestionTab } from '@/components/shared/QuestionTab/QuestionTab'
 import { Stats } from '@/components/shared/Stats/Stats'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { getBadge } from '@/lib/actions/badge.action'
 import {
   getUserAnswers,
-  getUserById,
+  getUserByClerkId,
   getUserProfileBySlug,
   getUserQuestions,
 } from '@/lib/actions/user.action'
@@ -22,40 +25,38 @@ interface ProfilePageProps {
   // searchParams?: ISearchParam
 }
 
-const ProfilePage = async ({ params }: ProfilePageProps) => {
+const ProfilePage = async (props: ProfilePageProps) => {
+  const { params } = props
+  const { slug } = params
   const { userId } = auth()
+  // const { user: profile } = await getUserProfileBySlug(slug)
 
   if (!userId) {
-    return (
-      <div className="paragraph-regular text-dark200_light800 mx-auto max-w-4xl text-center">
-        <p>You are not loggined</p>
-        <div className="flex items-center justify-center"></div>
-        <Link href="/sign-in" className="mt-1 font-bold text-accent-blue">
-          Sign in
-        </Link>
-        <Link href="/sign-up" className="mt-1 font-bold text-accent-blue">
-          Or sign up
-        </Link>
-      </div>
-    )
+    return <NotFoundUserToLogin />
   }
 
-  const userActual = await getUserById(userId)
+  const userActual = await getUserByClerkId(userId)
+  if (!userActual) {
+    return <NotFoundUser />
+  }
+  const badge = await getBadge(userActual?._id)
 
   const {
     user: userProfile,
     totalAnswers,
     totalQuestions,
-  } = await getUserProfileBySlug(params.slug)
+  } = await getUserProfileBySlug(slug)
+
+  if (!userProfile) {
+    return <NotFoundUser />
+  }
 
   const { questions } = await getUserQuestions({
     userId: userProfile._id,
     page: 1,
   })
-  // console.log('questions', questions)
 
   const { answers } = await getUserAnswers({ userId: userProfile._id, page: 1 })
-  // console.log('answers', answers)
 
   return (
     <div className="flex flex-col gap-4">
@@ -123,7 +124,12 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
       </div>
 
       {/* Stats */}
-      <Stats totalQuestions={totalQuestions} totalAnswers={totalAnswers} />
+      <Stats
+        totalQuestions={totalQuestions}
+        totalAnswers={totalAnswers}
+        badge={badge}
+        score={userProfile.reputation}
+      />
 
       <div className="mt-10 flex gap-10">
         <Tabs defaultValue="top-posts" className="flex-1">

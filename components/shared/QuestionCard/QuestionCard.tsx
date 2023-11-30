@@ -1,4 +1,4 @@
-import { formatNumber, getTimestamp, parseHTMLToString } from '@/lib/utils'
+import { formatNumber, getTimestamp, truncateText } from '@/lib/utils'
 import { IQuestion } from '@/types'
 import { ActionTypeEnum } from '@/types/shared'
 import { SignedIn } from '@clerk/nextjs'
@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
 import { CardActionBar } from '../CardActionBar/CardActionBar'
 import { Metric } from '../Metric/Metric'
+import { ParseHTML } from '../ParseHTML/ParseHTML'
 import { Tag } from '../Tag/Tag'
 
 interface QuestionCardProps extends HTMLAttributes<HTMLDivElement> {
@@ -41,8 +42,10 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
           </h3>
         </Link>
         <div className="text-dark400_light700 ">
-          <h3 className="text-[13px] leading-[15px]  opacity-50 break-all">
-            {parseHTMLToString(content.substring(0, 100))}...
+          <h3 className="text-[13px] leading-[15px]  opacity-80 break-all">
+            <div className="text inline">
+              <ParseHTML data={truncateText(content, 330)} withOutCode />
+            </div>
           </h3>
         </div>
       </div>

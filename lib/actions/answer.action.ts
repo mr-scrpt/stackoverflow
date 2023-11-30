@@ -13,6 +13,8 @@ import { QuestionModel } from '@/database/question.model'
 import { UserModel } from '@/database/user.model'
 import { InteractionModel } from '@/database/interaction.model'
 import { PAGINATION_BASE_LIMIT } from '@/constants'
+import { toPlainObject } from '../utils'
+import { IAnswer } from '@/types'
 
 export const createAnswer = async (params: ICreateAnswerParams) => {
   try {
@@ -21,12 +23,24 @@ export const createAnswer = async (params: ICreateAnswerParams) => {
     const { author, content, question, path } = params
     const newAnswer = await AnswerModel.create({ author, content, question })
 
+    if (!newAnswer) throw new Error('Answer is not created')
     // Add answer into question's answer array
-    await QuestionModel.findByIdAndUpdate(question, {
+    const result = await QuestionModel.findByIdAndUpdate(question, {
       $push: { answers: newAnswer._id },
     })
 
-    // TODO: Add interaction...
+    if (!result) throw new Error('Answer is not add to question')
+
+    await InteractionModel.create({
+      user: author,
+      action: 'answer',
+      question,
+      answer: newAnswer._id,
+      tags: result.tags,
+    })
+
+    // reputation + 10
+    await UserModel.findByIdAndUpdate(author, { $inc: { reputation: 10 } })
 
     revalidatePath(path)
 
@@ -62,7 +76,13 @@ export const deleteAnswer = async (params: IDeleteAnswerParams) => {
   }
 }
 
-export const getAnswerList = async (params: IGetAnswersParams) => {
+export const getAnswerList = async (
+  params: IGetAnswersParams
+): Promise<{
+  answers: IAnswer[]
+  hasNextPage: boolean
+  totalAnswers: number
+}> => {
   try {
     connectToDatabase()
     const {
@@ -99,6 +119,16 @@ export const getAnswerList = async (params: IGetAnswersParams) => {
         model: UserModel,
         select: '_id clerkId picture name',
       })
+      .populate({
+        path: 'upVotes',
+        model: UserModel,
+        select: '_id',
+      })
+      .populate({
+        path: 'downVotes',
+        model: UserModel,
+        select: '_id',
+      })
       .skip(skipPage)
       .limit(limit)
       .sort(sortOption)
@@ -107,7 +137,43 @@ export const getAnswerList = async (params: IGetAnswersParams) => {
     })
     const hasNextPage = totalAnswers > limit * (page - 1) + answers.length
 
-    return { answers, hasNextPage, totalAnswers }
+    // answers.map((item) => item.upVotes.map((item) => console.log('item', item)))
+    const answersPlain = toPlainObject(answers)
+    // console.log('answersPlain', answersPlain)
+    return { answers: answersPlain, hasNextPage, totalAnswers }
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export const getAnswerListByAuthorId = async (
+  authorId: string
+): Promise<IAnswer[]> => {
+  const answersList = await AnswerModel.find({ author: authorId })
+  if (!answersList.length) throw new Error('Answers not found')
+
+  return toPlainObject(answersList)
+}
+
+export const getAnswerSearchByContent = async (
+  content: string,
+  limit?: number
+): Promise<IAnswer[]> => {
+  try {
+    connectToDatabase()
+    const regexQuery = { $regex: content, $options: 'i' }
+
+    let query = AnswerModel.find({ content: regexQuery }).populate({
+      path: 'question',
+      model: QuestionModel,
+      select: 'slug title',
+    })
+    if (limit) {
+      query = query.limit(limit)
+    }
+
+    return toPlainObject(await query)
   } catch (error) {
     console.log(error)
     throw error
@@ -139,7 +205,17 @@ export const upVoteAnswer = async (params: IAnswerVoteParams) => {
 
     if (!answer) throw new Error('Answer not found')
 
-    // TODO: interaction
+    // reputation
+    if (userId !== answer.author.toString()) {
+      // user reputation + 2
+      await UserModel.findByIdAndUpdate(userId, {
+        $inc: { reputation: hasupVoted ? -2 : 2 },
+      })
+      // author reputation + 10
+      await UserModel.findByIdAndUpdate(answer.author, {
+        $inc: { reputation: hasupVoted ? -10 : 10 },
+      })
+    }
 
     revalidatePath(path)
   } catch (error) {
@@ -173,7 +249,14 @@ export const downVoteAnswer = async (params: IAnswerVoteParams) => {
 
     if (!answer) throw new Error('Answer not found')
 
-    // TODO: interaction
+    if (userId !== answer.author.toString()) {
+      await UserModel.findByIdAndUpdate(userId, {
+        $inc: { reputation: hasdownVoted ? 2 : -2 },
+      })
+      await UserModel.findByIdAndUpdate(answer.author, {
+        $inc: { reputation: hasdownVoted ? 10 : -10 },
+      })
+    }
 
     revalidatePath(path)
   } catch (error) {

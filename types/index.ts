@@ -17,6 +17,8 @@ export interface IUser
     | 'portfolioWebsite'
     | 'bio'
     | 'location'
+    | 'reputation'
+    | 'joinedAt'
   > {
   _id: string
   // name: string
@@ -139,3 +141,14 @@ export interface BadgeCounts {
 }
 
 export type BadgeCriteriaType = keyof typeof BADGE_CRITERIA
+
+export interface IFilteredResultItem {
+  title: string
+  type: string
+  link: string
+  data: {
+    title: string
+    link: string
+    id: any
+  }[]
+}

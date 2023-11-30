@@ -28,7 +28,6 @@ export const AnswerList: FC<AnswerListProps> = async (props) => {
     sortBy: filter,
     page: page ? +page : 1,
   })
-  console.log('userId', userId)
   if (!answerList) {
     return null
   }
@@ -77,11 +76,14 @@ export const AnswerList: FC<AnswerListProps> = async (props) => {
                     userId={userId}
                     upVotes={answer.upVotes.length}
                     downVotes={answer.downVotes.length}
-                    hasUpVoted={answer.upVotes.some((item) => {
-                      return item._id.toString() === userId
+                    hasUpVoted={answer.upVotes.some((user) => {
+                      // console.log('user', user)
+                      // console.log('userId', userId)
+                      // console.log('userId', userId)
+                      return user._id === userId
                     })}
                     hasDownVoted={answer.downVotes.some(
-                      (item) => item._id.toString() === userId
+                      (item) => item._id === userId
                     )}
                   />
                 )}
