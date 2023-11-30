@@ -3,12 +3,19 @@ import { fetchQuestionBySlug } from '@/lib/actions/question.action'
 import { getUserByClerkId } from '@/lib/actions/user.action'
 import { QuestionFormTypeEnum } from '@/types/shared'
 import { auth } from '@clerk/nextjs'
+import { Metadata } from 'next'
 
 interface EditQuestionDetailsProps {
   params: {
     slug: string
   }
 }
+
+export const metadata: Metadata = {
+  title: 'Edit Question | Dev Overflow',
+  description: 'Page to edit question',
+}
+
 const EditQuestionPage = async ({ params }: EditQuestionDetailsProps) => {
   const { slug } = params
 

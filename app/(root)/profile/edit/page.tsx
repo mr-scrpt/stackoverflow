@@ -1,8 +1,13 @@
 import { ProfileFrom } from '@/components/shared/ProfileForm/ProfileFrom'
 import { getUserByClerkId } from '@/lib/actions/user.action'
 import { auth } from '@clerk/nextjs'
+import { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+
+export const metadata: Metadata = {
+  title: 'Edit Profile | Dev Overflow',
+}
 
 const ProfileEditPage = async () => {
   const { userId } = auth()

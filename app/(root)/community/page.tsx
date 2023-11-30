@@ -6,7 +6,13 @@ import { UserCard } from '@/components/shared/UserCard/UserCard'
 import { USER_PAGE_FILTER } from '@/constants/filters'
 import { getAllUsers } from '@/lib/actions/user.action'
 import { ISearchParamsProps } from '@/types'
+import { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'Community | Dev Overflow',
+  description: 'Meet the outstanding people here in Dev Overflow',
+}
 
 const CommunityPage = async (props: ISearchParamsProps) => {
   const { searchParams } = props

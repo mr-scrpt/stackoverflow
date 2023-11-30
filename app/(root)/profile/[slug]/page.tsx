@@ -15,6 +15,7 @@ import {
 } from '@/lib/actions/user.action'
 import { getJoinedDate } from '@/lib/utils'
 import { SignedIn, auth } from '@clerk/nextjs'
+import { Metadata, ResolvingMetadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -23,6 +24,23 @@ interface ProfilePageProps {
     slug: string
   }
   // searchParams?: ISearchParam
+}
+
+export async function generateMetadata(
+  { params }: { params: { slug: string } },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { user: userProfile } = await getUserProfileBySlug(params.slug)
+  const username =
+    userProfile.username.charAt(0).toUpperCase() + userProfile.username.slice(1)
+
+  return {
+    title: `${username} | Dev Overflow`,
+    description: userProfile.bio,
+    openGraph: {
+      images: [userProfile.picture],
+    },
+  }
 }
 
 const ProfilePage = async (props: ProfilePageProps) => {

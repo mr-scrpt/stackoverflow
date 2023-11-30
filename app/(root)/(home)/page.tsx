@@ -10,7 +10,13 @@ import { getQuestions } from '@/lib/actions/question.action'
 import { getUserByClerkId } from '@/lib/actions/user.action'
 import { ISearchParamsProps } from '@/types'
 import { auth } from '@clerk/nextjs'
+import { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'Home | Dev Overflow',
+  description: 'Dev Overflow is awesome site to developer',
+}
 
 const HomePage = async (props: ISearchParamsProps) => {
   const { searchParams } = props

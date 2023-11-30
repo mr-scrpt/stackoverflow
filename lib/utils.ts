@@ -162,3 +162,8 @@ export const truncateText = (text: string, maxLength: number) => {
 
 export const arrayGen = (length: number) =>
   Array.from({ length }, (_, index) => index + 1)
+
+export const stripHtmlTags = (input: string) => {
+  const regex = /<[^>]*>/g
+  return input.replace(regex, '')
+}

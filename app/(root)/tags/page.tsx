@@ -7,6 +7,12 @@ import { TagCard } from '@/components/shared/TagCard/TagCard'
 import { TAG_PAGE_FILTER } from '@/constants/filters'
 import { fetchTagList } from '@/lib/actions/tag.action'
 import { ISearchParamsProps } from '@/types'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Tags list | Dev Overflow',
+  description: 'Popular tags from Dev Overflow site community',
+}
 
 const TagsPage = async (props: ISearchParamsProps) => {
   const { searchParams } = props

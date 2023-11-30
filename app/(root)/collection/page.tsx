@@ -9,7 +9,13 @@ import { getSavedQuestions } from '@/lib/actions/question.action'
 import { getUserByClerkId } from '@/lib/actions/user.action'
 import { ISearchParamsProps } from '@/types'
 import { auth } from '@clerk/nextjs'
+import { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'Collection | Dev Overflow',
+  description: 'Collect the valuable information or solution or ideas',
+}
 
 const CollectionPage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
