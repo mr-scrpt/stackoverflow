@@ -3,11 +3,9 @@ import { getUserByClerkId } from '@/lib/actions/user.action'
 import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import Loading from './loading'
 
 const ProfileEditPage = async () => {
   const { userId } = auth()
-  return <Loading></Loading>
 
   if (!userId) {
     return (
