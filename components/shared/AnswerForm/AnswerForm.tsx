@@ -17,6 +17,7 @@ import { z } from 'zod'
 import { AnswerFormSchema } from './validation.schema'
 import Image from 'next/image'
 import { Editor } from '@tinymce/tinymce-react'
+import { toast } from '@/components/ui/use-toast'
 
 interface AnswerFormProps extends HTMLAttributes<HTMLDivElement> {
   question: string
@@ -59,6 +60,10 @@ export const AnswerForm: FC<AnswerFormProps> = (props) => {
 
         editor.setContent('')
       }
+
+      return toast({
+        title: 'Your answer has been successfully added',
+      })
     } catch (error) {
       console.log(error)
     } finally {

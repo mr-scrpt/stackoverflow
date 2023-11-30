@@ -12,6 +12,7 @@ import {
 import { downVoteAnswer, upVoteAnswer } from '@/lib/actions/answer.action'
 import { viewQuestion } from '@/lib/actions/interaction.action'
 import { VoteDirectionEnum, VoteTypeEnum } from '@/types/shared'
+import { toast } from '@/components/ui/use-toast'
 
 interface VoteBarProps extends HTMLAttributes<HTMLDivElement> {
   type: VoteTypeEnum
@@ -40,17 +41,28 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
   const router = useRouter()
 
   const handleSave = async () => {
-    console.log('click')
     await toggleSaveQuestion({
       userId,
       questionId: itemId,
       path: pathname,
     })
+
+    toast({
+      title: `Question ${
+        !hasSaved ? 'add in' : 'removed from'
+      } your collections`,
+      variant: `${!hasSaved ? 'default' : 'destructive'}`,
+    })
   }
 
   const handleVote = async (vote: string) => {
     // check if user is logined
-    if (!userId) return
+    if (!userId) {
+      return toast({
+        title: 'Please log in',
+        description: 'You must be logged in to perform this action',
+      })
+    }
 
     if (vote === VoteDirectionEnum.UP) {
       if (type === VoteTypeEnum.QUESTION) {
@@ -70,6 +82,10 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
           path: pathname,
         })
       }
+      return toast({
+        title: `Upvote ${hasUpVoted ? 'Removed' : 'Successfully'}`,
+        variant: `${hasUpVoted ? 'destructive' : 'default'}`,
+      })
     }
 
     if (vote === VoteDirectionEnum.DOWN) {
@@ -91,6 +107,10 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
         })
       }
     }
+    return toast({
+      title: `Downvote ${hasDownVoted ? 'Removed' : 'Successfully'}`,
+      variant: `${hasDownVoted ? 'destructive' : 'default'}`,
+    })
   }
 
   // view interaction

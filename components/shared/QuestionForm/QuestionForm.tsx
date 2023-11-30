@@ -30,6 +30,7 @@ import { QuestionFormSchema } from './validation.schema'
 import useTheme from '@/contexts/ThemeProvider'
 import { IQuestion, ITag } from '@/types'
 import { QuestionFormTypeEnum } from '@/types/shared'
+import { toast } from '@/components/ui/use-toast'
 
 interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {
   userId: string
@@ -113,7 +114,9 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
           // author: userId,
           path: pathname,
         })
-        console.log('new')
+        toast({
+          title: 'You question has been successfully edited',
+        })
 
         router.push(`/question/${result.slug}`)
       }
@@ -126,7 +129,9 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
           path: pathname,
         })
 
-        // navigate to home page
+        toast({
+          title: 'Your question has been successfully added',
+        })
         router.push('/')
       }
     } catch (error) {

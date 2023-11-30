@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { updateUser } from '@/lib/actions/user.action'
+import { toast } from '@/components/ui/use-toast'
 
 interface ProfileFromProps extends HTMLAttributes<HTMLDivElement> {
   user: IUser
@@ -56,6 +57,9 @@ export const ProfileFrom: FC<ProfileFromProps> = (props) => {
           bio: values.bio,
         },
         path: pathname,
+      })
+      toast({
+        title: 'Your profile has been successfully edited',
       })
 
       router.push(`/profile/${updatedUser.slug}`)
