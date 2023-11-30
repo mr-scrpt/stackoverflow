@@ -2,6 +2,7 @@
 
 import { GLOBAL_SEARCH_LIMIT, GLOBAL_SEARCH_LIMIT_SINGLE } from '@/constants'
 import {
+  ISearchGlobalDataItem,
   ISearchGlobalResult,
   ISearchParams,
   SearchTypeEnum,
@@ -11,10 +12,6 @@ import { getAnswerSearchByContent } from './answer.action'
 import { getQuestionsSearchByName } from './question.action'
 import { getTagSearchByName } from './tag.action'
 import { getUserSearchByUsername } from './user.action'
-import {
-  globalSearchFiltered,
-  mapData,
-} from '@/components/shared/SearchGlobal/SearchGlobal.helper'
 
 const SearchableTypes = ['tag', 'answer', 'question', 'user']
 
@@ -74,3 +71,60 @@ export const globalSearch = async (
     throw error
   }
 }
+
+type MappingFunction = string | ((item: any) => string)
+
+interface Mapping {
+  title: MappingFunction
+  link: MappingFunction
+  id: MappingFunction
+}
+
+const defaultMapping: Record<SearchTypeEnum, Mapping> = {
+  tag: {
+    title: 'name',
+    link: 'slug',
+    id: '_id',
+  },
+  question: {
+    title: 'title',
+    link: 'slug',
+    id: '_id',
+  },
+  user: {
+    title: 'username',
+    link: 'slug',
+    id: '_id',
+  },
+  answer: {
+    title: (item) => item.question.title,
+    link: (item) => item.question.slug,
+    id: '_id',
+  },
+}
+export const mapData = (
+  dataArray: any[],
+  type: SearchTypeEnum
+): ISearchGlobalDataItem[] => {
+  const mapping = defaultMapping[type]
+
+  if (!mapping) {
+    throw new Error(`Unsupported search type: ${type}`)
+  }
+
+  return dataArray.map((item) => ({
+    title: getField(item, mapping.title),
+    link: getField(item, mapping.link),
+    id: getField(item, mapping.id),
+  }))
+}
+
+const getField = (item: any, field: string | MappingFunction): string => {
+  if (typeof field === 'function') {
+    return field(item)
+  }
+
+  return item[field]
+}
+export const globalSearchFiltered = (obj: ISearchGlobalResult[]) =>
+  obj.filter((item) => item.data.length)

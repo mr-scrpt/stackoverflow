@@ -93,33 +93,5 @@ const getField = (item: any, field: string | MappingFunction): string => {
 
   return item[field]
 }
-// type AdditionalMappingFunction = (item: any) => string
-//
-// export const mapData = (
-//   dataArray: any[],
-//   titleField: string,
-//   linkField: string,
-//   idField: string,
-//   additionalMapping?: Record<string, AdditionalMappingFunction>
-// ): ISearchGlobalDataItem[] => {
-//   return dataArray.map((item) => ({
-//     title: getField(item, titleField, additionalMapping),
-//     link: getField(item, linkField, additionalMapping),
-//     id: getField(item, idField, additionalMapping),
-//   }))
-// }
-//
-// export const getField = (
-//   item: any,
-//   field: string,
-//   additionalMapping?: Record<string, AdditionalMappingFunction>
-// ): string => {
-//   if (additionalMapping && additionalMapping[field]) {
-//     return additionalMapping[field](item)
-//   }
-//
-//   return item[field]
-// }
-//
 export const globalSearchFiltered = (obj: ISearchGlobalResult[]) =>
   obj.filter((item) => item.data.length)

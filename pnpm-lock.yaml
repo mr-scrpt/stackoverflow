@@ -44,6 +44,9 @@ dependencies:
   clsx:
     specifier: ^2.0.0
     version: 2.0.0
+  domhandler:
+    specifier: ^5.0.3
+    version: 5.0.3
   html-react-parser:
     specifier: ^5.0.6
     version: 5.0.6(react@18.2.0)

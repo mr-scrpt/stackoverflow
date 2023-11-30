@@ -1,15 +1,10 @@
-import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-import slugify from 'slugify'
-import qs from 'query-string'
-import {
-  IRemoveUrlQueryParams,
-  ISearchGlobalDataItem,
-  ISearchGlobalResult,
-  IUrlQueryParams,
-} from '@/types/shared'
-import { BadgeCounts } from '@/types'
 import { BADGE_CRITERIA } from '@/constants'
+import { BadgeCounts } from '@/types'
+import { IRemoveUrlQueryParams, IUrlQueryParams } from '@/types/shared'
+import { clsx, type ClassValue } from 'clsx'
+import qs from 'query-string'
+import slugify from 'slugify'
+import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -146,7 +141,6 @@ export function assignBadges(param: BadgeParams) {
     const badgeLevel: any = BADGE_CRITERIA[type] // {type: {GOLD, SILVER, BRONZE}}
 
     Object.keys(badgeLevel).forEach((level: any) => {
-      // level = 'BRONZE'|| 'SILVER'||'GOLD'
       if (count > badgeLevel[level]) {
         // if user's value > criteria
         userBadges[level as keyof BadgeCounts] += 1

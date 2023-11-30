@@ -1,9 +1,4 @@
-import {
-  formatNumber,
-  getTimestamp,
-  parseHTMLToString,
-  truncateText,
-} from '@/lib/utils'
+import { formatNumber, getTimestamp, truncateText } from '@/lib/utils'
 import { IQuestion } from '@/types'
 import { ActionTypeEnum } from '@/types/shared'
 import { SignedIn } from '@clerk/nextjs'
@@ -11,8 +6,8 @@ import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
 import { CardActionBar } from '../CardActionBar/CardActionBar'
 import { Metric } from '../Metric/Metric'
-import { Tag } from '../Tag/Tag'
 import { ParseHTML } from '../ParseHTML/ParseHTML'
+import { Tag } from '../Tag/Tag'
 
 interface QuestionCardProps extends HTMLAttributes<HTMLDivElement> {
   item: IQuestion

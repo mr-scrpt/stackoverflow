@@ -2,6 +2,7 @@
 import parse from 'html-react-parser'
 import Prism from 'prismjs'
 import { FC, HTMLAttributes, useEffect } from 'react'
+import { Element } from 'domhandler'
 
 import 'prismjs/components/prism-aspnet'
 import 'prismjs/components/prism-bash'
@@ -40,25 +41,18 @@ export const ParseHTML: FC<ParseHTMLProps> = (props) => {
     replace(domNode) {
       if (
         withOutCode &&
+        domNode instanceof Element &&
         domNode.attribs &&
         domNode.attribs.class === 'language-markup'
       ) {
-        console.log('====>>>> true', domNode)
         return <></>
       }
     },
   })
-  // useEffect(() => {
-  //   setMounted(true)
-  // }, [])
 
   useEffect(() => {
     Prism.highlightAll()
-  }, [])
-
-  // if (!mounted) {
-  //   return null
-  // }
+  }, [codeHTML])
 
   return <div className="markdown w-full min-f-full">{codeHTML}</div>
 }

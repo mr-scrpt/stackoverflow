@@ -1,8 +1,7 @@
 'use client'
-import { ISearchGlobalDataItem } from '@/types/shared'
 import TagIcon from '@/public/assets/icons/tag.svg'
+import { ISearchGlobalDataItem } from '@/types/shared'
 import Link from 'next/link'
-import Image from 'next/image'
 import { FC, HTMLAttributes } from 'react'
 
 interface SearchGlobalResultItemProps extends HTMLAttributes<HTMLDivElement> {
@@ -17,7 +16,7 @@ export const SearchGlobalResultItem: FC<SearchGlobalResultItemProps> = (
     <Link
       href={item.link}
       key={item.id}
-      className="flex items-start gap-2 items-center cursor-pointer group"
+      className="flex items-start gap-2 cursor-pointer group"
     >
       <TagIcon className="object-contain stroke-dark-500 group opacity-60 dark:stroke-light-400 group-hover:stroke-primary-500 transition-all hover:opacity-100" />
       <div className="flex flex-col">

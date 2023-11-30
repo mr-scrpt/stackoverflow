@@ -15,16 +15,18 @@ export const useOutsideClick = (props: UseClickOutsideProps) => {
   const handleOutsideClick = (e: any) => {
     const anchor = e.target.closest('a')
     const r = ref.current
-    const isOutside = !r.contains(e.target) || null
-    if (isOutside) {
-      callback()
-      if (!anchor && params && keysToRemove) {
-        const newUrl = removeKeysFromQuery({
-          params,
-          keysToRemove,
-        })
+    if (r) {
+      const isOutside = !r.contains(e.target) || null
+      if (isOutside) {
+        callback()
+        if (!anchor && params && keysToRemove) {
+          const newUrl = removeKeysFromQuery({
+            params,
+            keysToRemove,
+          })
 
-        router.replace(newUrl, { scroll: false })
+          router.replace(newUrl, { scroll: false })
+        }
       }
     }
   }
