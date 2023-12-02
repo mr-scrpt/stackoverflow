@@ -9,8 +9,6 @@ interface QuestionTabProps extends HTMLAttributes<HTMLDivElement> {
 
 export const AnswerTab: FC<QuestionTabProps> = (props) => {
   const { list, userId } = props
-  console.log('', userId)
-  // console.log('list', list)
   return (
     <>
       {list.map((item) => (

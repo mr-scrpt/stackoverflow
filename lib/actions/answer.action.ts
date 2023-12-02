@@ -151,7 +151,7 @@ export const getAnswerListByAuthorId = async (
   authorId: string
 ): Promise<IAnswer[]> => {
   const answersList = await AnswerModel.find({ author: authorId })
-  if (!answersList.length) throw new Error('Answers not found')
+  // if (!answersList.length) throw new Error('Answers not found')
 
   return toPlainObject(answersList)
 }

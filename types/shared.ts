@@ -65,6 +65,7 @@ export interface IJobFilterParams {
 export interface IGetQuestionsParams {
   page?: number
   limit?: number
+  userId?: string
   q?: string
   filter?: string
 }

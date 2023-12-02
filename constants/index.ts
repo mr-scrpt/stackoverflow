@@ -3,6 +3,7 @@ import { SidebarLink } from '@/types'
 export const PAGINATION_BASE_LIMIT = 10
 export const GLOBAL_SEARCH_LIMIT = 2
 export const GLOBAL_SEARCH_LIMIT_SINGLE = 5
+export const RECOMENDED_BASE_LIMIT = 10
 export const TIME_DEBOUNCE_DELAY = 300
 export const THEME_LIGHT = 'light'
 export const THEME_DARK = 'dark'

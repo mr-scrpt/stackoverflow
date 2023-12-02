@@ -21,13 +21,14 @@ export const metadata: Metadata = {
 const HomePage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
   const { q, filter, page } = searchParams
+  const { userId: clerkId } = auth()
   const { questions, hasNextPage } = await getQuestions({
     q,
+    userId: clerkId || undefined,
     filter,
     page: page ? +page : 1,
   })
 
-  const { userId: clerkId } = auth()
   const userActual = await getUserByClerkId(clerkId)
 
   return (

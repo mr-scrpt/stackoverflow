@@ -1,4 +1,5 @@
 import { AnswerTab } from '@/components/shared/AnswerTab/AnswerTab'
+import { NoResult } from '@/components/shared/NoResult/NoResult'
 import { NotFoundUser } from '@/components/shared/NotFoundUser/NotFoundUser'
 import { NotFoundUserToLogin } from '@/components/shared/NotFoundUserToLogin/NotFoundUserToLogin'
 import { ProfileLink } from '@/components/shared/ProfileLink/ProfileLink'
@@ -75,6 +76,7 @@ const ProfilePage = async (props: ProfilePageProps) => {
   })
 
   const { answers } = await getUserAnswers({ userId: userProfile._id, page: 1 })
+  console.log('QuestionTab', questions)
 
   return (
     <div className="flex flex-col gap-4">
@@ -159,37 +161,46 @@ const ProfilePage = async (props: ProfilePageProps) => {
               Answers
             </TabsTrigger>
           </TabsList>
-          <TabsContent
-            value="top-posts"
-            className="mt-5 flex w-full flex-col gap-6"
-          >
-            {questions ? (
-              <QuestionTab
-                list={questions}
-                userId={userActual?._id}
-                // pageCurrent={}
-                // hasNextPage={}
-                // searchParams={searchParams}
-                // clerkId={clerkId}
-                // userId={userInfo.user._id}
-              />
-            ) : (
-              <div>No questions eat</div>
-            )}
-          </TabsContent>
-          <TabsContent value="answers" className="flex w-full flex-col gap-6">
-            {answers ? (
-              <AnswerTab
-                list={answers}
-                userId={userActual?._id}
-                // searchParams={searchParams}
-                // clerkId={clerkId}
-                // userId={userInfo.user._id}
-              />
-            ) : (
-              <div>No answers eat</div>
-            )}
-          </TabsContent>
+          <div className="flex w-full flex-col gap-6">
+            <TabsContent value="top-posts">
+              {questions.length ? (
+                <QuestionTab
+                  list={questions}
+                  userId={userActual?._id}
+                  // pageCurrent={}
+                  // hasNextPage={}
+                  // searchParams={searchParams}
+                  // clerkId={clerkId}
+                  // userId={userInfo.user._id}
+                />
+              ) : (
+                <NoResult
+                  title="You haven't asked a single question"
+                  description="To ask your first question, you can follow the link below!💡 Start your journey with DevFlow 🚀"
+                  link="/ask-question"
+                  linkTitle="Ask a Question"
+                />
+              )}
+            </TabsContent>
+            <TabsContent value="answers">
+              {answers.length ? (
+                <AnswerTab
+                  list={answers}
+                  userId={userActual?._id}
+                  // searchParams={searchParams}
+                  // clerkId={clerkId}
+                  // userId={userInfo.user._id}
+                />
+              ) : (
+                <NoResult
+                  title="You haven't provided a single answer."
+                  description="To help other DevFlow users, you can click on the links below and give your awesome answers 👍"
+                  link="/"
+                  linkTitle="Answer the question"
+                />
+              )}
+            </TabsContent>
+          </div>
         </Tabs>
       </div>
     </div>
