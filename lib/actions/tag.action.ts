@@ -12,31 +12,69 @@ import { slugGenerator, toPlainObject } from '../utils'
 import { ITag } from '@/types'
 import { FilterQuery } from 'mongoose'
 import { PAGINATION_BASE_LIMIT } from '@/constants'
+import { InteractionModel } from '@/database/interaction.model'
 
-export const fetchTagsByUserId = async (
+// export const fetchTagsByUserId = async (
+//   params: IGetTopInteractedTagsParams
+// ) => {
+//   try {
+//     connectToDatabase()
+//
+//     const { userId } = params
+//
+//     // console.log('', limit)
+//
+//     const user = await UserModel.findById(userId)
+//
+//     if (!user) throw Error('user not found')
+//
+//     // find interactions for the user and grown tags...
+//     // interaction
+//
+//     return [
+//       { _id: '123', name: 'HTML', slug: 'test' },
+//       { _id: '123', name: 'HTML', slug: 'test' },
+//       { _id: '123', name: 'HTML', slug: 'test' },
+//     ]
+//   } catch (error) {
+//     console.log(error)
+//     throw error
+//   }
+// }
+
+export const getTopInteractedTags = async (
   params: IGetTopInteractedTagsParams
 ) => {
   try {
-    connectToDatabase()
+    await connectToDatabase()
 
-    const { userId } = params
+    const { userId, limit = 3 } = params
 
-    // console.log('', limit)
-
+    // Find the user by clerkId
     const user = await UserModel.findById(userId)
+    if (!user) {
+      throw new Error('User not found')
+    }
 
-    if (!user) throw Error('user not found')
+    // Find interactions for the user and group by tags
+    const tagCountMap = await InteractionModel.aggregate([
+      { $match: { user: user._id, tags: { $exists: true, $ne: [] } } },
+      { $unwind: '$tags' },
+      { $group: { _id: '$tags', count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: limit },
+    ])
 
-    // find interactions for the user and grown tags...
-    // interaction
+    console.log('tagCountMap', tagCountMap)
 
-    return [
-      { _id: '123', name: 'HTML', slug: 'test' },
-      { _id: '123', name: 'HTML', slug: 'test' },
-      { _id: '123', name: 'HTML', slug: 'test' },
-    ]
+    const topTags = tagCountMap.map((tagCount) => tagCount._id)
+
+    // Find the tag documents for the top tags
+    const topTagDocuments = await TagModel.find({ _id: { $in: topTags } })
+
+    return toPlainObject(topTagDocuments)
   } catch (error) {
-    console.log(error)
+    console.error('Error fetching top interacted tags:', error)
     throw error
   }
 }

@@ -2,9 +2,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { FC, HTMLAttributes } from 'react'
 import { IUser } from '@/types'
-import { fetchTagsByUserId } from '@/lib/actions/tag.action'
+// import { fetchTagsByUserId } from '@/lib/actions/tag.action'
 import { Badge } from '@/components/ui/badge'
 import { Tag } from '../Tag/Tag'
+import { getTopInteractedTags } from '@/lib/actions/tag.action'
 
 interface UserCardProps extends HTMLAttributes<HTMLDivElement> {
   user: IUser
@@ -12,7 +13,7 @@ interface UserCardProps extends HTMLAttributes<HTMLDivElement> {
 
 export const UserCard: FC<UserCardProps> = async (props) => {
   const { user } = props
-  const tagList = await fetchTagsByUserId({ userId: user._id })
+  const tagList = await getTopInteractedTags({ userId: user._id })
   return (
     <div className="bg-light900_dark200 rounded-2xl border light-border shadow-light100_darknone w-full max-xs:min-w-full flex flex-col gap-8 py-8 px-4">
       <article className="w-full">
