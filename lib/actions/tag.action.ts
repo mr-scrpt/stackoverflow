@@ -44,7 +44,7 @@ import { InteractionModel } from '@/database/interaction.model'
 
 export const getTopInteractedTags = async (
   params: IGetTopInteractedTagsParams
-) => {
+): Promise<ITag[]> => {
   try {
     await connectToDatabase()
 
