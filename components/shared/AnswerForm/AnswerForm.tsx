@@ -83,7 +83,6 @@ export const AnswerForm: FC<AnswerFormProps> = (props) => {
           body: JSON.stringify({ question }),
         }
       )
-      // console.log('response', response)
 
       const aiAnswer = await response.json()
 

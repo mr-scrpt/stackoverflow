@@ -44,7 +44,6 @@ export const getQuestions = async (
           userId: user._id,
           limit: RECOMENDED_BASE_LIMIT,
         })
-        // console.log('tags', tags)
         const query: FilterQuery<typeof QuestionModel> = {
           $and: [
             { tags: { $in: tags } },
@@ -94,8 +93,6 @@ export const getQuestions = async (
         break
     }
 
-    // console.log('sortOption', filter, sortOption)
-
     const skipPage = (page - 1) * limit
 
     const questions = await QuestionModel.find(query)
@@ -116,6 +113,19 @@ export const getQuestions = async (
   } catch (error) {
     console.log(error)
     throw error
+  }
+}
+
+export const getQuestion = async (id: string) => {
+  try {
+    connectToDatabase()
+
+    const question = await QuestionModel.findOne({ id }).populate('tags')
+
+    return question
+  } catch (e) {
+    console.log(e)
+    throw e
   }
 }
 
@@ -148,8 +158,6 @@ export const fetchQuestionBySlug = async (slug: string): Promise<IQuestion> => {
         model: UserModel,
         select: '_id',
       })
-
-    // console.log('===>>>', question)
 
     // return question
     return toPlainObject(question)
@@ -337,7 +345,6 @@ export const deleteQuestion = async (params: IDeleteQuestionParams) => {
     connectToDatabase()
 
     const { questionId, path } = params
-    // console.log('questionId =====6....>>>', questionId)
 
     // delete question/answers/interactivity/tags associate with question
     await QuestionModel.deleteOne({ _id: questionId })

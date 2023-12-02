@@ -17,14 +17,6 @@ interface ThemeSwitcherProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const ThemeSwitcher: FC<ThemeSwitcherProps> = (props) => {
   const { mode, setMode } = useTheme()
-  // console.log('mode', mode)
-  //
-  // let activeTheme = THEME_SYSTEM
-  // if (typeof window !== 'undefined') {
-  //   activeTheme = localStorage.getItem('theme')
-  // }
-  //
-  // const themeActiveSrc = `/assets/icons/${activeTheme}.svg`
 
   return (
     <Menubar className="relative border-none bg-transparent shadow-none">

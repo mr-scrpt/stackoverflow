@@ -4,6 +4,7 @@ import { IViewQuestionParams } from '@/types/shared'
 import { connectToDatabase } from '../mongoose'
 import { QuestionModel } from '@/database/question.model'
 import { InteractionModel } from '@/database/interaction.model'
+import { getQuestion } from './question.action'
 
 export async function viewQuestion(params: IViewQuestionParams) {
   try {
@@ -18,15 +19,17 @@ export async function viewQuestion(params: IViewQuestionParams) {
         action: 'view',
         question: questionId,
       })
-      // console.log('existingInteraction', existingInteraction)
 
       if (existingInteraction) return console.log('User has already viewed')
+
+      const question = await getQuestion(questionId)
 
       // Create interaction
       await InteractionModel.create({
         user: userId,
         action: 'view',
         question: questionId,
+        tags: question?.tags,
       })
 
       // Update view count for the question

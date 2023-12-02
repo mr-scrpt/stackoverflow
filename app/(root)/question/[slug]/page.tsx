@@ -49,7 +49,6 @@ const QuestionDetailsPage = async (props: QuestionDetailsProps) => {
 
   const question = await fetchQuestionBySlug(slug)
   if (!question) return null
-  console.log('question', question.content)
 
   return (
     <section className="flex flex-col gap-8">

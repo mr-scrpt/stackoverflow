@@ -64,7 +64,6 @@ export const getTopInteractedTags = async (
       { $sort: { count: -1 } },
       { $limit: limit },
     ])
-    console.log('count', tagCountMap)
 
     const topTags = tagCountMap.map((tagCount) => tagCount._id)
 

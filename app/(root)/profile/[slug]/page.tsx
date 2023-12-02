@@ -76,7 +76,6 @@ const ProfilePage = async (props: ProfilePageProps) => {
   })
 
   const { answers } = await getUserAnswers({ userId: userProfile._id, page: 1 })
-  console.log('QuestionTab', questions)
 
   return (
     <div className="flex flex-col gap-4">
