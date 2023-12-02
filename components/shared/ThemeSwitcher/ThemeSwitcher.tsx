@@ -36,7 +36,7 @@ export const ThemeSwitcher: FC<ThemeSwitcherProps> = (props) => {
               alt="moon"
               width={20}
               height={20}
-              className="active-theme"
+              className="active-theme min-w-[20px]"
             />
           )}
         </MenubarTrigger>
@@ -45,7 +45,7 @@ export const ThemeSwitcher: FC<ThemeSwitcherProps> = (props) => {
             return (
               <MenubarItem
                 key={item.value}
-                className="flex items-center gap-4 px-2.5 py-2 dark:focus:bg-dark-400"
+                className="flex items-center gap-4 px-2.5 py-2 focus:bg-light-800  dark:focus:bg-dark-400"
                 onClick={() => {
                   setMode(item.value)
                   localStorage.theme = item.value

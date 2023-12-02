@@ -30,18 +30,22 @@ export const Filter: FC<FilterProps> = (props) => {
         onValueChange={handleSelect}
       >
         <SelectTrigger
-          className={`${classTrigger} body-regular light-border rounded-xl text-dark500_light700 border px-5 py-2.5`}
+          className={`${classTrigger} body-regular light-border rounded-xl text-dark500_light700 border px-5 py-2.5 `}
         >
           <div className="line-clamp-1 flex-1 text-left">
             <SelectValue placeholder="Select a Filter" />
           </div>
         </SelectTrigger>
         <SelectContent
-          className={`${classList} text-dark500_light700 bg-light800_dark300`}
+          className={`${classList} text-dark500_light700 small-regular border-none bg-light-900 dark:bg-dark-400`}
         >
           <SelectGroup>
             {list.map((item) => (
-              <SelectItem key={item.value} value={item.value}>
+              <SelectItem
+                key={item.value}
+                value={item.value}
+                className="focus:bg-light-800 dark:focus:bg-dark-300 cursor-pointer"
+              >
                 {item.name}
               </SelectItem>
             ))}

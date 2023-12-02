@@ -15,11 +15,12 @@ export const Navbar: FC<NavbarProps> = (props) => {
       <Link className="flex items-center gap-2" href="/">
         <Image
           src={'/assets/images/site-logo.svg'}
-          width={23}
-          height={23}
+          width={25}
+          height={25}
           alt="DevFlow"
+          className="min-w-[25px]"
         />
-        <span className="h2-bold font-spaceGrotesk text-dark-100 dark:text-light-900 max-sm:hidden">
+        <span className="h2-bold font-spaceGrotesk text-dark-100 dark:text-light-900">
           Dev
           <span className="text-primary-500">Overflow</span>
         </span>

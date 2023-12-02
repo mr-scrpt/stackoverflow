@@ -12,7 +12,7 @@ import {
 import { downVoteAnswer, upVoteAnswer } from '@/lib/actions/answer.action'
 import { viewQuestion } from '@/lib/actions/interaction.action'
 import { VoteDirectionEnum, VoteTypeEnum } from '@/types/shared'
-import { toast } from '@/components/ui/use-toast'
+import { notice } from '../Notice/notice'
 
 interface VoteBarProps extends HTMLAttributes<HTMLDivElement> {
   type: VoteTypeEnum
@@ -47,7 +47,7 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
       path: pathname,
     })
 
-    toast({
+    notice({
       title: `Question ${
         !hasSaved ? 'add in' : 'removed from'
       } your collections`,
@@ -58,7 +58,7 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
   const handleVote = async (vote: string) => {
     // check if user is logined
     if (!userId) {
-      return toast({
+      return notice({
         title: 'Please log in',
         description: 'You must be logged in to perform this action',
       })
@@ -82,7 +82,7 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
           path: pathname,
         })
       }
-      return toast({
+      return notice({
         title: `Upvote ${hasUpVoted ? 'Removed' : 'Successfully'}`,
         variant: `${hasUpVoted ? 'destructive' : 'default'}`,
       })
@@ -107,7 +107,7 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
         })
       }
     }
-    return toast({
+    return notice({
       title: `Downvote ${hasDownVoted ? 'Removed' : 'Successfully'}`,
       variant: `${hasDownVoted ? 'destructive' : 'default'}`,
     })

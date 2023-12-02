@@ -30,7 +30,7 @@ import { QuestionFormSchema } from './validation.schema'
 import useTheme from '@/contexts/ThemeProvider'
 import { IQuestion, ITag } from '@/types'
 import { QuestionFormTypeEnum } from '@/types/shared'
-import { toast } from '@/components/ui/use-toast'
+import { notice } from '../Notice/notice'
 
 interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {
   userId: string
@@ -114,7 +114,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
           // author: userId,
           path: pathname,
         })
-        toast({
+        notice({
           title: 'You question has been successfully edited',
         })
 
@@ -129,7 +129,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
           path: pathname,
         })
 
-        toast({
+        notice({
           title: 'Your question has been successfully added',
         })
         router.push('/')
@@ -147,7 +147,6 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
     form.setValue('tags', newTags)
   }
 
-  console.log('type', type)
   // TODO - сделать переключенлие темы реактивной,
   // что бы редактор переключался динамически
 

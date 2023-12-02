@@ -46,7 +46,7 @@ const HomePage = async (props: ISearchParamsProps) => {
         <FilterContent
           list={HOME_PAGE_FILTER}
           classTrigger="min-h-[56px] sm:min-w-[170px] bg-light-700 dark:bg-dark-400"
-          // className="hidden max-md:flex"
+          className="hidden max-md:flex"
         />
       </div>
       {/* <FilterRow list={HOME_PAGE_FILTER} /> */}
