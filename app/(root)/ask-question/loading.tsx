@@ -3,15 +3,15 @@ import { Skeleton } from '@/components/ui/skeleton'
 const Loading = () => {
   return (
     <section>
-      <div className="grid grid-cols w-full gap-4 sm:flex-row sm:items-center">
-        <Skeleton className="h-14 flex-1 mb-8" />
-        <Skeleton className="h-4 flex-1 w-1/2" />
-        <Skeleton className="h-14 flex-1 mb-8" />
-        <Skeleton className="h-4 flex-1 w-1/2" />
-        <Skeleton className="h-56 flex-1 mb-8" />
+      <div className="grid-cols grid w-full gap-4 sm:flex-row sm:items-center">
+        <Skeleton className="mb-8 h-14 flex-1" />
+        <Skeleton className="h-4 w-1/2 flex-1" />
+        <Skeleton className="mb-8 h-14 flex-1" />
+        <Skeleton className="h-4 w-1/2 flex-1" />
+        <Skeleton className="mb-8 h-56 flex-1" />
         <Skeleton className="h-14 flex-1" />
-        <Skeleton className="h-4 flex-1 w-1/2" />
-        <Skeleton className="h-14 flex-1 w-44" />
+        <Skeleton className="h-4 w-1/2 flex-1" />
+        <Skeleton className="h-14 w-44 flex-1" />
       </div>
     </section>
   )

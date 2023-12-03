@@ -9,7 +9,7 @@ interface TagCardProps extends HTMLAttributes<HTMLDivElement> {
 export const TagCard: FC<TagCardProps> = (props) => {
   const { tag } = props
   return (
-    <article className="bg-light900_dark200 rounded-2xl border light-border shadow-light100_darknone w-full max-xs:min-w-full flex flex-col gap-8 py-8 px-4">
+    <article className="bg-light900_dark200 light-border shadow-light100_darknone flex w-full flex-col gap-8 rounded-2xl border px-4 py-8 max-xs:min-w-full">
       <div className="w-full">
         <Link
           href={`/tags/${tag.slug}`}
@@ -24,7 +24,7 @@ export const TagCard: FC<TagCardProps> = (props) => {
                   {tag.description}
                 </p> */}
 
-      <div className="text-dark400_light500 small-medium flex items-center py-1 gap-2">
+      <div className="text-dark400_light500 small-medium flex items-center gap-2 py-1">
         <span className="primary-text-gradient body-semibold">
           {tag.questions?.length}+
         </span>

@@ -25,7 +25,7 @@ export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
   const { isLoading, list, listFilter, activeFilter, onFilterClick } = props
 
   return (
-    <div className="mt-3 bg-light-700 dark:bg-dark-400 w-full absolute top-full z-10 rounded-xl py-5 shadow-sm">
+    <div className="absolute top-full z-10 mt-3 w-full rounded-xl bg-light-700 py-5 shadow-sm dark:bg-dark-400">
       <SearchGlobalFilterList
         listFilter={listFilter}
         activeFilter={activeFilter}
@@ -34,7 +34,7 @@ export const SearchGlobalResultList: FC<SearchGlobalResultListProps> = (
       {/* divider */}
       <div className="my-5 h-[1px] bg-light-700/50 dark:bg-dark-500/50" />
 
-      <div className="space-y-5 max-h-[300px] overflow-auto custom-scrollbar md:max-h-[600px]">
+      <div className="custom-scrollbar max-h-[300px] space-y-5 overflow-auto md:max-h-[600px]">
         <p className="base-bold text-dark400_light800 px-5">Top Match</p>
         {isLoading ? (
           <SearchGlobalResultLoader />

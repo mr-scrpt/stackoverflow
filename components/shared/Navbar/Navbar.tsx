@@ -26,7 +26,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
         </span>
       </Link>
       <SearchGlobal />
-      <div className="flex-between gap-5 mr-0 ml-auto">
+      <div className="flex-between ml-auto mr-0 gap-5">
         <ThemeSwitcher />
       </div>
       <SignedIn>

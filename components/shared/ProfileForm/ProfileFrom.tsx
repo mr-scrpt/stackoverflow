@@ -75,7 +75,7 @@ export const ProfileFrom: FC<ProfileFromProps> = (props) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex w-full flex-col gap-9 mt-9"
+          className="mt-9 flex w-full flex-col gap-9"
         >
           <FormField
             control={form.control}
@@ -200,7 +200,7 @@ export const ProfileFrom: FC<ProfileFromProps> = (props) => {
           />
           <Button
             type="submit"
-            className="mt-7 primary-gradient w-fit !text-light-900 ml-auto"
+            className="primary-gradient ml-auto mt-7 w-fit !text-light-900"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Saving' : 'Save'}

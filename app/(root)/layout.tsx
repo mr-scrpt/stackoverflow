@@ -35,7 +35,7 @@ const Layout = async (props: { children: ReactNode }) => {
       <div className="flex">
         <SidebarLeft className={clsLeftSide} userSlug={user?.slug} />
         <section className={clsContent}>
-          <div className="mx-auto w-full max-w-5xl h-full">{children}</div>
+          <div className="mx-auto h-full w-full max-w-5xl">{children}</div>
         </section>
         <SidebarRight className={clsRightSide} />
       </div>

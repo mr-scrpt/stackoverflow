@@ -33,7 +33,7 @@ const EditQuestionPage = async ({ params }: EditQuestionDetailsProps) => {
       <h1 className="h1-bold text-dark100_light900">Edit question</h1>
 
       {/* <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center"></div> */}
-      <div className="custom-scrollbar flex flex-col items-center flex-wrap md:flex-row md:justify-start  w-full gap-6 overflow-y-auto">
+      <div className="custom-scrollbar flex w-full flex-col flex-wrap items-center gap-6  overflow-y-auto md:flex-row md:justify-start">
         <QuestionForm
           type={QuestionFormTypeEnum.EDIT}
           questionDetails={question}

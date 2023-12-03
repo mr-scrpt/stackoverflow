@@ -136,7 +136,7 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
         classBg="bg-light700_dark400"
         route="/"
         iconPosition="left"
-        className="max-w-[600px] w-full max-lg:hidden"
+        className="w-full max-w-[600px] max-lg:hidden"
       />
       {isOpen && (
         <SearchGlobalResultList

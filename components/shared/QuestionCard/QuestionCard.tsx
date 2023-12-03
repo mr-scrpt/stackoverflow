@@ -30,7 +30,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
   } = item
 
   return (
-    <div className="flex flex-col gap-2 card-wrapper rounded-[10px] p-2 sm:p-4">
+    <div className="card-wrapper flex flex-col gap-2 rounded-[10px] p-2 sm:p-4">
       <div className="flex flex-col items-start justify-between gap-1">
         <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
           {/* for mobile size */}
@@ -42,7 +42,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
           </h3>
         </Link>
         <div className="text-dark400_light700 ">
-          <h3 className="text-[13px] leading-[15px]  opacity-80 break-all">
+          <h3 className="break-all text-[13px]  leading-[15px] opacity-80">
             <div className="text inline">
               <ParseHTML data={truncateText(content, 330)} withOutCode />
             </div>

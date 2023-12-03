@@ -15,11 +15,11 @@ export const UserCard: FC<UserCardProps> = async (props) => {
   const { user } = props
   const tagList = await getTopInteractedTags({ userId: user._id })
   return (
-    <div className="bg-light900_dark200 rounded-2xl border light-border shadow-light100_darknone w-full max-xs:min-w-full flex flex-col gap-8 py-8 px-4">
+    <div className="bg-light900_dark200 light-border shadow-light100_darknone flex w-full flex-col gap-8 rounded-2xl border px-4 py-8 max-xs:min-w-full">
       <article className="w-full">
         <Link
           href={`/profile/${user.username}`}
-          className="flex flex-col justify-center items-center"
+          className="flex flex-col items-center justify-center"
         >
           <Image
             src={user.picture}

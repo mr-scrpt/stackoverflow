@@ -12,7 +12,7 @@ interface StatsCardProps extends HTMLAttributes<HTMLDivElement> {
 export const StatsCard: FC<StatsCardProps> = (props) => {
   const { imgUrl, value, title } = props
   return (
-    <div className="bg-light900_dark300 flex flex-wrap gap-3.5 px-6 py-5 rounded-md items-center justify-start light-border border shadow-light-300 dark:shadow-dark-200">
+    <div className="bg-light900_dark300 light-border flex flex-wrap items-center justify-start gap-3.5 rounded-md border px-6 py-5 shadow-light-300 dark:shadow-dark-200">
       <Image src={imgUrl} alt={title} width={40} height={50} className="" />
       <div>
         <p className="paragraph-semibold text-dark200_light900">{value}</p>
@@ -41,7 +41,7 @@ export const Stats: FC<StatsProps> = (props) => {
       </h4>
 
       <div className="mt-5 grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-4">
-        <div className="bg-light900_dark300 flex flex-wrap p-6 gap-4 rounded-md items-center justify-evenly light-border border shadow-light-300 dark:shadow-dark-200">
+        <div className="bg-light900_dark300 light-border flex flex-wrap items-center justify-evenly gap-4 rounded-md border p-6 shadow-light-300 dark:shadow-dark-200">
           <div className="flex flex-col items-center">
             <span className="paragraph-semibold text-dark200_light900">
               {formatNumber(totalQuestions)}

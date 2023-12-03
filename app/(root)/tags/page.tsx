@@ -37,7 +37,7 @@ const TagsPage = async (props: ISearchParamsProps) => {
         />
       </div>
       <FilterRowContent list={TAG_PAGE_FILTER} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 custom-scrollbar overflow-y-auto">
+      <div className="custom-scrollbar grid grid-cols-1 gap-6 overflow-y-auto sm:grid-cols-2">
         {tagList.length > 0 ? (
           tagList.map((tag) => {
             return <TagCard key={tag._id} tag={tag} />

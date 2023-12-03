@@ -35,7 +35,7 @@ const CommunityPage = async (props: ISearchParamsProps) => {
         />
       </div>
       <FilterRowContent list={USER_PAGE_FILTER} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 custom-scrollbar overflow-y-auto">
+      <div className="custom-scrollbar grid grid-cols-1 gap-6 overflow-y-auto sm:grid-cols-2">
         {users.length > 0 ? (
           users.map((user) => {
             return <UserCard user={user} key={user._id} />

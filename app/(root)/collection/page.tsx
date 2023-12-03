@@ -49,7 +49,7 @@ const CollectionPage = async (props: ISearchParamsProps) => {
     <section className="flex flex-col gap-8">
       <h1 className="h1-bold text-dark100_light900">Saved Pages</h1>
 
-      <div className="flex jusify-between gap-5 max-sm:flex-col sm:items-center">
+      <div className="jusify-between flex gap-5 max-sm:flex-col sm:items-center">
         <SearchLocal route="/collection" placeholder="Search users" />
         <FilterContent
           list={QUESTION_PAGE_FILTER}
@@ -58,7 +58,7 @@ const CollectionPage = async (props: ISearchParamsProps) => {
         />
       </div>
       <FilterRowContent list={QUESTION_PAGE_FILTER} />
-      <div className="custom-scrollbar flex flex-col items-center flex-wrap md:flex-row md:justify-start  w-full gap-6 overflow-y-auto">
+      <div className="custom-scrollbar flex w-full flex-col flex-wrap items-center gap-6  overflow-y-auto md:flex-row md:justify-start">
         {questions && questions.length > 0 ? (
           questions.map((item) => {
             return (

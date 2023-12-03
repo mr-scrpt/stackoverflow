@@ -31,7 +31,7 @@ export const MenuMobile: FC<MenuMobileProps> = (props) => {
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="bg-light900_dark200 border-none flex flex-col gap-8 custom-scrollbar overflow-y-auto"
+        className="bg-light900_dark200 custom-scrollbar flex flex-col gap-8 overflow-y-auto border-none"
       >
         <Link href="/" className="flex items-center gap-1">
           <Image
@@ -46,7 +46,7 @@ export const MenuMobile: FC<MenuMobileProps> = (props) => {
           </p>
         </Link>
 
-        <div className="flex flex-col gap-4 h-full">
+        <div className="flex h-full flex-col gap-4">
           <SheetClose className="outline-none">
             <div className="flex h-full flex-col gap-4">
               <Menu menuList={SIDEBAR_LINKS} pathname={pathname} />
@@ -54,7 +54,7 @@ export const MenuMobile: FC<MenuMobileProps> = (props) => {
 
             {/* only see if user signed out */}
             <SignedOut>
-              <div className="flex flex-col gap-3 my-auto">
+              <div className="my-auto flex flex-col gap-3">
                 <SheetClose asChild>
                   <LoginBar classIcon="hidden" />
                 </SheetClose>
