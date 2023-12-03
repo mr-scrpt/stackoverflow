@@ -52,7 +52,9 @@ export const UserCard: FC<UserCardProps> = async (props) => {
             ))}
           </div>
         ) : (
-          <Badge>No tags yet</Badge>
+          <Badge className="subtle-medium bg-light800_dark400 text-light400_light500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 capitalize">
+            No tags yet
+          </Badge>
         )}
       </div>
     </div>

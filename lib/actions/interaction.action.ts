@@ -5,6 +5,7 @@ import { connectToDatabase } from '../mongoose'
 import { QuestionModel } from '@/database/question.model'
 import { InteractionModel } from '@/database/interaction.model'
 import { getQuestion } from './question.action'
+import { revalidatePath } from 'next/cache'
 
 export async function viewQuestion(params: IViewQuestionParams) {
   try {
@@ -40,6 +41,7 @@ export async function viewQuestion(params: IViewQuestionParams) {
         },
         { new: true }
       )
+      revalidatePath('/community')
     }
   } catch (error) {
     console.log(error)
