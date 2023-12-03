@@ -7,9 +7,13 @@ import { MenuMobile } from '../MenuMobile/MenuMobile'
 import { SearchGlobal } from '../SearchGlobal/SearchGlobal'
 import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher'
 
-interface NavbarProps extends HTMLAttributes<HTMLDivElement> {}
+interface NavbarProps extends HTMLAttributes<HTMLDivElement> {
+  userSlug?: string
+  isAuth: boolean
+}
 
 export const Navbar: FC<NavbarProps> = (props) => {
+  const { userSlug, isAuth } = props
   return (
     <nav className="flex-between bg-light800_dark300 fixed z-50 w-full gap-5 p-6 shadow-light-300 dark:shadow-none sm:px-12">
       <Link className="flex items-center gap-2" href="/">
@@ -29,18 +33,22 @@ export const Navbar: FC<NavbarProps> = (props) => {
       <div className="flex-between ml-auto mr-0 gap-5">
         <ThemeSwitcher />
       </div>
-      <SignedIn>
-        <UserButton
-          afterSignOutUrl="/"
-          appearance={{
-            elements: { avatarBox: 'h-10 w-10' },
-            variables: {
-              colorPrimary: '#ff7000',
-            },
-          }}
-        />
-      </SignedIn>
-      <MenuMobile />
+      {userSlug && (
+        <SignedIn>
+          <UserButton
+            afterSignOutUrl="/?logout=true"
+            userProfileMode="navigation"
+            userProfileUrl={`/profile/${userSlug}`}
+            appearance={{
+              elements: { avatarBox: 'h-10 w-10' },
+              variables: {
+                colorPrimary: '#ff7000',
+              },
+            }}
+          />
+        </SignedIn>
+      )}
+      <MenuMobile isAuth={isAuth} />
     </nav>
   )
 }
