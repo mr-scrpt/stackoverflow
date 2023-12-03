@@ -36,7 +36,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
       {userSlug && (
         <SignedIn>
           <UserButton
-            afterSignOutUrl="/?logout=true"
+            afterSignOutUrl="/"
             userProfileMode="navigation"
             userProfileUrl={`/profile/${userSlug}`}
             appearance={{
