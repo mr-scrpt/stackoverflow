@@ -160,8 +160,11 @@ const ProfilePage = async (props: ProfilePageProps) => {
               Answers
             </TabsTrigger>
           </TabsList>
-          <div className="flex w-full flex-col gap-6">
-            <TabsContent value="top-posts">
+          <div className="w-full">
+            <TabsContent
+              value="top-posts"
+              className="flex w-full flex-col gap-6"
+            >
               {questions.length ? (
                 <QuestionTab
                   list={questions}
@@ -181,7 +184,7 @@ const ProfilePage = async (props: ProfilePageProps) => {
                 />
               )}
             </TabsContent>
-            <TabsContent value="answers">
+            <TabsContent value="answers" className="flex w-full flex-col gap-6">
               {answers.length ? (
                 <AnswerTab
                   list={answers}
