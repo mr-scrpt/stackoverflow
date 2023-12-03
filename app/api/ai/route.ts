@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 
+export const maxDuration = 40
+
 export const POST = async (request: Request) => {
   const { question } = await request.json()
   console.log(' =>>> OPENAI_API_KEY', process.env.OPENAI_API_KEY)
