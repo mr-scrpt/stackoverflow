@@ -30,7 +30,7 @@ export const SearchGlobalResultRow: FC<SearchGlobalResultItemProps> = (
   return (
     <span
       key={item.type}
-      className="dark:bg-dark-700/50 flex w-full flex-wrap items-start gap-3 px-5 py-2.5 hover:bg-light-700/5"
+      className="flex w-full flex-wrap items-start gap-3 px-5 py-2.5 hover:bg-light-700/5 dark:bg-dark-400/50"
     >
       {item.title && <div className="w-full">{title}</div>}
       <div className="flex flex-col gap-3">

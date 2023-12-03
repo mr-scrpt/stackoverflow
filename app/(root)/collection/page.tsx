@@ -49,7 +49,7 @@ const CollectionPage = async (props: ISearchParamsProps) => {
     <section className="flex flex-col gap-8">
       <h1 className="h1-bold text-dark100_light900">Saved Pages</h1>
 
-      <div className="jusify-between flex gap-5 max-sm:flex-col sm:items-center">
+      <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <SearchLocal route="/collection" placeholder="Search users" />
         <FilterContent
           list={QUESTION_PAGE_FILTER}

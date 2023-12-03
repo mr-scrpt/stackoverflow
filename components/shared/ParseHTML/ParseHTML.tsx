@@ -54,5 +54,5 @@ export const ParseHTML: FC<ParseHTMLProps> = (props) => {
     Prism.highlightAll()
   }, [codeHTML])
 
-  return <div className="markdown min-f-full w-full">{codeHTML}</div>
+  return <div className="markdown w-full">{codeHTML}</div>
 }

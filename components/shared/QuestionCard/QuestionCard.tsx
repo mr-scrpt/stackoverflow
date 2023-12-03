@@ -43,7 +43,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
         </Link>
         <div className="text-dark400_light700 ">
           <h3 className="break-all text-[13px]  leading-[15px] opacity-80">
-            <div className="text inline">
+            <div className="flex">
               <ParseHTML data={truncateText(content, 330)} withOutCode />
             </div>
           </h3>
