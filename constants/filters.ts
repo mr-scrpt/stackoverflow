@@ -59,4 +59,5 @@ export const URL_SEARCH_PARMS = {
   q: 'q',
   global: 'global',
   type: 'type',
+  // logout: 'true',
 }

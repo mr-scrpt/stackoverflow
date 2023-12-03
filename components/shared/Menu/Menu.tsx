@@ -1,3 +1,4 @@
+'use client'
 import { cn } from '@/lib/utils'
 import { SidebarLink } from '@/types'
 import Image from 'next/image'
@@ -7,6 +8,7 @@ import { FC, HTMLAttributes } from 'react'
 interface MenuProps extends HTMLAttributes<HTMLDivElement> {
   menuList: SidebarLink[]
   pathname: string
+  isAuth: boolean
   classLink?: string
   classLinkText?: string
   userProfileSlug?: string
@@ -19,6 +21,7 @@ export const Menu: FC<MenuProps> = (props) => {
     classLink,
     classLinkText,
     userProfileSlug,
+    isAuth,
     ...rest
   } = props
 
@@ -48,10 +51,12 @@ export const Menu: FC<MenuProps> = (props) => {
           isActive ? 'base-bold' : 'base-medium'
         )
 
-        if (item.route === '/profile') {
-          if (userProfileSlug) {
+        if (item.route.startsWith('/profile')) {
+          console.log(' =>>> in item')
+          if (isAuth && userProfileSlug) {
             item.route = `${item.route}/${userProfileSlug}`
           } else {
+            console.log(' =>>> return null')
             return null
           }
         }

@@ -73,9 +73,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'OK', user: userCreated })
   }
 
-  if (eventType === 'session.ended') {
-    revalidatePath('/')
-  }
+  // if (eventType === 'session.ended') {
+  //   revalidatePath('/')
+  // }
 
   if (eventType === 'user.updated') {
     const { id, email_addresses, image_url, username, first_name, last_name } =
