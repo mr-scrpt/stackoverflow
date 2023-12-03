@@ -13,8 +13,14 @@ interface MenuProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const Menu: FC<MenuProps> = (props) => {
-  const { menuList, pathname, classLink, classLinkText, userProfileSlug } =
-    props
+  const {
+    menuList,
+    pathname,
+    classLink,
+    classLinkText,
+    userProfileSlug,
+    ...rest
+  } = props
 
   const clsLink = cn(
     'flex items-center justify-start gap-4 bg-transparent p-4',
@@ -23,7 +29,7 @@ export const Menu: FC<MenuProps> = (props) => {
   const clsLinkText = classLinkText
 
   return (
-    <nav>
+    <nav {...rest}>
       {menuList.map((item) => {
         // assure the item is correctly selected
         const isActive =
