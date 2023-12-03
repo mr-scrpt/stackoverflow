@@ -14,9 +14,6 @@ export const QuestionTab: FC<QuestionTabProps> = (props) => {
   return (
     <>
       {list.map((question) => {
-        // console.log('question.author._id', question.author._id)
-        // console.log('userId', userId)
-        // console.log('is equal', question.author._id === userId)
         return (
           <QuestionCard
             key={question._id}

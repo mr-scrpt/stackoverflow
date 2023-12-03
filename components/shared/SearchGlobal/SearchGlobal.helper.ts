@@ -1,9 +1,7 @@
 import {
   ISearchGlobalCategoryInfo,
-  ISearchGlobalDataItem,
   ISearchGlobalResult,
   ISearchGlobalTransformedResult,
-  SearchTypeEnum,
 } from '@/types/shared'
 
 export const transformSearchData = (
@@ -39,59 +37,3 @@ export const getCategoryItemLink: Record<
   user: (itemLink, itemId) => `/community/${itemLink}`,
   answer: (itemLink, itemId) => `/question/${itemLink}#${itemId}`,
 }
-type MappingFunction = string | ((item: any) => string)
-
-interface Mapping {
-  title: MappingFunction
-  link: MappingFunction
-  id: MappingFunction
-}
-
-const defaultMapping: Record<SearchTypeEnum, Mapping> = {
-  tag: {
-    title: 'name',
-    link: 'slug',
-    id: '_id',
-  },
-  question: {
-    title: 'title',
-    link: 'slug',
-    id: '_id',
-  },
-  user: {
-    title: 'username',
-    link: 'slug',
-    id: '_id',
-  },
-  answer: {
-    title: (item) => item.question.title,
-    link: (item) => item.question.slug,
-    id: '_id',
-  },
-}
-export const mapData = (
-  dataArray: any[],
-  type: SearchTypeEnum
-): ISearchGlobalDataItem[] => {
-  const mapping = defaultMapping[type]
-
-  if (!mapping) {
-    throw new Error(`Unsupported search type: ${type}`)
-  }
-
-  return dataArray.map((item) => ({
-    title: getField(item, mapping.title),
-    link: getField(item, mapping.link),
-    id: getField(item, mapping.id),
-  }))
-}
-
-const getField = (item: any, field: string | MappingFunction): string => {
-  if (typeof field === 'function') {
-    return field(item)
-  }
-
-  return item[field]
-}
-export const globalSearchFiltered = (obj: ISearchGlobalResult[]) =>
-  obj.filter((item) => item.data.length)

@@ -97,7 +97,6 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
   }, [queryType, queryGlobal])
 
   const onFilterClick = (type: string) => {
-    console.log('click activeFilter', activeFilter)
     if (activeFilter === type) {
       // if tag being clicked === active tag => clear filter
       setActiveFilter('')
@@ -137,7 +136,7 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
         classBg="bg-light700_dark400"
         route="/"
         iconPosition="left"
-        className="max-w-[600px] w-full max-lg:hidden"
+        className="w-full max-w-[600px] max-lg:hidden"
       />
       {isOpen && (
         <SearchGlobalResultList

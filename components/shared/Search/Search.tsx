@@ -25,7 +25,7 @@ export const Search: FC<SearchProps> = (props) => {
   return (
     <div className={className}>
       <div
-        className={`${classBg} w-full relative flex min-h-[56px] grow items-center gap-1 rounded-xl px-4 `}
+        className={`${classBg} relative flex min-h-[56px] w-full grow items-center gap-1 rounded-xl px-4 `}
       >
         {icon && iconPosition === 'left' && (
           <Image
@@ -42,7 +42,7 @@ export const Search: FC<SearchProps> = (props) => {
           onChange={(e) => onSearch(e.target?.value)}
           value={value}
           // value=""
-          className={`${classBg} paragraph-regular no-focus placeholder border-none shadow-none outline-none text-dark200_light900`}
+          className={`${classBg} paragraph-regular no-focus placeholder text-dark200_light900 border-none shadow-none outline-none`}
         />
         {icon && iconPosition === 'right' && (
           <Image

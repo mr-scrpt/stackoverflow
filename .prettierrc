@@ -15,5 +15,5 @@
   "importOrder": ["^components/(.*)$", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
-  "plugins": ["prettier-plugin-prisma"]
+  "plugins": ["prettier-plugin-prisma","prettier-plugin-tailwindcss"]
 }

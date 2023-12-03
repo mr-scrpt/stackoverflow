@@ -17,6 +17,7 @@ import { z } from 'zod'
 import { AnswerFormSchema } from './validation.schema'
 import Image from 'next/image'
 import { Editor } from '@tinymce/tinymce-react'
+import { notice } from '../Notice/notice'
 
 interface AnswerFormProps extends HTMLAttributes<HTMLDivElement> {
   question: string
@@ -59,6 +60,10 @@ export const AnswerForm: FC<AnswerFormProps> = (props) => {
 
         editor.setContent('')
       }
+
+      return notice({
+        title: 'Your answer has been successfully added',
+      })
     } catch (error) {
       console.log(error)
     } finally {
@@ -78,7 +83,6 @@ export const AnswerForm: FC<AnswerFormProps> = (props) => {
           body: JSON.stringify({ question }),
         }
       )
-      // console.log('response', response)
 
       const aiAnswer = await response.json()
 

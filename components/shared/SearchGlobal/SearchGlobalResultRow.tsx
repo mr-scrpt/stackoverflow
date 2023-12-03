@@ -21,7 +21,7 @@ export const SearchGlobalResultRow: FC<SearchGlobalResultItemProps> = (
       <Link
         key={item.type}
         href={item.link}
-        className="cursor-pointer text-light400_light500"
+        className="text-light400_light500 cursor-pointer"
       >
         {item.title}
       </Link>
@@ -30,7 +30,7 @@ export const SearchGlobalResultRow: FC<SearchGlobalResultItemProps> = (
   return (
     <span
       key={item.type}
-      className="flex flex-wrap w-full items-start gap-3 px-5 py-2.5 hover:bg-light-700/5 dark:bg-dark-700/50"
+      className="flex w-full flex-wrap items-start gap-3 px-5 py-2.5 hover:bg-light-700/5 dark:bg-dark-400/50"
     >
       {item.title && <div className="w-full">{title}</div>}
       <div className="flex flex-col gap-3">

@@ -1,11 +1,5 @@
 'use client'
-import { IUser } from '@/types'
-import { usePathname, useRouter } from 'next/navigation'
-import { FC, HTMLAttributes, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import { ProfileFormSchema } from './validation.schema'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -15,9 +9,16 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { updateUser } from '@/lib/actions/user.action'
+import { IUser } from '@/types'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { usePathname, useRouter } from 'next/navigation'
+import { FC, HTMLAttributes, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+import { notice } from '../Notice/notice'
+import { ProfileFormSchema } from './validation.schema'
 
 interface ProfileFromProps extends HTMLAttributes<HTMLDivElement> {
   user: IUser
@@ -57,6 +58,9 @@ export const ProfileFrom: FC<ProfileFromProps> = (props) => {
         },
         path: pathname,
       })
+      notice({
+        title: 'Your profile has been successfully edited',
+      })
 
       router.push(`/profile/${updatedUser.slug}`)
     } catch (error) {
@@ -71,7 +75,7 @@ export const ProfileFrom: FC<ProfileFromProps> = (props) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex w-full flex-col gap-9 mt-9"
+          className="mt-9 flex w-full flex-col gap-9"
         >
           <FormField
             control={form.control}
@@ -196,7 +200,7 @@ export const ProfileFrom: FC<ProfileFromProps> = (props) => {
           />
           <Button
             type="submit"
-            className="mt-7 primary-gradient w-fit !text-light-900 ml-auto"
+            className="primary-gradient ml-auto mt-7 w-fit !text-light-900"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Saving' : 'Save'}

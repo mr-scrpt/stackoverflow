@@ -77,9 +77,6 @@ export const AnswerList: FC<AnswerListProps> = async (props) => {
                     upVotes={answer.upVotes.length}
                     downVotes={answer.downVotes.length}
                     hasUpVoted={answer.upVotes.some((user) => {
-                      // console.log('user', user)
-                      // console.log('userId', userId)
-                      // console.log('userId', userId)
                       return user._id === userId
                     })}
                     hasDownVoted={answer.downVotes.some(

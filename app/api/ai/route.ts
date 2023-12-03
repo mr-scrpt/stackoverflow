@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server'
 
 export const POST = async (request: Request) => {
   const { question } = await request.json()
-  // console.log('in fetch', question)
-  console.log('key', process.env.OPENAI_API_KEY)
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {

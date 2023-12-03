@@ -9,12 +9,31 @@ import { getQuestionByTagSlug } from '@/lib/actions/question.action'
 import { getUserByClerkId } from '@/lib/actions/user.action'
 import { ISearchParam } from '@/types'
 import { auth } from '@clerk/nextjs'
+import { Metadata } from 'next'
 
 interface TagPageProps {
   params: {
     slug: string
   }
   searchParams: ISearchParam
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const { slug } = params
+
+  const { tagTitle } = await getQuestionByTagSlug({
+    slug,
+  })
+  const tagname = tagTitle.charAt(0).toUpperCase() + tagTitle.slice(1)
+
+  return {
+    title: `${tagname} | Dev Overflow`,
+    description: `About ${tagTitle} tag page`,
+  }
 }
 
 const TagPage = async (props: TagPageProps) => {

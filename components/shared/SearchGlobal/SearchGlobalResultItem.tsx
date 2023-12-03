@@ -16,11 +16,11 @@ export const SearchGlobalResultItem: FC<SearchGlobalResultItemProps> = (
     <Link
       href={item.link}
       key={item.id}
-      className="flex items-start gap-2 cursor-pointer group"
+      className="group flex cursor-pointer items-start gap-2"
     >
-      <TagIcon className="object-contain stroke-dark-500 group opacity-60 dark:stroke-light-400 group-hover:stroke-primary-500 transition-all hover:opacity-100" />
+      <TagIcon className="group stroke-dark-500 object-contain opacity-60 transition-all group-hover:stroke-primary-500 dark:stroke-light-400" />
       <div className="flex flex-col">
-        <span className="body-medium transition-all line-clamp-1 group-hover:text-primary-500 dark:text-light-800 dark:group-hover:text-primary-500">
+        <span className="body-medium line-clamp-1 transition-all group-hover:text-primary-500 dark:text-light-800 dark:group-hover:text-primary-500">
           {item.title}
         </span>
       </div>

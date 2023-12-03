@@ -2,9 +2,13 @@ import { QuestionForm } from '@/components/shared/QuestionForm/QuestionForm'
 import { getUserByClerkId } from '@/lib/actions/user.action'
 import { QuestionFormTypeEnum } from '@/types/shared'
 import { auth } from '@clerk/nextjs'
+import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
-// interface PageProps extends HTMLAttributes<HTMLDivElement> {}
+export const metadata: Metadata = {
+  title: 'Ask Question | Dev Overflow',
+  description: 'Ask any question about programming',
+}
 
 const QuestionPage = async () => {
   const { userId } = auth()

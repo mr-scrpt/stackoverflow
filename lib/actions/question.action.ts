@@ -1,6 +1,6 @@
 'use server'
 
-import { PAGINATION_BASE_LIMIT } from '@/constants'
+import { PAGINATION_BASE_LIMIT, RECOMENDED_BASE_LIMIT } from '@/constants'
 import { AnswerModel } from '@/database/answer.model'
 import { InteractionModel } from '@/database/interaction.model'
 import { QuestionModel } from '@/database/question.model'
@@ -21,14 +21,52 @@ import { FilterQuery } from 'mongoose'
 import { revalidatePath } from 'next/cache'
 import { connectToDatabase } from '../mongoose'
 import { slugGenerator, toPlainObject } from '../utils'
-import { createTag } from './tag.action'
+import { createTag, getTopInteractedTags } from './tag.action'
+import { getUserByClerkId } from './user.action'
 
 export const getQuestions = async (
   params: IGetQuestionsParams
 ): Promise<{ questions: IQuestion[]; hasNextPage: boolean }> => {
   try {
     await connectToDatabase()
-    const { q, filter, page = 1, limit = PAGINATION_BASE_LIMIT } = params
+    const {
+      q,
+      filter,
+      userId,
+      page = 1,
+      limit = PAGINATION_BASE_LIMIT,
+    } = params
+
+    if (userId && filter === 'recommended') {
+      const user = await getUserByClerkId(userId)
+      if (user) {
+        const tags = await getTopInteractedTags({
+          userId: user._id,
+          limit: RECOMENDED_BASE_LIMIT,
+        })
+        const query: FilterQuery<typeof QuestionModel> = {
+          $and: [
+            { tags: { $in: tags } },
+            { author: { $ne: user._id } }, // Exclude user's own question
+          ],
+        }
+
+        const totalQuestions = await QuestionModel.countDocuments(query)
+
+        const recommendedQuestion = await QuestionModel.find(query)
+          .populate('author')
+          .populate('tags')
+          .sort({ createdAt: -1 })
+          .skip((page - 1) * limit)
+          .limit(limit)
+
+        const hasNextPage =
+          totalQuestions > (page - 1) * limit + recommendedQuestion.length
+
+        return { questions: recommendedQuestion, hasNextPage }
+      }
+      return { questions: [], hasNextPage: false }
+    }
     const query: FilterQuery<typeof QuestionModel> = q
       ? {
           $or: [
@@ -55,8 +93,6 @@ export const getQuestions = async (
         break
     }
 
-    // console.log('sortOption', filter, sortOption)
-
     const skipPage = (page - 1) * limit
 
     const questions = await QuestionModel.find(query)
@@ -80,11 +116,24 @@ export const getQuestions = async (
   }
 }
 
+export const getQuestion = async (id: string) => {
+  try {
+    connectToDatabase()
+
+    const question = await QuestionModel.findOne({ id }).populate('tags')
+
+    return question
+  } catch (e) {
+    console.log(e)
+    throw e
+  }
+}
+
 export const getQuestionListByAuthorId = async (
   authorId: string
 ): Promise<IQuestion[]> => {
   const questionList = await QuestionModel.find({ author: authorId })
-  if (!questionList.length) throw new Error('Questions not found')
+  // if (!questionList.length) throw new Error('Questions not found')
 
   return toPlainObject(questionList)
 }
@@ -109,8 +158,6 @@ export const fetchQuestionBySlug = async (slug: string): Promise<IQuestion> => {
         model: UserModel,
         select: '_id',
       })
-
-    // console.log('===>>>', question)
 
     // return question
     return toPlainObject(question)
@@ -298,7 +345,6 @@ export const deleteQuestion = async (params: IDeleteQuestionParams) => {
     connectToDatabase()
 
     const { questionId, path } = params
-    // console.log('questionId =====6....>>>', questionId)
 
     // delete question/answers/interactivity/tags associate with question
     await QuestionModel.deleteOne({ _id: questionId })

@@ -15,12 +15,11 @@ export const LoginBar: FC<LoginBarProps> = (props) => {
   const clsTextSignUp = cn(classLinkText, '')
 
   const clsIcon = cn(classIcon, 'invert-colors lg:hidden')
-  // console.log('class for icon', clsIcon)
   return (
     <div>
-      <div className="flex flex-col gap-3 my-auto">
+      <div className="my-auto flex flex-col gap-3">
         <Link href="/sign-in">
-          <Button className="small-medium border light-border-2 min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none">
+          <Button className="small-medium light-border-2 min-h-[41px] w-full rounded-lg border px-4 py-3 shadow-none">
             <Image
               src="/assets/icons/account.svg"
               alt="login"

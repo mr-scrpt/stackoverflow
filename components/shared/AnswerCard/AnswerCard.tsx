@@ -15,12 +15,8 @@ interface AnswerCardProps extends HTMLAttributes<HTMLDivElement> {
 export const AnswerCard: FC<AnswerCardProps> = (props) => {
   const { item, isAuthor } = props
   const { question, author } = item
-  // console.log('question $$$$', question)
   return (
-    <div
-      // href={`/question/${question.slug}/#${item._id}`}
-      className="card-wrapper rounded-[10px] px-11 py-9"
-    >
+    <div className="card-wrapper rounded-[10px] px-11 py-9">
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
         <div>
           <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">

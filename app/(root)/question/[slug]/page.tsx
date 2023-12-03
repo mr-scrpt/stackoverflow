@@ -6,10 +6,11 @@ import { Tag } from '@/components/shared/Tag/Tag'
 import { VoteBar } from '@/components/shared/VoteBar/VoteBar'
 import { fetchQuestionBySlug } from '@/lib/actions/question.action'
 import { getUserByClerkId } from '@/lib/actions/user.action'
-import { formatNumber, getTimestamp } from '@/lib/utils'
+import { formatNumber, getTimestamp, stripHtmlTags } from '@/lib/utils'
 import { ISearchParam } from '@/types'
 import { VoteTypeEnum } from '@/types/shared'
 import { auth } from '@clerk/nextjs'
+import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -20,6 +21,23 @@ interface QuestionDetailsProps {
   searchParams: ISearchParam
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const { slug } = params
+
+  const question = await fetchQuestionBySlug(slug)
+
+  const clean = stripHtmlTags(question.content)
+
+  return {
+    title: `${question.title} | Dev Overflow`,
+    description: clean.slice(0, 150),
+  }
+}
+
 const QuestionDetailsPage = async (props: QuestionDetailsProps) => {
   const { searchParams, params } = props
   const { filter, page } = searchParams
@@ -27,11 +45,9 @@ const QuestionDetailsPage = async (props: QuestionDetailsProps) => {
   const { userId } = auth()
 
   const user = await getUserByClerkId(userId)
-  console.log('user::', user)
 
   const question = await fetchQuestionBySlug(slug)
   if (!question) return null
-  console.log('question', question)
 
   return (
     <section className="flex flex-col gap-8">

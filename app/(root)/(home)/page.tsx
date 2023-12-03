@@ -10,18 +10,25 @@ import { getQuestions } from '@/lib/actions/question.action'
 import { getUserByClerkId } from '@/lib/actions/user.action'
 import { ISearchParamsProps } from '@/types'
 import { auth } from '@clerk/nextjs'
+import { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'Home | Dev Overflow',
+  description: 'Dev Overflow is awesome site to developer',
+}
 
 const HomePage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
   const { q, filter, page } = searchParams
+  const { userId: clerkId } = auth()
   const { questions, hasNextPage } = await getQuestions({
     q,
+    userId: clerkId || undefined,
     filter,
     page: page ? +page : 1,
   })
 
-  const { userId: clerkId } = auth()
   const userActual = await getUserByClerkId(clerkId)
 
   return (
@@ -40,7 +47,7 @@ const HomePage = async (props: ISearchParamsProps) => {
         <FilterContent
           list={HOME_PAGE_FILTER}
           classTrigger="min-h-[56px] sm:min-w-[170px] bg-light-700 dark:bg-dark-400"
-          // className="hidden max-md:flex"
+          className="hidden max-md:flex"
         />
       </div>
       {/* <FilterRow list={HOME_PAGE_FILTER} /> */}

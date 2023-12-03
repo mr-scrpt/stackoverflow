@@ -1,6 +1,7 @@
 import { Navbar } from '@/components/shared/Navbar'
 import { SidebarLeft } from '@/components/shared/SidebarLeft/SidebarLeft'
 import { SidebarRight } from '@/components/shared/SidebarRight/SidebarRight'
+import { Toaster } from '@/components/ui/toaster'
 import { getUserByClerkId } from '@/lib/actions/user.action'
 import { cn } from '@/lib/utils'
 import { auth } from '@clerk/nextjs'
@@ -34,10 +35,11 @@ const Layout = async (props: { children: ReactNode }) => {
       <div className="flex">
         <SidebarLeft className={clsLeftSide} userSlug={user?.slug} />
         <section className={clsContent}>
-          <div className="mx-auto w-full max-w-5xl h-full">{children}</div>
+          <div className="mx-auto h-full w-full max-w-5xl">{children}</div>
         </section>
         <SidebarRight className={clsRightSide} />
       </div>
+      <Toaster />
     </main>
   )
 }

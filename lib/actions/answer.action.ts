@@ -137,9 +137,7 @@ export const getAnswerList = async (
     })
     const hasNextPage = totalAnswers > limit * (page - 1) + answers.length
 
-    // answers.map((item) => item.upVotes.map((item) => console.log('item', item)))
     const answersPlain = toPlainObject(answers)
-    // console.log('answersPlain', answersPlain)
     return { answers: answersPlain, hasNextPage, totalAnswers }
   } catch (error) {
     console.log(error)
@@ -151,7 +149,7 @@ export const getAnswerListByAuthorId = async (
   authorId: string
 ): Promise<IAnswer[]> => {
   const answersList = await AnswerModel.find({ author: authorId })
-  if (!answersList.length) throw new Error('Answers not found')
+  // if (!answersList.length) throw new Error('Answers not found')
 
   return toPlainObject(answersList)
 }

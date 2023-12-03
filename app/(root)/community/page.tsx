@@ -1,5 +1,3 @@
-// interface pageProps extends HTMLAttributes<HTMLDivElement> {}
-
 import { FilterContent } from '@/components/shared/FilterContent/FilterContent'
 import { FilterRowContent } from '@/components/shared/FilterRowContend/FilterRowContent'
 import { PaginationContent } from '@/components/shared/PaginationContent/PaginationContent'
@@ -8,7 +6,13 @@ import { UserCard } from '@/components/shared/UserCard/UserCard'
 import { USER_PAGE_FILTER } from '@/constants/filters'
 import { getAllUsers } from '@/lib/actions/user.action'
 import { ISearchParamsProps } from '@/types'
+import { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'Community | Dev Overflow',
+  description: 'Meet the outstanding people here in Dev Overflow',
+}
 
 const CommunityPage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
@@ -31,7 +35,7 @@ const CommunityPage = async (props: ISearchParamsProps) => {
         />
       </div>
       <FilterRowContent list={USER_PAGE_FILTER} />
-      <div className="custom-scrollbar flex flex-col items-center flex-wrap md:flex-row md:justify-start  w-full gap-6 overflow-y-auto">
+      <div className="custom-scrollbar grid grid-cols-1 gap-6 overflow-y-auto sm:grid-cols-2">
         {users.length > 0 ? (
           users.map((user) => {
             return <UserCard user={user} key={user._id} />

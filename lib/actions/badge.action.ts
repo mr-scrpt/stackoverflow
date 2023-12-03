@@ -53,11 +53,6 @@ export const getBadge = async (userId: string) => {
     (total, item) => total + item.upVotes.length,
     0
   )
-  // console.log('questionCount', questionCount)
-  // console.log('answerCount', answerCount)
-  // console.log('questionUpvoteCount', questionUpvoteCount)
-  // console.log('answerUpvoteCount', answerUpvoteCount)
-  // console.log('viewTotal', viewTotal)
   const scores = [
     {
       type: 'QUESTION_COUNT' as BadgeCriteriaType,

@@ -201,7 +201,7 @@ export const deleteUser = async (params: IDeleteUserParams) => {
 
     const { clerkId } = params
 
-    const user = await UserModel.findOneAndDelete({ clerkId })
+    const user = await UserModel.findOne({ clerkId })
 
     if (!user) throw new Error('User not found')
 

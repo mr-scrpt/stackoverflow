@@ -30,6 +30,7 @@ import { QuestionFormSchema } from './validation.schema'
 import useTheme from '@/contexts/ThemeProvider'
 import { IQuestion, ITag } from '@/types'
 import { QuestionFormTypeEnum } from '@/types/shared'
+import { notice } from '../Notice/notice'
 
 interface QuestionFormProps extends HTMLAttributes<HTMLDivElement> {
   userId: string
@@ -113,7 +114,9 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
           // author: userId,
           path: pathname,
         })
-        console.log('new')
+        notice({
+          title: 'You question has been successfully edited',
+        })
 
         router.push(`/question/${result.slug}`)
       }
@@ -126,7 +129,9 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
           path: pathname,
         })
 
-        // navigate to home page
+        notice({
+          title: 'Your question has been successfully added',
+        })
         router.push('/')
       }
     } catch (error) {
@@ -142,7 +147,6 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
     form.setValue('tags', newTags)
   }
 
-  console.log('type', type)
   // TODO - сделать переключенлие темы реактивной,
   // что бы редактор переключался динамически
 
@@ -164,10 +168,10 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                 <Input
                   placeholder=""
                   {...field}
-                  className="mt-0 no-focus paragraph-regular bg-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
+                  className="no-focus paragraph-regular bg-light900_dark300 light-border-2 text-dark300_light700 mt-0 min-h-[56px] border"
                 />
               </FormControl>
-              <FormDescription className="mt-0 text-[0.8rem] dark:text-slate-400 body-regular text-light-500">
+              <FormDescription className="body-regular mt-0 text-[0.8rem] text-light-500 dark:text-slate-400">
                 Be specific and imagine youre asking a question to another
                 person.
               </FormDescription>
@@ -248,7 +252,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                 <Input
                   onKeyDown={(e) => handleInputKeyDown(e, field)}
                   disabled={type === QuestionFormTypeEnum.EDIT}
-                  className="mt-0 no-focus paragraph-regular bg-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
+                  className="no-focus paragraph-regular bg-light900_dark300 light-border-2 text-dark300_light700 mt-0 min-h-[56px] border"
                   placeholder="Tags..."
                 />
               </FormControl>
@@ -277,7 +281,7 @@ export const QuestionForm: FC<QuestionFormProps> = (props) => {
                   ))}
                 </div>
               )}
-              <FormDescription className="mt-0 text-[0.8rem] dark:text-slate-400 body-regular text-light-500">
+              <FormDescription className="body-regular mt-0 text-[0.8rem] text-light-500 dark:text-slate-400">
                 Add up to 3 tags to describe what your question is about. You
                 need to press enter to add a tag.
               </FormDescription>

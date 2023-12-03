@@ -7,6 +7,12 @@ import { TagCard } from '@/components/shared/TagCard/TagCard'
 import { TAG_PAGE_FILTER } from '@/constants/filters'
 import { fetchTagList } from '@/lib/actions/tag.action'
 import { ISearchParamsProps } from '@/types'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Tags list | Dev Overflow',
+  description: 'Popular tags from Dev Overflow site community',
+}
 
 const TagsPage = async (props: ISearchParamsProps) => {
   const { searchParams } = props
@@ -31,7 +37,7 @@ const TagsPage = async (props: ISearchParamsProps) => {
         />
       </div>
       <FilterRowContent list={TAG_PAGE_FILTER} />
-      <div className="custom-scrollbar flex flex-col items-center flex-wrap md:flex-row md:justify-start  w-full gap-6 overflow-y-auto">
+      <div className="custom-scrollbar grid grid-cols-1 gap-6 overflow-y-auto sm:grid-cols-2">
         {tagList.length > 0 ? (
           tagList.map((tag) => {
             return <TagCard key={tag._id} tag={tag} />

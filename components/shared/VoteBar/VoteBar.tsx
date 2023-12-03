@@ -12,6 +12,7 @@ import {
 import { downVoteAnswer, upVoteAnswer } from '@/lib/actions/answer.action'
 import { viewQuestion } from '@/lib/actions/interaction.action'
 import { VoteDirectionEnum, VoteTypeEnum } from '@/types/shared'
+import { notice } from '../Notice/notice'
 
 interface VoteBarProps extends HTMLAttributes<HTMLDivElement> {
   type: VoteTypeEnum
@@ -40,17 +41,28 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
   const router = useRouter()
 
   const handleSave = async () => {
-    console.log('click')
     await toggleSaveQuestion({
       userId,
       questionId: itemId,
       path: pathname,
     })
+
+    notice({
+      title: `Question ${
+        !hasSaved ? 'add in' : 'removed from'
+      } your collections`,
+      variant: `${!hasSaved ? 'default' : 'destructive'}`,
+    })
   }
 
   const handleVote = async (vote: string) => {
     // check if user is logined
-    if (!userId) return
+    if (!userId) {
+      return notice({
+        title: 'Please log in',
+        description: 'You must be logged in to perform this action',
+      })
+    }
 
     if (vote === VoteDirectionEnum.UP) {
       if (type === VoteTypeEnum.QUESTION) {
@@ -70,6 +82,10 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
           path: pathname,
         })
       }
+      return notice({
+        title: `Upvote ${hasUpVoted ? 'Removed' : 'Successfully'}`,
+        variant: `${hasUpVoted ? 'destructive' : 'default'}`,
+      })
     }
 
     if (vote === VoteDirectionEnum.DOWN) {
@@ -91,6 +107,10 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
         })
       }
     }
+    return notice({
+      title: `Downvote ${hasDownVoted ? 'Removed' : 'Successfully'}`,
+      variant: `${hasDownVoted ? 'destructive' : 'default'}`,
+    })
   }
 
   // view interaction
@@ -113,7 +133,7 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
             className="cursor-pointer"
             onClick={() => handleVote(VoteDirectionEnum.UP)}
           />
-          <div className="flex-center  bg-light700_dark400 p-1 rounded-sm min-w-[18px] ">
+          <div className="flex-center  bg-light700_dark400 min-w-[18px] rounded-sm p-1 ">
             <p className="text-dark400_light900 subtle-medium text-center uppercase">
               {formatNumber(upVotes)}
             </p>
@@ -129,7 +149,7 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
             className="cursor-pointer"
             onClick={() => handleVote(VoteDirectionEnum.DOWN)}
           />
-          <div className="flex-center  bg-light700_dark400 p-1 rounded-sm min-w-[18px] ">
+          <div className="flex-center  bg-light700_dark400 min-w-[18px] rounded-sm p-1 ">
             <p className="text-dark400_light900 subtle-medium text-center uppercase">
               {formatNumber(downVotes)}
             </p>

@@ -17,14 +17,6 @@ interface ThemeSwitcherProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const ThemeSwitcher: FC<ThemeSwitcherProps> = (props) => {
   const { mode, setMode } = useTheme()
-  // console.log('mode', mode)
-  //
-  // let activeTheme = THEME_SYSTEM
-  // if (typeof window !== 'undefined') {
-  //   activeTheme = localStorage.getItem('theme')
-  // }
-  //
-  // const themeActiveSrc = `/assets/icons/${activeTheme}.svg`
 
   return (
     <Menubar className="relative border-none bg-transparent shadow-none">
@@ -36,16 +28,16 @@ export const ThemeSwitcher: FC<ThemeSwitcherProps> = (props) => {
               alt="moon"
               width={20}
               height={20}
-              className="active-theme"
+              className="active-theme min-w-[20px]"
             />
           )}
         </MenubarTrigger>
-        <MenubarContent className="absolute right-[-3rem] mt-3 min-w-[120px] rounded border py-2 dark:border-dark-400 dark:bg-dark-300 bg-light-850">
+        <MenubarContent className="absolute right-[-3rem] mt-3 min-w-[120px] rounded border bg-light-850 py-2 dark:border-dark-400 dark:bg-dark-300">
           {THEME_LIST.map((item) => {
             return (
               <MenubarItem
                 key={item.value}
-                className="flex items-center gap-4 px-2.5 py-2 dark:focus:bg-dark-400"
+                className="flex items-center gap-4 px-2.5 py-2 focus:bg-light-800  dark:focus:bg-dark-400"
                 onClick={() => {
                   setMode(item.value)
                   localStorage.theme = item.value
