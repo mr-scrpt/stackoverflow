@@ -45,7 +45,6 @@ const QuestionDetailsPage = async (props: QuestionDetailsProps) => {
   const { userId } = auth()
 
   const user = await getUserByClerkId(userId)
-  console.log('user::', user)
 
   const question = await fetchQuestionBySlug(slug)
   if (!question) return null
