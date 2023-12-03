@@ -4,6 +4,7 @@ import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 import { createUser, deleteUser, updateUser } from '@/lib/actions/user.action'
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -68,6 +69,7 @@ export async function POST(req: Request) {
       picture: image_url,
     })
 
+    revalidatePath('/')
     return NextResponse.json({ message: 'OK', user: userCreated })
   }
 
