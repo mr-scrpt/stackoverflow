@@ -14,7 +14,6 @@ interface FilterContentProps extends HTMLAttributes<HTMLDivElement> {
 
 export const FilterContent: FC<FilterContentProps> = (props) => {
   const { list, className, classTrigger, defaultValue } = props
-  console.log(' =>>>', defaultValue)
   const searchParams = useSearchParams()
   const router = useRouter()
   const filterValue: string | null = searchParams.get('filter')

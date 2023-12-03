@@ -30,7 +30,6 @@ export const Filter: FC<FilterProps> = (props) => {
     active,
     handleSelect,
   } = props
-  console.log(' =>>>', list[0])
   return (
     <div className={`relative ${className}`}>
       <Select
