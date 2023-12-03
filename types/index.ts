@@ -52,6 +52,20 @@ export interface IBaseQuestion {
   createdAt: Date
 }
 
+export interface IJob {
+  id?: string
+  employer_name?: string
+  employer_logo?: string | undefined
+  employer_website?: string
+  job_employment_type?: string
+  job_title?: string
+  job_description?: string
+  job_apply_link?: string
+  job_city?: string
+  job_state?: string
+  job_country?: string
+}
+
 export interface IBaseAnswer {
   author: IUser
   question: IBaseQuestion
@@ -151,4 +165,49 @@ export interface IFilteredResultItem {
     link: string
     id: any
   }[]
+}
+
+export interface IRestCountry {
+  name: {
+    common: string
+    official: string
+    nativeName: object
+  }
+  tld: string
+  cca2: string
+  ccn3: number
+  cca3: string
+  cioc: string
+  independent: boolean
+  status: string
+  unMember: boolean
+  currencies: object
+  idd: object
+  capital: string
+  altSpellings: string[]
+  region: string
+  subregion: string
+  languages: object
+  translations: object
+  latlng: number[]
+  landlocked: boolean
+  borders: string[]
+  area: number
+  demonyms: string
+  flag: string
+  maps: {
+    openStreetMap: string
+    googleMaps: string
+  }
+  population: number
+  gini: object
+  fifa: string
+  car: object
+  timezones: string
+  continents: string
+  flags: object
+  coatOfArms: object
+  startOfWeek: string
+  capitalInfo: object
+  postalCode: object
 }

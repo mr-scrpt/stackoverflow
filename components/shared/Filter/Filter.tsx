@@ -13,6 +13,7 @@ import {
 
 interface FilterProps extends HTMLAttributes<HTMLDivElement> {
   list: IFilter[]
+  defaultValue?: string
   handleSelect: (value: string) => void
   active?: IFilter | null
   classTrigger?: string
@@ -20,12 +21,20 @@ interface FilterProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const Filter: FC<FilterProps> = (props) => {
-  const { list, className, classTrigger, classList, active, handleSelect } =
-    props
+  const {
+    list,
+    defaultValue,
+    className,
+    classTrigger,
+    classList,
+    active,
+    handleSelect,
+  } = props
+  console.log(' =>>>', list[0])
   return (
     <div className={`relative ${className}`}>
       <Select
-        defaultValue={active?.value || list[0].value}
+        defaultValue={active?.value || defaultValue || list[0].value}
         value={active?.value}
         onValueChange={handleSelect}
       >
@@ -37,7 +46,7 @@ export const Filter: FC<FilterProps> = (props) => {
           </div>
         </SelectTrigger>
         <SelectContent
-          className={`${classList} text-dark500_light700 small-regular border-none bg-light-900 dark:bg-dark-400`}
+          className={`${classList} text-dark500_light700 small-regular max-h-72 border-none bg-light-900 dark:bg-dark-400`}
         >
           <SelectGroup>
             {list.map((item) => (

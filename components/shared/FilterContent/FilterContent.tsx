@@ -9,10 +9,12 @@ interface FilterContentProps extends HTMLAttributes<HTMLDivElement> {
   list: IFilter[]
   classList?: string
   classTrigger?: string
+  defaultValue?: string
 }
 
 export const FilterContent: FC<FilterContentProps> = (props) => {
-  const { list, className, classTrigger } = props
+  const { list, className, classTrigger, defaultValue } = props
+  console.log(' =>>>', defaultValue)
   const searchParams = useSearchParams()
   const router = useRouter()
   const filterValue: string | null = searchParams.get('filter')
@@ -41,6 +43,7 @@ export const FilterContent: FC<FilterContentProps> = (props) => {
       handleSelect={handleUpdateParams}
       classTrigger={classTrigger}
       className={className}
+      defaultValue={defaultValue}
     />
   )
 }
