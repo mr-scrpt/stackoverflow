@@ -64,8 +64,10 @@ export const getTopInteractedTags = async (
       { $sort: { count: -1 } },
       { $limit: limit },
     ])
+    // console.log(' =>>> tagCount', tagCountMap)
 
     const topTags = tagCountMap.map((tagCount) => tagCount._id)
+    // console.log(' =>>>', user.username, user._id, topTags)
 
     // Find the tag documents for the top tags
     const topTagDocuments = await TagModel.find({ _id: { $in: topTags } })

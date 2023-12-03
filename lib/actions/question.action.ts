@@ -120,7 +120,7 @@ export const getQuestion = async (id: string) => {
   try {
     connectToDatabase()
 
-    const question = await QuestionModel.findOne({ id }).populate('tags')
+    const question = await QuestionModel.findOne({ _id: id }).populate('tags')
 
     return question
   } catch (e) {

@@ -115,11 +115,14 @@ export const VoteBar: FC<VoteBarProps> = (props) => {
 
   // view interaction
   useEffect(() => {
-    viewQuestion({
-      questionId: itemId,
-      userId,
-    })
-  }, [itemId, userId, pathname, router])
+    if (type === VoteTypeEnum.QUESTION) {
+      console.log(' =>>> view')
+      viewQuestion({
+        questionId: itemId,
+        userId,
+      })
+    }
+  }, [itemId, userId, pathname, router, type])
 
   return (
     <div className="flex gap-5 ">
