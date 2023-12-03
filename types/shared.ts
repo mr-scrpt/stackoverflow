@@ -247,3 +247,7 @@ export interface ISearchGlobalCategoryInfo {
   title: string
   link: string
 }
+export interface JobFilterParams {
+  query: string
+  page: number
+}
