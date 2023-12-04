@@ -14,12 +14,9 @@ import { FC, HTMLAttributes, useState } from 'react'
 import { LoginBar } from '../LoginBar/LoginBar'
 import { Menu } from '../Menu/Menu'
 
-interface MenuMobileProps extends HTMLAttributes<HTMLDivElement> {
-  isAuth: boolean
-}
+interface MenuMobileProps extends HTMLAttributes<HTMLDivElement> {}
 
-export const MenuMobile: FC<MenuMobileProps> = (props) => {
-  const { isAuth } = props
+export const MenuMobile: FC<MenuMobileProps> = () => {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   return (
@@ -64,16 +61,13 @@ export const MenuMobile: FC<MenuMobileProps> = (props) => {
         <div className="flex h-full flex-col gap-4">
           <div className="outline-none">
             <SheetClose>
-              <div className="flex h-full flex-col gap-4">
-                <Menu
-                  isAuth={isAuth}
-                  menuList={SIDEBAR_LINKS}
-                  pathname={pathname}
-                  onClick={() => {
-                    setIsOpen(false)
-                  }}
-                />
-              </div>
+              <Menu
+                menuList={SIDEBAR_LINKS}
+                pathname={pathname}
+                onClick={() => {
+                  setIsOpen(false)
+                }}
+              />
             </SheetClose>
 
             {/* only see if user signed out */}

@@ -51,16 +51,17 @@ export const SIDEBAR_LINKS: SidebarLink[] = [
     label: 'Tags',
   },
   {
-    imgURL: '/assets/icons/user.svg',
-    route: '/profile',
-    label: 'Profile',
-  },
-  {
     imgURL: '/assets/icons/question.svg',
     route: '/ask-question',
     label: 'Ask a question',
   },
 ]
+
+export const PROFILE_LINK = {
+  imgURL: '/assets/icons/user.svg',
+  route: '/profile',
+  label: 'Profile',
+}
 
 export const BADGE_CRITERIA = {
   QUESTION_COUNT: {

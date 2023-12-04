@@ -9,11 +9,10 @@ import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher'
 
 interface NavbarProps extends HTMLAttributes<HTMLDivElement> {
   userSlug?: string
-  isAuth: boolean
 }
 
 export const Navbar: FC<NavbarProps> = (props) => {
-  const { userSlug, isAuth } = props
+  const { userSlug } = props
   return (
     <nav className="flex-between bg-light800_dark300 fixed z-50 w-full gap-5 p-6 shadow-light-300 dark:shadow-none sm:px-12">
       <Link className="flex items-center gap-2" href="/">
@@ -48,7 +47,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
           />
         </SignedIn>
       )}
-      <MenuMobile isAuth={isAuth} />
+      <MenuMobile />
     </nav>
   )
 }
