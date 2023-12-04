@@ -31,13 +31,9 @@ const Layout = async (props: { children: ReactNode }) => {
 
   return (
     <main className="bg-light850_dark100 relative">
-      <Navbar userSlug={user?.slug} isAuth={!!userId} />
+      <Navbar userSlug={user?.slug} />
       <div className="flex">
-        <SidebarLeft
-          className={clsLeftSide}
-          userSlug={user?.slug}
-          isAuth={!!userId}
-        />
+        <SidebarLeft className={clsLeftSide} userSlug={user?.slug} />
         <section className={clsContent}>
           <div className="mx-auto h-full w-full max-w-5xl">{children}</div>
         </section>

@@ -8,17 +8,14 @@ import { Menu } from '../Menu/Menu'
 
 interface SidebarLeftProps extends HTMLAttributes<HTMLDivElement> {
   userSlug?: string
-  isAuth: boolean
 }
 
 export const SidebarLeft: FC<SidebarLeftProps> = (props) => {
-  const { className, userSlug, isAuth } = props
-  console.log(' =>>>', isAuth)
+  const { className, userSlug } = props
   const pathname = usePathname()
   return (
     <aside className={className}>
       <Menu
-        isAuth={isAuth}
         menuList={SIDEBAR_LINKS}
         pathname={pathname}
         classLinkText="max-lg:hidden"
