@@ -18,6 +18,7 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
   const router = useRouter()
 
   const pathname = usePathname()
+
   const searchParams = useSearchParams()
   const queryGlobal = searchParams.get(URL_SEARCH_PARMS.global)
   const queryType = searchParams.get(URL_SEARCH_PARMS.type)
@@ -51,6 +52,21 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
     keysToRemove: [URL_SEARCH_PARMS.global, URL_SEARCH_PARMS.type],
     params: searchParams.toString(),
   })
+
+  useEffect(() => {
+    const handleClick = (e: any) => {
+      const anchor = e.target.closest('a')
+      if (anchor) {
+        setSearch('')
+        setActiveFilter('')
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener('click', handleClick)
+
+    return () => document.removeEventListener('click', handleClick)
+  }, [])
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {

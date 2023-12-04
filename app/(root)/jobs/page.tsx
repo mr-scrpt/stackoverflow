@@ -25,7 +25,7 @@ const JobPage = async (props: ISearchParamsProps) => {
   return (
     <section className="flex flex-col gap-8">
       <div className="flex justify-between gap-5 max-sm:flex-col sm:items-center">
-        <h1 className="h1-bold text-dark100_light900">Saved Pages</h1>
+        <h1 className="h1-bold text-dark100_light900">Jobs list</h1>
 
         {/* <JobsFilter countriesList={countries} /> */}
         <FilterContent
@@ -37,7 +37,7 @@ const JobPage = async (props: ISearchParamsProps) => {
       </div>
 
       <div className="custom-scrollbar flex w-full flex-col flex-wrap items-center gap-6  overflow-y-auto md:flex-row md:justify-start">
-        {jobs.length > 0 ? (
+        {jobs && jobs.length > 0 ? (
           jobs.map((job) => {
             if (job.job_title && job.job_title.toLowerCase() !== 'undefined')
               return <JobCard key={job.id} job={job} />
@@ -54,7 +54,7 @@ const JobPage = async (props: ISearchParamsProps) => {
         )}
       </div>
 
-      {jobs.length > 0 && (
+      {jobs && jobs.length > 0 && (
         <PaginationContent
           pageCurrent={page ? +page : 1}
           hasNextPage={jobs.length === 10}
