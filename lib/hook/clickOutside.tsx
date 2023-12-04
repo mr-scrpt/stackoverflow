@@ -1,3 +1,4 @@
+'use client'
 import { RefObject, useEffect } from 'react'
 import { removeKeysFromQuery } from '../utils'
 import { useRouter } from 'next/navigation'
@@ -19,7 +20,9 @@ export const useOutsideClick = (props: UseClickOutsideProps) => {
       const isOutside = !r.contains(e.target) || null
       if (isOutside) {
         callback()
+
         if (!anchor && params && keysToRemove) {
+          // if (params && keysToRemove) {
           const newUrl = removeKeysFromQuery({
             params,
             keysToRemove,
@@ -35,7 +38,7 @@ export const useOutsideClick = (props: UseClickOutsideProps) => {
     document.addEventListener('click', handleOutsideClick)
 
     return () => document.removeEventListener('click', handleOutsideClick)
-  }, [])
+  }, [params])
 }
 
 //

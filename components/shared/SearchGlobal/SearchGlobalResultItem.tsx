@@ -14,6 +14,7 @@ export const SearchGlobalResultItem: FC<SearchGlobalResultItemProps> = (
   const { item } = props
   return (
     <Link
+      onClick={() => console.log('click')}
       href={item.link}
       key={item.id}
       className="group flex cursor-pointer items-start gap-2"
