@@ -151,7 +151,10 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
   }
 
   return (
-    <div className="relative w-full max-w-[600px]" ref={searchContainerRef}>
+    <div
+      className="relative w-full max-w-[600px] max-lg:hidden"
+      ref={searchContainerRef}
+    >
       <Search
         onSearch={onSearch}
         value={search}
@@ -160,7 +163,7 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
         classBg="bg-light700_dark400"
         route="/"
         iconPosition="left"
-        className="w-full max-w-[600px] max-lg:hidden"
+        className="w-full max-w-[600px] "
       />
       {isOpen && (
         <SearchGlobalResultList
