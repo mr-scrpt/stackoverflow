@@ -30,7 +30,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
   } = item
 
   return (
-    <div className="card-wrapper flex flex-col gap-2 rounded-[10px] p-2 sm:p-4 md:p-5">
+    <div className="card-wrapper flex flex-col gap-2 rounded-[10px] p-4 md:p-5">
       <div className="flex flex-col items-start justify-between gap-1">
         <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
           {/* for mobile size */}
