@@ -40,7 +40,7 @@ const HomePage = async (props: ISearchParamsProps) => {
           href="/ask-question"
           className={cn(
             buttonVariants(),
-            'primary-gradient flex min-h-[40px] justify-end px-4 py-3 text-light-900 max-sm:w-full'
+            'primary-gradient min-h-[40px] self-end px-4 py-3 text-light-900 max-sm:w-full'
           )}
         >
           {/* <Button className="primary-gradient min-h-[40px] px-4 py-3 text-light-900"> */}

@@ -20,7 +20,7 @@ export const MenuLink: FC<MenuLinkProps> = (props) => {
     }
   )
 
-  const classLinkTextComplited = cn('hidden lg:flex', {
+  const classLinkTextComplited = cn('sm:hidden lg:flex', {
     'base-bold': isActive,
     'base-medium': !isActive,
   })

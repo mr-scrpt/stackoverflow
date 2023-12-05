@@ -14,9 +14,12 @@ import { FC, HTMLAttributes, useState } from 'react'
 import { LoginBar } from '../LoginBar/LoginBar'
 import { Menu } from '../Menu/Menu'
 
-interface MenuMobileProps extends HTMLAttributes<HTMLDivElement> {}
+interface MenuMobileProps extends HTMLAttributes<HTMLDivElement> {
+  userProfileSlug?: string
+}
 
-export const MenuMobile: FC<MenuMobileProps> = () => {
+export const MenuMobile: FC<MenuMobileProps> = (props) => {
+  const { userProfileSlug } = props
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   return (
@@ -60,10 +63,11 @@ export const MenuMobile: FC<MenuMobileProps> = () => {
 
         <div className="flex h-full flex-col gap-4">
           <div className="outline-none">
-            <SheetClose>
+            <SheetClose asChild>
               <Menu
                 menuList={SIDEBAR_LINKS}
                 pathname={pathname}
+                userProfileSlug={userProfileSlug}
                 onClick={() => {
                   setIsOpen(false)
                 }}

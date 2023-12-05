@@ -23,21 +23,9 @@ export const Menu: FC<MenuProps> = (props) => {
     ...rest
   } = props
 
-  console.log(' =>>>', PROFILE_LINK.route.startsWith(pathname))
-  console.log(' =>>> pathname', pathname)
-  console.log(' =>>> PROFILE_LINK', PROFILE_LINK.route)
-
   return (
     <nav {...rest} className="flex h-full flex-col">
       {menuList.map((item) => {
-        // assure the item is correctly selected
-        // console.log(' =>>> route', item.route)
-        // console.log(' =>>> pathname', pathname)
-        // console.log(' =>>> startsWith', item.route.startsWith(pathname))
-        // const isActive =
-        //   (pathname.includes(item.route) && item.route.length > 1) ||
-        //   item.route.startsWith(pathname)
-        // pathname === item.route
         const isActive =
           (item.route === '/' && pathname === '/') ||
           (pathname !== '/' &&

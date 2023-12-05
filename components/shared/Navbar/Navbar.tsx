@@ -47,7 +47,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
           />
         </SignedIn>
       )}
-      <MenuMobile />
+      <MenuMobile userProfileSlug={userSlug} />
     </nav>
   )
 }
