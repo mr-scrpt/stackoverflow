@@ -11,6 +11,7 @@ import { GLOBAL_SEARCH_FILTER, URL_SEARCH_PARMS } from '@/constants/filters'
 import { ISearchGlobalTransformedResult } from '@/types/shared'
 import { globalSearch } from '@/lib/actions/global.action'
 import { transformSearchData } from './SearchGlobal.helper'
+import { TIME_DEBOUNCE_DELAY } from '@/constants'
 
 interface SearchGlobalProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -82,34 +83,41 @@ export const SearchGlobal: FC<SearchGlobalProps> = (props) => {
     }, 300)
 
     return () => clearTimeout(delayDebounceFn)
-  }, [search, pathname, router, searchParams, queryGlobal])
+  }, [search, pathname, router, searchParams])
+  // }, [search, pathname, router, searchParams, queryGlobal])
 
   // fetching data
   useEffect(() => {
-    if (queryGlobal) {
-      const fetchResult = async () => {
-        setIsLoadingData(true)
+    const delayDebounceFn = setTimeout(() => {
+      // console.log(' =>>> equal?', queryGlobal !== ' ')
+      if (queryGlobal && queryGlobal !== ' ') {
+        // console.log(' =>>> go')
+        const fetchResult = async () => {
+          setIsLoadingData(true)
 
-        try {
-          const typeExisting = GLOBAL_SEARCH_FILTER.find(
-            (item) => item.value === queryType
-          )
-          const res = await globalSearch({
-            query: queryGlobal,
-            type: typeExisting?.value,
-          })
-          const searchData = transformSearchData(res)
-          setResult(searchData)
-        } catch (error) {
-          console.log(error)
-          throw error
-        } finally {
-          setIsLoadingData(false)
+          try {
+            const typeExisting = GLOBAL_SEARCH_FILTER.find(
+              (item) => item.value === queryType
+            )
+            const res = await globalSearch({
+              query: queryGlobal,
+              type: typeExisting?.value,
+            })
+            const searchData = transformSearchData(res)
+            setResult(searchData)
+          } catch (error) {
+            console.log(error)
+            throw error
+          } finally {
+            setIsLoadingData(false)
+          }
         }
-      }
 
-      fetchResult()
-    }
+        fetchResult()
+      }
+    }, TIME_DEBOUNCE_DELAY)
+
+    return () => clearTimeout(delayDebounceFn)
   }, [queryType, queryGlobal])
 
   const onFilterClick = (type: string) => {

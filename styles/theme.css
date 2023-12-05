@@ -23,7 +23,7 @@
   }
 
   .bg-light800_darkgradient {
-    @apply bg-light-800 dark:dark-gradient;
+    @apply dark:dark-gradient bg-light-800;
   }
 
   .bg-light700_darkgradient {
@@ -202,8 +202,79 @@
     @apply shadow-light-100 dark:shadow-none;
   }
 
+  /* .primary-gradient { */
+  /*   background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%); */
+  /*   -webkit-animation: gradientAnimate 30s ease infinite; */
+  /*   -moz-animation: gradientAnimate 30s ease infinite; */
+  /*   animation: gradientAnimate 30s ease infinite; */
+  /* } */
+  /**/
+  /* @-webkit-keyframes gradientAnimate { */
+  /*   0% { */
+  /*     background-position: 0% 50%; */
+  /*   } */
+  /*   50% { */
+  /*     background-position: 100% 50%; */
+  /*   } */
+  /*   100% { */
+  /*     background-position: 0% 50%; */
+  /*   } */
+  /* } */
+  /* @-moz-keyframes gradientAnimate { */
+  /*   0% { */
+  /*     background-position: 0% 50%; */
+  /*   } */
+  /*   50% { */
+  /*     background-position: 100% 50%; */
+  /*   } */
+  /*   100% { */
+  /*     background-position: 0% 50%; */
+  /*   } */
+  /* } */
+  /* @keyframes gradientAnimate { */
+  /*   0% { */
+  /*     background-position: 0% 50%; */
+  /*   } */
+  /*   50% { */
+  /*     background-position: 100% 50%; */
+  /*   } */
+  /*   100% { */
+  /*     background-position: 0% 50%; */
+  /*   } */
+  /* } */
+  /* .primary-gradient { */
+  /*   background: linear-gradient(300deg, deepskyblue, darkviolet, blue); */
+  /*   /* background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%); */
+  /*   background-size: 180% 180%; */
+  /* } */
+  /* .primary-gradient:hover { */
+  /*   animation: gradient-animation 250s ease forwards; */
+  /* } */
+  /**/
+  /* @keyframes gradient-animation { */
+  /*   0% { */
+  /*     background-position: 0% 50%; */
+  /*   } */
+  /*   50% { */
+  /*     background-position: 100% 50%; */
+  /*   } */
+  /*   100% { */
+  /*     background-position: 0% 50%; */
+  /*   } */
+  /* } */
   .primary-gradient {
-    background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
+    /* background: linear-gradient(129deg, red 0%, green 100%); */
+    /* background-size: 200% 100%; */
+    /* transition: background-position 2.3s forwards; /* добавляем плавный переход для свойства background-position */
+    background: linear-gradient(130deg, #ff7000 0%, #fa730a 50%, #e2995f 100%);
+
+    background-position-x: 50%;
+    background-size: 150%;
+    transition: background-position 0.2s;
+  }
+
+  .primary-gradient:hover {
+    background-position-x: 0%;
   }
 
   .dark-gradient {

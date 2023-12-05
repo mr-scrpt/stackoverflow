@@ -20,6 +20,7 @@ export const globalSearch = async (
 ): Promise<ISearchGlobalResult[]> => {
   try {
     connectToDatabase()
+    console.log(' =>>> fetching')
 
     const { query, type, limit = GLOBAL_SEARCH_LIMIT } = params
 

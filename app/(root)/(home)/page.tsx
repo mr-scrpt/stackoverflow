@@ -4,10 +4,11 @@ import { NoResult } from '@/components/shared/NoResult/NoResult'
 import { PaginationContent } from '@/components/shared/PaginationContent/PaginationContent'
 import { QuestionCard } from '@/components/shared/QuestionCard/QuestionCard'
 import { SearchLocal } from '@/components/shared/SearchLocal/SearchLocal'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { HOME_PAGE_FILTER } from '@/constants/filters'
 import { getQuestions } from '@/lib/actions/question.action'
 import { getUserByClerkId } from '@/lib/actions/user.action'
+import { cn } from '@/lib/utils'
 import { ISearchParamsProps } from '@/types'
 import { auth } from '@clerk/nextjs'
 import { Metadata } from 'next'
@@ -35,10 +36,16 @@ const HomePage = async (props: ISearchParamsProps) => {
     <section className="flex flex-col gap-8">
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="h1-bold text-dark100_light900">All Questions</h1>
-        <Link href="/ask-question" className="flex justify-end max-sm:w-full">
-          <Button className="primary-gradient min-h-[40px] px-4 py-3 text-light-900">
-            Ask question
-          </Button>
+        <Link
+          href="/ask-question"
+          className={cn(
+            buttonVariants(),
+            'primary-gradient flex min-h-[40px] justify-end px-4 py-3 text-light-900 max-sm:w-full'
+          )}
+        >
+          {/* <Button className="primary-gradient min-h-[40px] px-4 py-3 text-light-900"> */}
+          Ask question
+          {/* </Button> */}
         </Link>
       </div>
 
