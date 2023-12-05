@@ -23,13 +23,26 @@ export const Menu: FC<MenuProps> = (props) => {
     ...rest
   } = props
 
+  console.log(' =>>>', PROFILE_LINK.route.startsWith(pathname))
+  console.log(' =>>> pathname', pathname)
+  console.log(' =>>> PROFILE_LINK', PROFILE_LINK.route)
+
   return (
     <nav {...rest} className="flex h-full flex-col">
       {menuList.map((item) => {
         // assure the item is correctly selected
+        // console.log(' =>>> route', item.route)
+        // console.log(' =>>> pathname', pathname)
+        // console.log(' =>>> startsWith', item.route.startsWith(pathname))
+        // const isActive =
+        //   (pathname.includes(item.route) && item.route.length > 1) ||
+        //   item.route.startsWith(pathname)
+        // pathname === item.route
         const isActive =
-          (pathname.includes(item.route) && item.route.length > 1) ||
-          pathname === item.route
+          (item.route === '/' && pathname === '/') ||
+          (pathname !== '/' &&
+            item.route !== '/' &&
+            pathname.startsWith(item.route))
 
         if (item.route === '/profile') {
           if (userProfileSlug) {
@@ -50,7 +63,7 @@ export const Menu: FC<MenuProps> = (props) => {
       })}
       <SignedIn>
         <MenuLink
-          isActive={pathname === PROFILE_LINK.route}
+          isActive={pathname.startsWith(PROFILE_LINK.route)}
           href={`${PROFILE_LINK.route}/${userProfileSlug}`}
           lable={PROFILE_LINK.label}
           imgSrc={PROFILE_LINK.imgURL}
