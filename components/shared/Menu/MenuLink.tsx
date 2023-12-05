@@ -14,12 +14,16 @@ export const MenuLink: FC<MenuLinkProps> = (props) => {
   const { href, imgSrc, lable, isActive } = props
   const classLinkComplited = cn(
     'flex items-center justify-start gap-4 bg-transparent p-4',
-    isActive
-      ? 'primary-gradient rounded-lg text-light-900'
-      : 'text-dark300_light900'
+    {
+      'primary-gradient rounded-lg text-light-900': isActive,
+      'text-dark300_light900': !isActive,
+    }
   )
 
-  const classLinkTextComplited = cn(isActive ? 'base-bold' : 'base-medium')
+  const classLinkTextComplited = cn('hidden lg:flex', {
+    'base-bold': isActive,
+    'base-medium': !isActive,
+  })
   return (
     <Link href={href} className={classLinkComplited}>
       <Image
